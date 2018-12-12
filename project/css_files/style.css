@@ -1,0 +1,45 @@
+@font-face{
+    font-family: quicksand;
+    src: url("../font_files/Quicksand-Medium.ttf");
+}
+
+*{
+    font-family: quicksand;
+    font-size:14px;
+}
+
+body{
+    margin:0;
+}
+
+.left_links{
+    padding:0;
+    margin:0;
+}
+
+.left_links li{
+    list-style-type:none;
+    margin:0;
+    padding:0;
+}
+
+.left_links li a{
+    text-decoration:none;
+    color:white;
+    padding:8px 24px;
+    display:block;
+}
+
+.sidebar_left{
+    position:fixed;
+    top:0px;
+    left:0px;
+    background-color: #0060B0;
+    color:white;
+    width:250px;
+    box-shadow:0 0 10px black;
+}
+
+.sidebar_left b{
+    margin:0 0 0 20px;
+}
