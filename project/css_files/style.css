@@ -8,16 +8,24 @@
 }
 
 .left-nav-bar{
+    font-size:14px;
+    z-index:1;
     position:fixed;
     left:0;
     top:0;
     display:block;
-    background-color:#2B3350;
+    background-color:white;
     width:20%;
-    color:white;
+    color:#005C40;
     text-align:center;
     box-shadow:0 0 10px black;
+    height:100%;
 }
+
+.left-nav-bar h3{
+    margin-top:10px;
+}
+
 ul{
     padding:0;
 }
@@ -25,20 +33,33 @@ ul li{
     text-align:left;
     list-style-type:none;
     padding:0;
-    margin:0;
+    margin:0 0 8px 0;
 }
 
 ul li a{
     text-decoration:none;
-    color:white;
+    color:#005C40;
     display:block;
-    padding:5px 40px;
+    padding:8px 40px;
 }
 
 ul li a:hover{
-    background-color:#191D2E;
+    background-color:#005C40;
+    color:white;
 }
 
-.main_container{
-    margin-left:20%;
+body{
+    margin-left:22%;
+    margin-top:4%;
+}
+
+.top-nav-bar{
+    background-color:white;
+    box-shadow:0 0 8px black;
+    display:block;
+    width:100%;
+    position:fixed;
+    top:0;
+    left:0;
+    padding:8px 0 8px 22%;
 }
