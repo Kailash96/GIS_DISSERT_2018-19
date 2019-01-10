@@ -15,6 +15,11 @@
                 height: 600px;
                 width: 1090px;
             }
+
+            #home_selected{
+                background-color:#002246;
+                color:white;
+            }
         </style>
 
         <script>  

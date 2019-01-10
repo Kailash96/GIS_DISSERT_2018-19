@@ -60,14 +60,14 @@
             <div class="reg-form-box">
                 <div>
                     <h3>Sign Up!</h3>
-                    <form>
-                        <input type="text" placeholder="NIC" class="input-box" /><br/>
-                        <input type="text" placeholder="Full Name" class="input-box" /><br/>
-                        <input type="text" placeholder="Tax Account Number" class="input-box" /><br/>
-                        <input type="text" placeholder="Address" class="input-box" /><br/>
-                        <input type="text" placeholder="Phone" class="input-box" /><br/>
-                        <input type="text" placeholder="Email" class="input-box" /><br/>
-                        <input type="text" placeholder="Address" class="input-box" /><br/><br/>
+                    <form method="POST" action="registration_complete.php">
+                        <input type="text" name="nic" placeholder="NIC" style="text-transform:uppercase" class="input-box" required /><br/>
+                        <input type="text" name="fullname" placeholder="Full Name" style="text-transform:capitalize" class="input-box" required /><br/>
+                        <input type="text" name="tan" placeholder="Tax Account Number" class="input-box" /><br/>
+                        <input type="number" name="phone" placeholder="Phone" class="input-box" required /><br/>
+                        <input type="text" name="email" placeholder="Email" class="input-box" /><br/>
+                        <input type="text" name="address" placeholder="Address" style="text-transform:capitalize" class="input-box" required /><br/><br/>
+                        <input type="hidden" name="locationCoordinate" value="" />
                         <input type="submit" class="submit_button" value="Sign Up" />
                     </form>
                 </div>
