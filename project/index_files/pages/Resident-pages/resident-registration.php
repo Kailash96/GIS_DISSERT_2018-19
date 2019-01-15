@@ -4,6 +4,7 @@
         <title>Resident Registration | Binswiper</title>
         <link type="text/css" rel="stylesheet" href="../../css_files/style.css" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
         <style>
             *{
                 color:#002246;
@@ -38,6 +39,11 @@
             }
             
         </style>
+        <script>
+            function setValue(coordinates){
+                $('[name="locationCoordinate"]').val(coordinates);
+            }
+        </script>
     </head>
     <body style="margin:0;padding:0;">
         <h1 style="text-align:center"><i class="fa fa-trash-o"></i> Binswiper</h1>

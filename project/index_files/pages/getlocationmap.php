@@ -32,12 +32,12 @@
         <script>
             var map = L.map('map', {
               center: [-20.197960, 57.721996],
-              zoom: 13
+              zoom: 12
             });
 
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 attribution: '&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors',
-                maxZoom: 18
+                maxZoom: 16
             }).addTo(map);
 
             /*
@@ -77,8 +77,9 @@
             });
             */
 
-            var result_layer = L.layerGroup().addTo(map);
+            // var result_layer = L.layerGroup().addTo(map);
             // FULLY FUNCTIONAL
+            var prevMarker = "";
             function searchLoc(country_val, address_val, region_val){
               console.log(
                 "country: " + country_val,
@@ -86,15 +87,29 @@
                 "region: " + region_val,
               );
               // GEOCODE
-
               // L.esri.Geocoding.geocode().country(country_val).address(address_val).region(region_val).subregion('Albion').postal(postal_val).run(function(err, result, response){
               L.esri.Geocoding.geocode().text(address_val + ' ' + region_val + ' ' + country_val).run(function(err, result, response){
-                result_layer.clearLayers();
+                // result_layer.clearLayers();
                 console.log(result.results[0].latlng);
                 console.log(result.results.length);
-                result_layer.addLayer(
-                  L.marker(result.results[0].latlng)
-                );
+                // result_layer.addLayer(
+                  if (prevMarker != ""){
+                    map.removeLayer(prevMarker);
+                  }
+                  prevMarker = L.marker(result.results[0].latlng, {draggable:'true'}).addTo(map);
+                  var position = prevMarker.getLatLng();
+                  var reformat = position.lat + "," + position.lng;
+                  map.setView([position.lat, position.lng], 16);
+                  setValue(reformat);
+
+                  prevMarker.on('dragend', function(event){
+                    position = prevMarker.getLatLng();
+                    // function to set value in input type hidden
+                    reformat = position.lat + "," + position.lng;
+                    map.setView([position.lat, position.lng], 16);
+                    setValue(reformat);
+                  });
+                // );
               });
               
             };
