@@ -29,10 +29,10 @@
         <div style="border:2px solid black;padding:2px;width:700px;height:450px">
             <div id="map"></div>
         </div>
-        <script>
+        <script>        
             var map = L.map('map', {
                 center: [-20.197960, 57.721996],
-                zoom: 16
+                zoom: 12
             });
 
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -60,6 +60,50 @@
                 }
             });
             results.addTo(map);
+
+            /*
+
+            var data = [
+
+            {
+                "title": 'Chennai',
+                "lat": '-20.191340',
+                "lng": '57.718990',
+                "description": '',
+                "flag":'1'
+            }
+            ,
+            {
+            "title": 'Ramapuram',
+            "lat": '-20.206120',
+            "lng": '57.749620',
+            "description": '',
+
+            },
+
+            {
+                "title": 'Kanchipuram',
+                "lat": '-20.220740',
+                "lng": '57.776270',
+                "description": '',
+                "flag":'1'
+            },
+
+            ];
+
+            var routeControl = L.Routing.control({
+
+            }).addTo(map);
+            routeControl.setWaypoints(data);
+
+            */
+
+            L.Routing.control({
+                waypoints: [
+                    L.latLng(-20.220740, 57.776270),
+                    L.latLng(-20.206120, 57.749620)
+                ]
+            }).addTo(map);
         </script>
     </body>
 </html>

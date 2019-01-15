@@ -6,104 +6,80 @@
 
         <!-- ARCGIS CONNECTION -->
         <link rel="stylesheet" href="https://js.arcgis.com/4.9/esri/css/main.css">
-        <script src="https://js.arcgis.com/4.9/"></script>
+        
+
+        <!-- MAP CSS AND JAVASCRIPT -->
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css"
+        integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="
+        crossorigin=""/>
+        <script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js"
+        integrity="sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg=="
+        crossorigin=""></script>
+
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.2.0/dist/leaflet.css" />
+        <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css" />
+        <script src="https://unpkg.com/leaflet@1.2.0/dist/leaflet.js"></script>
+        <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
 
         <style>
-            #viewDiv {
-                padding:0;
-                margin:0;
-                height: 600px;
-                width: 1090px;
-            }
-
             #home_selected{
                 background-color:#002246;
                 color:white;
             }
+
+            #map{
+                height:550px;
+            }
         </style>
 
-        <script>  
-            require([
-            "esri/Map",
-            "esri/views/MapView",      
-            "esri/Graphic",
-            "esri/tasks/RouteTask",
-            "esri/tasks/support/RouteParameters",
-                "esri/tasks/support/FeatureSet",
-            "dojo/domReady!"
-            ], function(Map, MapView, Graphic, RouteTask, RouteParameters, FeatureSet) {
-
-            var map = new Map({
-                basemap: "osm" //"streets-navigation-vector"
-            });
-            
-            var view = new MapView({
-                container: "viewDiv",
-                map: map,
-                center: [57.721996, -20.197960],
-                zoom: 15
-            });
-            
-            // To allow access to the route service and prevent the user from signing in, do the Challenge step in the lab to set up a service proxy
-            
-            var routeTask = new RouteTask({
-                url: "https://route.arcgis.com/arcgis/rest/services/World/Route/NAServer/Route_World"
-            });
-
-            view.on("click", function(event){
-                if (view.graphics.length === 0) {
-                addGraphic("start", event.mapPoint);
-                } else if (view.graphics.length === 1) {
-                addGraphic("finish", event.mapPoint);
-                // Call the route service
-                getRoute();
-                } else {
-                view.graphics.removeAll();
-                addGraphic("start",event.mapPoint);
-                }
-            });
-            
-            function addGraphic(type, point) {
-                var graphic = new Graphic({
-                symbol: {
-                    type: "simple-marker",
-                    color: (type === "start") ? "white" : "black",
-                    size: "8px"
-                },
-                geometry: point
-                });
-                view.graphics.add(graphic);
-            }
-            
-            function getRoute() {
-                // Setup the route parameters
-                var routeParams = new RouteParameters({
-                stops: new FeatureSet({
-                    features: view.graphics
-                }),
-                returnDirections: true
-                });
-                // Get the route
-                routeTask.solve(routeParams).then(function(data) {
-                data.routeResults.forEach(function(result) {
-                    result.route.symbol = {
-                    type: "simple-line",
-                    color: [5, 150, 255],
-                    width: 3
-                    };
-                    view.graphics.add(result.route); 
-                });
-                
-                });
-            }
-            
-            });
-        </script>
     </head>
-    <body>
+    <body style="margin-left:20.4%;margin-right:0.4%">
         <?php include("left_side_nav_bar.html"); ?>
         <?php include("top-nav-bar.html"); ?>
+
+        <?php
+            include("../../../db_connect.php");
+
+            // QUERY FOR RESIDENTS
+            $active_user_query = "SELECT LocationCoordinate FROM residents WHERE Active = 1";
+            // QUERY FOR INDUSTRIALS
+            // QUERY FOR COMMERCIALS
+
+
+        ?>
         
-        <div id="viewDiv"></div>
+        <div id="map"></div>
+
+        <script>
+            var map = L.map('map').setView([-20.220740, 57.776270], 12);
+
+            L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+            }).addTo(map);
+
+            var data = [
+
+            <?php
+
+                if ($results = mysqli_query($conn, $active_user_query)){
+                    while($row = mysqli_fetch_assoc($results)){
+                        $coord = explode(",", $row['LocationCoordinate']);
+                        echo "
+                            {
+                                'lat': '$coord[0]',
+                                'lng': '$coord[1]'
+                            },
+                        ";
+                    }
+                }
+            ?>
+
+            ];
+
+            var routeControl = L.Routing.control({
+            }).addTo(map);
+            routeControl.setWaypoints(data);
+
+        </script>
     </body>
 </html>

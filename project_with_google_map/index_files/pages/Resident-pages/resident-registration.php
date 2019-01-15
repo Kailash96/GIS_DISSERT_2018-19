@@ -33,36 +33,38 @@
                 box-shadow:0 0 10px #002246;
             }
 
-            .input-box{
-                width:100%;
+            #mapid{
+                height:180px;
             }
             
         </style>
     </head>
     <body style="margin:0;padding:0;">
         <h1 style="text-align:center"><i class="fa fa-trash-o"></i> Binswiper</h1>
-        <h3 align="center">Registration</h3>
         <div align="center">
             <div class="reg-form-box">
                 <div>
+                    <h3>Sign Up!</h3>
                     <form method="POST" action="registration_complete.php">
                         <input type="text" name="nic" placeholder="NIC" style="text-transform:uppercase" class="input-box" required /><br/>
                         <input type="text" name="fullname" placeholder="Full Name" style="text-transform:capitalize" class="input-box" required /><br/>
                         <input type="text" name="tan" placeholder="Tax Account Number" class="input-box" /><br/>
                         <input type="number" name="phone" placeholder="Phone" class="input-box" required /><br/>
-                        <input type="text" name="email" placeholder="Email" class="input-box" style="text-transform:none" /><br/>
-                        
-                            <input type="text" name="country" placeholder="Country" style="width:49.3%;text-transform:capitalize" class="input-box" required />
-                            <input type="text" name="region" placeholder="Region" style="width:49.3%;text-transform:capitalize" class="input-box" required /><br/>
-                            <input type="text" name="address" placeholder="Address" style="width:100%;text-transform:capitalize" class="input-box" required /><br/><br/>
-                            <input type="button" onclick="searchLoc(country.value, address.value, region.value)" value="Set my Location" style="width:100%" class="submit_button" />
-                        
-                        <input type="hidden" name="locationCoordinate" value="" /><br/><br/>
-                        <input type="submit" class="submit_button" style="width:100%" value="Register" />
+                        <input type="text" name="email" placeholder="Email" class="input-box" /><br/>
+                        <input type="hidden" name="locationCoordinate" value="" /><br/>
+                        <input type="submit" class="submit_button" value="Sign Up" />
                     </form>
                 </div>
-                <div align="right">
+                <div>
                     <?php include("../getlocationmap.php"); ?>
+                    <div style="border:1px solid black;padding:10px;margin-top:10px;">
+                        <form onsubmit="event.preventDefault();searchLoc(country.value, address.value, region.value)">
+                            <input type="text" name="country" placeholder="Country" style="width:24%;text-transform:capitalize" class="input-box" required />
+                            <input type="text" name="address" placeholder="Address" style="width:40%;text-transform:capitalize" class="input-box" required />
+                            <input type="text" name="region" placeholder="Region" style="width:20%;text-transform:capitalize" class="input-box" required />
+                            <input type="submit" value="Localize" class="submit_button" />
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
