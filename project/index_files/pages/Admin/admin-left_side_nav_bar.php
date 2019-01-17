@@ -1,25 +1,6 @@
-<?php
-    include("../../../db_connect.php");
-    
-    $commercialCount = 0;
-    $industrialCount = 0;
-    $residentsCount = 0;
-
-    $queryResidents = "SELECT * FROM residents WHERE Active = 0";
-    
-    if ($result = mysqli_query($conn, $queryResidents)){
-        $residentsCount = mysqli_num_rows($result);
-    } else {
-        echo 'no result';
-    }
-
-    $numOfReq = $residentsCount + $commercialCount + $industrialCount;
-?>
-
 <script type="text/javascript">
+    var current_value = 0;
     function update(){
-        var current_value = <?php echo $numOfReq; ?>;
-        var countValue = 0;
         if (window.XMLHttpRequest){
             xmlhttp = new XMLHttpRequest();
         } else {
@@ -27,12 +8,13 @@
         }
         xmlhttp.onreadystatechange = function(){
             if (this.readyState == 4 && this.status == 200){
-                var countedValue = this.responseText;
-                if ((countedValue > 0) && (countValue != current_value)){
+                var dataValue = JSON.parse(this.responseText);
+                if ((dataValue[0] > 0) && (dataValue[0] != current_value)){
                     document.getElementById("counter").style.visibility = "visible";
-                    document.getElementById("counter").innerHTML = countedValue;
-                    countValue = countedValue;
-                } else {
+                    document.getElementById("counter").innerHTML = dataValue[0];
+                    current_value = dataValue[0];
+                    document.getElementById("LORequests").innerHTML = dataValue[1];
+                } else if (dataValue[0] == 0) {
                     document.getElementById("counter").style.visibility = "hidden";
                 }                  
             }
@@ -41,7 +23,7 @@
         xmlhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
         xmlhttp.send("checker=" + current_value);
     }
-    setInterval(update, 1000);
+    setInterval(update, 100);
 </script>
 
 

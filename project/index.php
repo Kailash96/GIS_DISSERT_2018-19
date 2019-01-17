@@ -28,6 +28,7 @@
         </div>
 
         <h1>temporary links:</h1><br/>
+        <a href="index_files/pages/resident-pages/resident-home.php" target="_blank">resident home page</a><br/>
         <a href="index_files/pages/admin/admin-home.php" target="_blank">admin page</a><br/>
         <a href="index_files/pages/district-council-pages/home.php" target="_blank">district council page</a><br/>
         <a href="">municipality page</a><br/>

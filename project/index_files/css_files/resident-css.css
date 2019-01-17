@@ -1,0 +1,21 @@
+@font-face{
+    font-family: quicksand;
+    src: url("../font_files/Quicksand-Medium.ttf")
+}
+
+*{
+    font-family:  quicksand;
+    color:#002246;
+    box-sizing:border-box;
+}
+
+.top-bar{
+    background-color:white;
+    position:fixed;
+    top:0px;
+    left:0px;
+    width:100%;
+    box-shadow:0 0 2px #002246;
+    padding:0 50px;
+}
+

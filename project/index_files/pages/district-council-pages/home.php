@@ -60,8 +60,12 @@
             var data = [
 
             <?php
+                // POLYGON VARIABLE
+                $latlng = "[";
 
+                // COORDINATES FROM DATABASE MERGED WITH POLYGON FUNCTION
                 if ($results = mysqli_query($conn, $active_user_query)){
+                    $counter = mysqli_num_rows($results);
                     while($row = mysqli_fetch_assoc($results)){
                         $coord = explode(",", $row['LocationCoordinate']);
                         echo "
@@ -70,6 +74,8 @@
                                 'lng': '$coord[1]'
                             },
                         ";
+                        // POLYGON MAKER
+                        
                     }
                 }
             ?>

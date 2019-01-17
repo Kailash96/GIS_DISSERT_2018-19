@@ -115,7 +115,7 @@
                 </form>
                 <div>
                     <h3>List of Employees Registered</h3>
-                    <div id='listofemp'></div>
+                    <div id='listofemp' style='font-size:14px'></div>
                 </div>
             </div>
         </div>
