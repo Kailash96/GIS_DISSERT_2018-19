@@ -26,7 +26,7 @@
                     <td style='text-transform:uppercase'>" . $row['NIC'] . "</td>
                     <td>" . $row['Name'] . "</td>
                     <td><div style='border:0px solid black;padding:5px 0;width:100px;box-shadow:0 0 8px green;border-radius:2px;background-color:green;color:white;text-align:center;'>Resident</div></td>
-                    <td align='right'><input type='button' value='View Details' style='padding:5px 20px' class='button' /></td>
+                    <td align='right'><input type='button' value='View Details' id='" . $row['NIC'] . "-resident' onclick='viewDetails(this.id)' style='padding:5px 20px' class='button' /></td>
                 </tr>
                 <tr><td colspan='4'><hr></td></tr>
             ";

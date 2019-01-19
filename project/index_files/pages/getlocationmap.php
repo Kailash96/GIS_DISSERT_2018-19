@@ -26,9 +26,9 @@
     </style>
   </head>
   <body>
-  <div style="border:1px solid black;padding:2px;width:600px;height:100%">
-            <div id="map"></div>
-        </div>
+  <div class="map-holder">
+    <div id="map"></div>
+  </div>
         <script>
             var map = L.map('map', {
               center: [-20.197960, 57.721996],
@@ -115,13 +115,5 @@
             };
             
         </script>
-        <!--
-        <form onsubmit="event.preventDefault();searchLoc(country.value, address.value, region.value)">
-          <input type="text" name="country" />
-          <input type="text" name="address" />
-          <input type="text" name="region" />
-          <input type="submit" />
-        </form>
-        -->
   </body>
 </html>

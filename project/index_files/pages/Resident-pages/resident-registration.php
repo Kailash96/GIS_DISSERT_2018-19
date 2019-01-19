@@ -9,7 +9,12 @@
             *{
                 color:#002246;
             }
-
+            .map-holder{
+                border:1px solid black;
+                padding:2px;
+                width:600px;
+                height:100%;
+            }
             .reg-form-box{
                 display:grid;
                 grid-template-columns: auto auto;

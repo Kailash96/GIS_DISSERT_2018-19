@@ -22,6 +22,7 @@
         <br/>
         <div>
           <i class="fa fa-trash-o" style="font-size:120px;color:#E44747;"></i>
+          <input type="text" placeholder = "waste level" />
         </div>
     </body>
 </html>
