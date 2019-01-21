@@ -4,6 +4,7 @@
         <title>Requests | Binswiper</title>
         <link rel="stylesheet" href="../../css_files/style.css" />
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
         <style>
             #requests_selected{
                 background-color:#002246;
@@ -60,36 +61,52 @@
             }
 
             #viewDetailsContainer{
-                display:block;
+                visibility:visible;
+                position:fixed;
+                top:2%;
+                left:13%;
+                background-color:white;
+                box-shadow:0 0 8px black;
+                z-index:3;
+                padding:10px 0;
+                visibility:hidden;
             }
+
+            .blurry-background{
+                background-color:white;
+                opacity:0.8;
+                position:fixed;
+                width:100%;
+                height:100%;
+                top:0;
+                left:0;
+                z-index:2;
+                visibility:hidden;
+            }
+
+            .top-right-close-button{
+                float:right;
+                background-color:white;
+                border:1px solid black;
+                cursor:pointer;
+                outline:none;
+            }
+
+            .top-right-close-button:hover{
+                box-shadow:0 0 1px black;
+            }
+
         </style>
         <script>
-                function viewDetails(data){
-                    
-                    var arrdata = data.split("-");
-                    var nic = arrdata[0];
-                    var category = arrdata[1];
+            function edit(){
+                event.preventDefault();
+                // GET ALL VALUES
+            }
 
-                    $("#listofrequestscontainer").hide();
-                    $("#viewDetailsContainer").fadeIn();
-                    
-                    var userdetails = new XMLHttpRequest();
-                    userdetails.onreadystatechange = function(){
-                        if (this.readyState == 4 && this.status == 200){
-                            // var data = JSON.parse(this.responseText);
-                            // alert('test');
-                        }
-                    }
-                    userdetails.open("POST", "getuserdetails.php", true);
-                    userdetails.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-                    userdetails.send('id=' + nic);
-                    
-                }
-
-                function edit(){
-                    event.preventDefault();
-                    // GET ALL VALUES
-                }
+            function closeme(){
+                $("#viewDetailsContainer").css('visibility', 'hidden');
+                $(".blurry-background").css('visibility', 'hidden');
+            }
         </script>
     </head>
     <body>
@@ -102,14 +119,16 @@
             <input type="button" class="selection_button" value="Commercial" />
             <input type="button" class="selection_button" value="Industrial" />
             <br/><br/>
+            <!-- LIST OF REQUEST CONTAINER -->
             <div id="LORequests"></div>
         </div>
 
         <!-- VIEW DETAILS CONTAINER  -->
+        <div class="blurry-background"></div>
         <div id="viewDetailsContainer">
-            <h3 style="padding:0 20px;margin:0">Details Edit</h3>
+            <h3 style="padding:0 20px;margin:0;color:#002246">Details Edit <input type='button' onclick='closeme()' value='X' class='top-right-close-button'></h3>
             <div class="reg-form-box">
-                <div>
+                <div style="padding:10px;">
                     <form method="POST" action="edit()" style="font-size:12px;font-weight:bold;color:#9F9F9F">
                         NIC <input type="text" name="nic" placeholder="NIC" style="text-transform:uppercase" class="input-box" required /><br/><br/>
                         Full Name <input type="text" name="fullname" placeholder="Full Name" style="text-transform:capitalize" class="input-box" required /><br/><br/>
@@ -120,14 +139,48 @@
                             Country/Region<br/><input type="text" name="country" placeholder="Country" style="width:49.3%;text-transform:capitalize" class="input-box" required />
                             <input type="text" name="region" placeholder="Region" style="width:49.3%;text-transform:capitalize" class="input-box" required /><br/><br/>
                             Address<input type="text" name="address" placeholder="Address" style="width:100%;text-transform:capitalize" class="input-box" required /><br/><br/>
-                            <input type="button" onclick="searchLoc(country.value, address.value, region.value)" value="Set my Location" style="width:100%" class="submit_button" />
+                            <input type="button" onclick="searchLoc(country.value, address.value, region.value)" value="Set my Location" style="width:100%;color:blue;" class="submit_button" />
                         
                         <input type="hidden" name="locationCoordinate" value="" /><br/><br/>
-                        <input type="submit" class="submit_button" style="width:100%" value="Register" />
+                        <input type="submit" class="submit_button" style="width:50%;color:green;box-shadow:0 0 8px green" value="Activate Account" />
+                        <input type="submit" class="submit_button" style="width:48%;color:red;box-shadow:0 0 8px red" value="Reject Request" />
                     </form>
                 </div>
-                <div align="right">
-                    <?php include("../getlocationmap.php"); ?>
+                <div align="right" style="padding:10px;">
+                    <?php include('../getlocationmap.php'); ?>
+                    <script>
+                        function viewDetails(data){
+                    
+                            var arrdata = data.split("-");
+                            var nic = arrdata[0];
+                            var category = arrdata[1];
+
+                            var userdetails = new XMLHttpRequest();
+                            userdetails.onreadystatechange = function(){
+                                if (this.readyState == 4 && this.status == 200){
+                                    var data = JSON.parse(this.responseText);
+                                    
+                                    $("#viewDetailsContainer").css('visibility', 'visible');
+                                    $(".blurry-background").css('visibility', 'visible');
+
+                                    $("input[name='nic']").val(data[0]);
+                                    $("input[name='fullname']").val(data[1]);
+                                    $("input[name='tan']").val(data[2]);
+                                    $("input[name='phone']").val(data[4]);
+                                    $("input[name='email']").val(data[6]);
+                                    $("input[name='country']").val(data[7]);
+                                    $("input[name='region']").val(data[8]);
+                                    $("input[name='address']").val(data[3]);
+                                    
+                                    
+                                }
+                            }
+                            userdetails.open("POST", "getuserdetails.php", true);
+                            userdetails.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+                            userdetails.send('id=' + nic + '&category=' + category);
+                            
+                        }
+                    </script>
                 </div>
             </div>
         </div>

@@ -39,7 +39,7 @@
                 attribution: '&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors',
                 maxZoom: 16
             }).addTo(map);
-
+            
             /*
             var geocodeService = L.esri.Geocoding.geocodeService();
 
@@ -96,6 +96,7 @@
                   if (prevMarker != ""){
                     map.removeLayer(prevMarker);
                   }
+                  
                   prevMarker = L.marker(result.results[0].latlng, {draggable:'true'}).addTo(map);
                   var position = prevMarker.getLatLng();
                   var reformat = position.lat + "," + position.lng;
