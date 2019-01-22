@@ -11,7 +11,7 @@
             <h4><i class='fa fa-id-badge'></i> " . $userID . "</h4>
             <h4><i class='fa fa-pie-chart'></i> Total No. of Bins:</h4>
             <input type='hidden' value='$userID' id='user_bin' />
-            <input type='button' value='Add Bins +' onclick='addbin(user_bin.value)' class='button' style='position:absolute;top:7px;right:10px;padding:4px 8px;' />
+            <input type='button' value='Add Bins +' onclick='popupaddbin(user_bin.value)' class='button' style='position:absolute;top:7px;right:10px;padding:4px 8px;' />
         </div>
     ";
 

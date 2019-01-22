@@ -49,11 +49,16 @@
                 border-radius:3px;
                 padding:10px;
                 width:300px;
+                display:none;
             }
 
             .addBinPromptBox h3{
                 margin:0;
                 padding:0 0 8px 0;
+            }
+
+            #blurme{
+                display:none;
             }
         </style>
         <script>
@@ -89,9 +94,31 @@
 
             }
 
-            function addbin(user_bin_id){
-                var binType = document.getElementById('bintype').value;
-                var nOfBin = document.getElementById('nOfBin').value;
+            function update_bin(user_bin_id, bin_type, bin_capacity, nOfBin, act){
+                event.preventDefault();
+
+                var update_bin = new XMLHttpRequest();
+                update_bin.onreadystatechange = function () {
+                    if (this.readyState == 4 && this.status == 200) {
+                         document.getElementById('promptbox').innerHTML = "New Bin Added";
+                         setTimeout(function(){
+                            $("#blurme, #promptbox").fadeOut();
+                         }, 1000);
+                    }
+                }
+                update_bin.open("POST", "update_bin.php", true);
+                update_bin.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+                update_bin.send('user_id=' + user_bin_id + "&bin_type=" + bin_type + "&bin_capacity=" + bin_capacity + "&nOfBin=" + nOfBin + "&act=" + act);
+
+            }
+
+            function popupaddbin(user_id){
+                document.getElementById('theuserid').value = user_id;
+                $("#blurme, .addBinPromptBox").fadeIn();
+            }
+
+            function close_box(){
+                $("#blurme, .addBinPromptBox").fadeOut();
             }
         </script>
     </head>
@@ -104,27 +131,30 @@
             <div id="bin_control_box" align='left'>bin control box</div>
 
             <!-- BACKGROUND BLUR -->
-            <div style='position:fixed;left:0;top:0;background-color:white;width:100%;height:100%;opacity:0.8;z-index:0;'></div>
+            <div id='blurme' style='position:fixed;left:0;top:0;background-color:white;width:100%;height:100%;opacity:0.8;z-index:0;'></div>
 
             <!-- ADD BIN PROMPT BOX -->
-            <div class='addBinPromptBox' align="left" style='position:absolute;top:180px;left:650px;background-color:white;z-index:1'>
+            <div class='addBinPromptBox' id='promptbox' align="left" style='position:absolute;top:180px;left:650px;background-color:white;z-index:1'>
                 <h3><i class='fa fa-trash-o'></i> New Bin</h3>
-                Bin Type:
-                <select id='bintype' style='width:100%;border:1px solid #002246;padding:8px;cursor:pointer;outline:none;border-radius:3px;'>
-                    <option value='organic' >Organic</option>
-                    <option value='plastic'>Plastic</option>
-                    <option value='paper'>Paper</option>
-                </select><br/><br/>
-                Capacity:
-                <select id='binCapacity' style='width:100%;border:1px solid #002246;padding:8px;cursor:pointer;outline:none;border-radius:3px;'>
-                    <option value='5' >5 Liters</option>
-                    <option value='15'>15 Liters</option>
-                    <option value='25'>25 Liters</option>
-                </select><br/><br/>
-                Number of Bins:<br/>
-                <input type="number" id='nOfBin' style='width:100%;border:1px solid #002246;padding:8px;cursor:pointer;outline:none;border-radius:3px;box-sizing:border-box' required /><br/><br/>
-                <input type='hidden' value='' id='theuserid' />
-                <input type="button" class='button' value="Add +" onclick='addbin(theuserid.value)' />
+                <form onsubmit='update_bin(theuserid.value, bintype.value, binCapacity.value, nOfBin.value, 1)'>
+                    Bin Type:
+                    <select id='bintype' style='width:100%;border:1px solid #002246;padding:8px;cursor:pointer;outline:none;border-radius:3px;'>
+                        <option value='organic' >Organic</option>
+                        <option value='plastic'>Plastic</option>
+                        <option value='paper'>Paper</option>
+                    </select><br/><br/>
+                    Capacity:
+                    <select id='binCapacity' style='width:100%;border:1px solid #002246;padding:8px;cursor:pointer;outline:none;border-radius:3px;'>
+                        <option value='5' >5 Liters</option>
+                        <option value='15'>15 Liters</option>
+                        <option value='25'>25 Liters</option>
+                    </select><br/><br/>
+                    Number of Bins:<br/>
+                    <input type="number" id='nOfBin' style='width:100%;border:1px solid #002246;padding:8px;cursor:pointer;outline:none;border-radius:3px;box-sizing:border-box' required /><br/><br/>
+                    <input type='hidden' value='' id='theuserid' />
+                    <input type="submit" class='button' value="Add +" />
+                    <input type="button" class="button" onclick="close_box()" value="Cancel" />
+                </form>
             </div>
         </div>
         
