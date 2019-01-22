@@ -33,7 +33,22 @@
                 var level = new XMLHttpRequest();
                 level.onreadystatechange = function(){
                     if (this.readyState == 4 && this.status == 200){
-                        alert(this.responseText);
+                        var level_bar_id = binType + binCapacity;
+                        var new_level = JSON.parse(this.responseText);
+
+                        var i;
+                        for (i = 0; i < numOfBins; i++){
+                            if (new_level <= 100) {
+                                document.getElementById(level_bar_id + "_" + i).style.width = new_level + '%';
+                                new_level = 0;
+                            } else {
+                                document.getElementById(level_bar_id + "_" + i).style.width = "100%";
+                                new_level -= 100;
+                            }
+                            
+
+                        }
+                        
                     }
                 }
                 level.open("POST", "bin_level.php", true);

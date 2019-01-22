@@ -31,7 +31,7 @@
                                                 <div style='display:inline-block;width:300px'>
                                                     <i class='fa fa-trash-o' style='font-size:100px;'></i>
                                                     <div style='height:20px;border:1px solid black;width:100%'>
-                                                        <div style='background-color:#002246;height:20px;' id=''></div>
+                                                        <div style='background-color:#002246;height:20px;' id='" . $type . $bin_capacity . "_" . $i . "'></div>
                                                     </div>
                                                 </div>
                                             ";
