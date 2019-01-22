@@ -61,7 +61,7 @@
 
             <?php
                 // POLYGON VARIABLE
-                $latlng = "[";
+                // $latlng = "[";
 
                 // COORDINATES FROM DATABASE MERGED WITH POLYGON FUNCTION
                 if ($results = mysqli_query($conn, $active_user_query)){
@@ -76,8 +76,8 @@
                         ";
                         // POLYGON MAKER
                         
-                    }
-                }
+                    };
+                };
             ?>
 
             ];

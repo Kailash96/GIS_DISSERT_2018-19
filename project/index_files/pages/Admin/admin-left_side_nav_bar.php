@@ -36,7 +36,7 @@
     <ul>
         <li><a href="admin-home.php" id="home_selected"><i class="fa fa-home" id="home"></i> Home</a></li>
         <li><a href="register_new_user.php" id="register_selected"><i class="fa fa-address-book-o" id="registeruser"></i> Register New User</a></li>
-        <li><a href=""><i class="fa fa-group"></i> User Management</a></li>
+        <li><a href="user-management.php" id="user_mngt_selected"><i class="fa fa-group"></i> User Management</a></li>
         <li><a href="requests_management.php" id="requests_selected"><i class="fa fa-bell-o"></i> Requests <span style="background-color:red;padding:0px 6px 0px 5px;border-radius:3px;color:white;" id="counter"></span></a></li>
         <li><a href="register-employee.php" id="register-employee_selected"><i class="fa fa-address-card-o"></i> Employee Management</a></li>
         <li><a href=""><i class="fa fa-cogs"></i> Settings</a></li>

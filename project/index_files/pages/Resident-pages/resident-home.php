@@ -4,6 +4,7 @@
         <title>Home | Binswiper</title>
         <link type="text/css" rel="stylesheet" href="../../css_files/resident-css.css" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <?php session_start(); ?>
     </head>
     <body style="padding:70px 45px;">
         <!-- TOP BAR -->
@@ -11,7 +12,7 @@
             <h1 style="display:inline-block;margin:8px 0;">Binswiper</h1>
             <!-- OPTIONS CONTAINER -->
             <div style="float:right;display:block-inline;margin-top:20px;">
-                <span style="margin-right:50px;">Username</span>
+                <span style="margin-right:50px;text-transform:capitalize"><i class="fa fa-user-circle-o"></i> <?php echo $_SESSION['username'] ?></span>
                 <a href="logout.php" style="color:#002246;text-decoration:none;"><i class="fa fa-sign-out"></i> Logout</a>
             </div>
         </div>

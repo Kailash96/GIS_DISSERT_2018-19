@@ -13,6 +13,7 @@
     <body>
         <?php include("admin-left_side_nav_bar.php"); ?>
         <?php include("admin-top-nav-bar.html"); ?>
-
+        
+        Dashboard
     </body>
 </html>

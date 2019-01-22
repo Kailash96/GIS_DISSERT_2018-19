@@ -16,50 +16,7 @@
             }
         </style>
 
-        <?php
-            include("db_connect.php");
-
-            if($_POST){
-                
-                $userid = $_POST['userid'];
-                $password = $_POST['userpassword'];
-
-                $checkID_query = "SELECT * FROM generatorslogin WHERE GeneratorID = '$userid'";
-                $checkPass_query = "SELECT * FROM generatorslogin WHERE Password = '$password'";
-
-                if (mysqli_num_rows(mysqli_query($conn, $checkID_query)) > 0){
-                    if (mysqli_number_rows($result = mysqli_query($conn, $checkPass_query)) > 0){
-                        echo "password correct";
-                        /*
-                        $row = mysqli_fetch_assoc($result);
-                        if ($row['Category'] == 'residential'){
-                            $getDataQuery = "SELECT * FROM residents WHERE NIC = $userid";
-                        } else if ($row['Category'] == 'commercial'){
-                            $getDataQuery = "SELECT * FROM commercial WHERE RegNo = $userid";
-                        } else if ($row['Industrial'] == 'industrial'){
-                            $getDataQuery = "SELECT * FROM industrial WHERE RegNo = $userid";
-                        }
-                        */
-                        /*
-                        if ($fetched_data = mysqli_query($conn, $getDataQuery)){
-
-                            // SET SESSION
-                            include('index_files/pages/setsessions.php');
-                        }
-                        */
-                
-                    } else {
-                        // WRONG PASSWORD
-                        echo "<script>alert('wrong password');</script>";
-                    }
-                } else {
-                    // WRONG ID
-                    echo "<script>alert('wrong ID');</script>";
-                }
-                
-            }
-            
-        ?>
+        <?php include('login_server.php'); ?>
     </head>
     <body style="margin:0;">
         <div align="center">

@@ -98,15 +98,27 @@
 
         </style>
         <script>
-            function edit(){
-                event.preventDefault();
-                // GET ALL VALUES
-            }
-
             function closeme(){
                 $("#viewDetailsContainer").css('visibility', 'hidden');
                 $(".blurry-background").css('visibility', 'hidden');
             }
+            var thiscategory = "";
+            function edit(nic){
+                event.preventDefault();
+                // TEMPORARY CODE
+                // ACTIVATE ACCOUNT
+                var activate = new XMLHttpRequest();
+                activate.onreadystatechange = function(){
+                    if (this.readyState == 4 && this.status == 200){
+                        closeme();
+                    }
+                }
+                activate.open("POST", "activate-account.php", true);
+                activate.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+                activate.send("nic=" + nic + "&category=" + thiscategory);
+                
+            }
+
         </script>
     </head>
     <body>
@@ -129,7 +141,7 @@
             <h3 style="padding:0 20px;margin:0;color:#002246">Details Edit <input type='button' onclick='closeme()' value='X' class='top-right-close-button'></h3>
             <div class="reg-form-box">
                 <div style="padding:10px;">
-                    <form method="POST" action="edit()" style="font-size:12px;font-weight:bold;color:#9F9F9F">
+                    <form method="POST" onsubmit="edit(nic.value)" style="font-size:12px;font-weight:bold;color:#9F9F9F">
                         NIC <input type="text" name="nic" placeholder="NIC" style="text-transform:uppercase" class="input-box" required /><br/><br/>
                         Full Name <input type="text" name="fullname" placeholder="Full Name" style="text-transform:capitalize" class="input-box" required /><br/><br/>
                         Tax Account Number <input type="text" name="tan" placeholder="Tax Account Number" class="input-box" /><br/><br/>
@@ -143,7 +155,7 @@
                         
                         <input type="hidden" name="locationCoordinate" value="" /><br/><br/>
                         <input type="submit" class="submit_button" style="width:50%;color:green;box-shadow:0 0 8px green" value="Activate Account" />
-                        <input type="submit" class="submit_button" style="width:48%;color:red;box-shadow:0 0 8px red" value="Reject Request" />
+                        <input type="button" class="submit_button" style="width:48%;color:red;box-shadow:0 0 8px red" value="Reject Request" />
                     </form>
                 </div>
                 <div align="right" style="padding:10px;">
@@ -172,7 +184,7 @@
                                     $("input[name='region']").val(data[8]);
                                     $("input[name='address']").val(data[3]);
                                     
-                                    
+                                    thiscategory = category;
                                 }
                             }
                             userdetails.open("POST", "getuserdetails.php", true);
