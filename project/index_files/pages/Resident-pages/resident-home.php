@@ -5,25 +5,62 @@
         <link type="text/css" rel="stylesheet" href="../../css_files/resident-css.css" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         <?php session_start(); ?>
+        <style>
+            .bins_box{
+                box-shadow:0 0 4px #002246;
+                padding:10px;
+                margin:10px 0;
+                border-radius:3px;
+            }
+        </style>
+        <script>
+            function update_bins(userID){
+                var update_bin = new XMLHttpRequest();
+                update_bin.onreadystatechange = function(){
+                    if (this.readyState == 4 && this.status == 200) {
+                        var data = JSON.parse(this.responseText);
+                        document.getElementById('bins_box').innerHTML = data;
+                    }
+                }
+                update_bin.open("POST", "update_resident_bin.php", true);
+                update_bin.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+                update_bin.send("user_id=" + userID);
+            }
+
+            function levelup(userID, binType, binCapacity, numOfBins, level_value){
+                event.preventDefault();
+
+                var level = new XMLHttpRequest();
+                level.onreadystatechange = function(){
+                    if (this.readyState == 4 && this.status == 200){
+                        alert(this.responseText);
+                    }
+                }
+                level.open("POST", "bin_level.php", true);
+                level.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+                level.send("GenID=" + userID + "&cap=" + binCapacity + "&type=" + binType + "&nob=" + numOfBins + "&level=" + level_value);
+
+            }
+        </script>
     </head>
-    <body style="padding:70px 45px;">
+    <input type="hidden" value="<?php echo $_SESSION['userID']; ?>" id='userid' />
+    <body style="padding:70px 45px;" onload="update_bins(userid.value)">
         <!-- TOP BAR -->
         <div class="top-bar">
             <h1 style="display:inline-block;margin:8px 0;">Binswiper</h1>
             <!-- OPTIONS CONTAINER -->
             <div style="float:right;display:block-inline;margin-top:20px;">
                 <span style="margin-right:50px;text-transform:capitalize"><i class="fa fa-user-circle-o"></i> <?php echo $_SESSION['username'] ?></span>
+                <a href="" style="color:#002246;text-decoration:none;margin-right:50px;"><i class="fa fa-wrench"></i> Settings</a>
                 <a href="logout.php" style="color:#002246;text-decoration:none;"><i class="fa fa-sign-out"></i> Logout</a>
             </div>
         </div>
 
         Next Collection: -- | -- | --
         <h3>My Bins</h3>
-        <div style="background-color:#002246;color:white;padding:4px 10px;border-radius:3px;">Organic</div>
-        <br/>
-        <div>
-          <i class="fa fa-trash-o" style="font-size:120px;color:#E44747;"></i>
-          <input type="text" placeholder = "waste level" />
+
+        <!-- BINS DETAILS BOX -->
+        <div id="bins_box">
         </div>
     </body>
 </html>
