@@ -4,6 +4,7 @@
         <title>Home | Binswiper</title>
         <link type="text/css" rel="stylesheet" href="../../css_files/resident-css.css" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
         <?php session_start(); ?>
         <style>
             .bins_box{
@@ -19,7 +20,11 @@
                 update_bin.onreadystatechange = function(){
                     if (this.readyState == 4 && this.status == 200) {
                         var data = JSON.parse(this.responseText);
-                        document.getElementById('bins_box').innerHTML = data[0];
+                        document.getElementById('bins_box').innerHTML = data[0][0];
+                        var i;
+                        for (i = 1; i < data.length; i++) {
+                            levelup(userID, data[i][0], data[i][1], data[i][2], 0);
+                        }
                     }
                 }
                 update_bin.open("POST", "update_resident_bin.php", true);
@@ -29,13 +34,12 @@
 
             function levelup(userID, binType, binCapacity, numOfBins, level_value){
                 event.preventDefault();
-
+                
                 var level = new XMLHttpRequest();
                 level.onreadystatechange = function(){
                     if (this.readyState == 4 && this.status == 200){
                         var level_bar_id = binType + binCapacity;
                         var new_level = JSON.parse(this.responseText);
-
                         var i;
                         for (i = 0; i < numOfBins; i++){
                             if (new_level <= 100) {
