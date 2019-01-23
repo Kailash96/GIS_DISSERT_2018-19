@@ -47,6 +47,7 @@
                                                 <input type='text' placeholder='Waste Level in Liters' id='level' required />
                                                 <input type='submit' value='Submit' />
                                             </form>
+                                            <div id='" . $type . $bin_capacity . "'></div>
                                         ";
                                     }
                                 }
