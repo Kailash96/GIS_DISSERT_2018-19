@@ -19,7 +19,7 @@
                 update_bin.onreadystatechange = function(){
                     if (this.readyState == 4 && this.status == 200) {
                         var data = JSON.parse(this.responseText);
-                        document.getElementById('bins_box').innerHTML = data;
+                        document.getElementById('bins_box').innerHTML = data[0];
                     }
                 }
                 update_bin.open("POST", "update_resident_bin.php", true);
@@ -35,15 +35,16 @@
                     if (this.readyState == 4 && this.status == 200){
                         var level_bar_id = binType + binCapacity;
                         var new_level = JSON.parse(this.responseText);
-                        document.getElementById(level_bar_id).innerHTML = new_level + '%';
 
                         var i;
                         for (i = 0; i < numOfBins; i++){
                             if (new_level <= 100) {
                                 document.getElementById(level_bar_id + "_" + i).style.width = new_level + '%';
+                                document.getElementById(level_bar_id + "_fill_" + i).innerHTML = new_level + '%';
                                 new_level = 0;
                             } else {
                                 document.getElementById(level_bar_id + "_" + i).style.width = "100%";
+                                document.getElementById(level_bar_id + "_fill_" + i).innerHTML = '100%';
                                 new_level -= 100;
                             }  
                         }

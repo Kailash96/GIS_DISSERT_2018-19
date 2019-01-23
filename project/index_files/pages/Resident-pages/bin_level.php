@@ -8,7 +8,7 @@
     $level = $_POST['level'];
 
     $total_capacity = $capacity * $numOfBins;
-    $percent_level = ($level / $total_capacity) * 100;
+    $percent_level = ($level / $total_capacity) * ($numOfBins * 100);
 
     $getBinID_query = "SELECT GenBinID FROM bins WHERE Type = '$type' AND Capacity = '$capacity' AND GeneratorID = '$genID' LIMIT 1";
     if ($binID_result = mysqli_query($conn, $getBinID_query)){

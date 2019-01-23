@@ -3,11 +3,12 @@
 
     $userID = $_POST['user_id'];
 
-    $data = "";
+    $data = array();
+    $data[0] = "";
     $type_query = "SELECT DISTINCT Type FROM bins WHERE GeneratorID = '$userID'";
     if ($results = mysqli_query($conn, $type_query)) {
         while ($row = mysqli_fetch_assoc($results)) {
-            $data .= "
+            $data[0] .= "
                 <div class='bins_box'>
                     <h3 style='margin:0;text-transform:capitalize;'>" . $row['Type'] . "</h3>";
 
@@ -18,7 +19,7 @@
                     while ($capacity_row = mysqli_fetch_assoc($capacity_results)) {
                         $bin_capacity = $capacity_row['Capacity'];
 
-                        $data .= "
+                        $data[0] .= "
                             <div class='bins_box' style='font-size:14px;'>
                                 Capacity: " . $capacity_row['Capacity'] . " Liters<br/><br/>";
                                 $numberofbins_query = "SELECT NoOfBins FROM bins WHERE GeneratorID = '$userID' AND Type = '$type' AND Capacity = $bin_capacity";
@@ -27,17 +28,18 @@
                                         $numberOfBins = $numOfBins_row['NoOfBins'];
 
                                         for ($i = 0; $i < $numberOfBins; $i++) {
-                                            $data .= "
+                                            $data[0] .= "
                                                 <div style='display:inline-block;width:300px'>
                                                     <i class='fa fa-trash-o' style='font-size:100px;'></i>
                                                     <div style='height:20px;border:1px solid black;width:100%'>
                                                         <div style='background-color:#002246;height:20px;' id='" . $type . $bin_capacity . "_" . $i . "'></div>
                                                     </div>
+                                                    <div id='" . $type . $bin_capacity . "_fill_" . $i . "'>Bin:</div>
                                                 </div>
                                             ";
                                         }
 
-                                        $data .= "
+                                        $data[0] .= "
                                             <br/><br/>
                                             <form onsubmit='levelup(theuserid.value, thetype.value, thecapacity.value, thenum.value, level.value)'>
                                                 <input type='hidden' value='" . $userID . "' id='theuserid' />
@@ -47,21 +49,21 @@
                                                 <input type='text' placeholder='Waste Level in Liters' id='level' required />
                                                 <input type='submit' value='Submit' />
                                             </form>
-                                            <div id='" . $type . $bin_capacity . "'></div>
                                         ";
                                     }
                                 }
-                        $data .= "
+                        $data[0] .= "
                             </div>
                         ";
                     }
                 }
 
-            $data .= "
+            $data[0] .= "
                 </div>
             ";
         }
     }
 
+    
     echo json_encode($data);
 ?>
