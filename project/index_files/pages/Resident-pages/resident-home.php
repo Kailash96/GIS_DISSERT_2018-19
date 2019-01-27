@@ -5,7 +5,12 @@
         <link type="text/css" rel="stylesheet" href="../../css_files/resident-css.css" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-        <?php session_start(); ?>
+        <?php
+            session_start();
+            if (!isset($_SESSION['userID'])) {
+                header('location: ../../../index.php');
+            }
+        ?>
         <style>
             .bins_box{
                 box-shadow:0 0 4px #002246;
@@ -66,12 +71,18 @@
     <body style="padding:70px 45px;" onload="update_bins(userid.value)">
         <!-- TOP BAR -->
         <div class="top-bar">
-            <h1 style="display:inline-block;margin:8px 0;">Binswiper</h1>
+            <h1 style="display:inline-block;margin:8px 0;"><i class='fa fa-trash'></i> Binswiper</h1>
             <!-- OPTIONS CONTAINER -->
             <div style="float:right;display:block-inline;margin-top:20px;">
                 <span style="margin-right:50px;text-transform:capitalize"><i class="fa fa-user-circle-o"></i> <?php echo $_SESSION['username'] ?></span>
                 <a href="" style="color:#002246;text-decoration:none;margin-right:50px;"><i class="fa fa-wrench"></i> Settings</a>
-                <a href="logout.php" style="color:#002246;text-decoration:none;"><i class="fa fa-sign-out"></i> Logout</a>
+                <a href="?logout=logout" style="color:#002246;text-decoration:none;"><i class="fa fa-sign-out"></i> Logout</a>
+                <?php
+                    if (isset($_GET['logout'])) {
+                        session_destroy();
+                        header("Refresh:0");
+                    }
+                ?>
             </div>
         </div>
 

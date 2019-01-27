@@ -49,6 +49,7 @@
                 $('[name="locationCoordinate"]').val(coordinates);
             }
         </script>
+        <?php include('../../../log_reg_server.php'); ?>
     </head>
     <body style="margin:0;padding:0;">
         <h1 style="text-align:center"><i class="fa fa-trash-o"></i> Binswiper</h1>
@@ -56,10 +57,9 @@
         <div align="center">
             <div class="reg-form-box">
                 <div>
-                    <form method="POST" action="registration_complete.php">
+                    <form method="POST" onsubmit="<?php $_SERVER['PHP_SELF'] ?>">
                         <input type="text" name="nic" placeholder="NIC" style="text-transform:uppercase" class="input-box" required /><br/>
                         <input type="text" name="fullname" placeholder="Full Name" style="text-transform:capitalize" class="input-box" required /><br/>
-                        <input type="text" name="tan" placeholder="Tax Account Number" class="input-box" /><br/>
                         <input type="number" name="phone" placeholder="Phone" class="input-box" required /><br/>
                         <input type="text" name="email" placeholder="Email" class="input-box" style="text-transform:none" /><br/>
                         
@@ -69,7 +69,7 @@
                             <input type="button" onclick="searchLoc(country.value, address.value, region.value)" value="Set my Location" style="width:100%" class="submit_button" />
                         
                         <input type="hidden" name="locationCoordinate" value="" /><br/><br/>
-                        <input type="submit" class="submit_button" style="width:100%" value="Register" />
+                        <input type="submit" class="submit_button" name="reg" style="width:100%" value="Register" />
                     </form>
                 </div>
                 <div align="right">

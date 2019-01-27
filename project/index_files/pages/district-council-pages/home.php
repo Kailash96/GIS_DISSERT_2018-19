@@ -57,27 +57,88 @@
                 attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
             }).addTo(map);
 
+
+            <?php
+                // temp for dcof region to be changes to session[collectorsID] on login
+                $getPolygonCoords_query = "SELECT coordinates FROM zone WHERE collectorsID = 'DCOF' LIMIT 1";
+                if ($results = mysqli_query($conn, $getPolygonCoords_query)) {
+                    while ($row = mysqli_fetch_assoc($results)) {
+                        $coords = $row['coordinates'];
+                    }
+                }
+            ?>
+
+            var polygon = L.polygon(<?php echo $coords; ?>, {color: 'red'});
+            polygon.addTo(map);
+
+            map.fitBounds(polygon.getBounds());
+
+            // CHECK IF COORDINATE IS IN ZONE
+            /*
+            function inside(point, vs) {
+                var x = point[0], y = point[1];
+
+                var inside = false;
+                for (var i = 0, j = vs.length - 1; i < vs.length; j = i++) {
+                    var xi = vs[i][0], yi = vs[i][1];
+                    var xj = vs[j][0], yj = vs[j][1];
+
+                    var intersect = ((yi > y) != (yj > y))
+                        && (x < (xj - xi) * (y - yi) / (yj - yi) + xi);
+                    if (intersect) inside = !inside;
+                }
+
+                return inside;
+            };
+            */
+
+            <?php
+                function inside($point, $vs) {
+
+                    $x = $point[0];
+                    $y = $point[1];
+
+                    $inside = false;
+                    for ($i = 0, $j = sizeof($vs) - 1; $i < sizeof($vs); $j = $i++) {
+                        $xi = $vs[$i][0];
+                        $yi = $vs[$i][1];
+                        $xj = $vs[$j][0];
+                        $yj = $vs[$j][1];
+                        
+                        $intersect = (($yi > $y) != ($yj > $y)) && ($x < ($xj - $xi) * ($y - $yi) / ($yj - $yi) + $xi);
+                        if ($intersect) $inside = !$inside;
+                    }
+
+                    return $inside;
+
+                };
+            ?>
+            
+            // ROUTING WITH COORDINATES
             var data = [
 
             <?php
-                // POLYGON VARIABLE
-                // $latlng = "[";
-
+ 
                 // COORDINATES FROM DATABASE MERGED WITH POLYGON FUNCTION
                 if ($results = mysqli_query($conn, $active_user_query)){
                     $counter = mysqli_num_rows($results);
                     while($row = mysqli_fetch_assoc($results)){
-                        $coord = explode(",", $row['LocationCoordinate']);
+                        $loc_coords = explode(",", $row['LocationCoordinate']);
+
+                        if (inside($loc_coords, json_decode($coords))) {
+                            $coord = $loc_coords;
+                        }
+                        
                         echo "
                             {
                                 'lat': '$coord[0]',
                                 'lng': '$coord[1]'
                             },
                         ";
-                        // POLYGON MAKER
-                        
+
                     };
                 };
+                
             ?>
 
             ];
@@ -87,5 +148,6 @@
             routeControl.setWaypoints(data);
 
         </script>
+
     </body>
 </html>

@@ -35,8 +35,8 @@
                                             $data[0][0] .= "
                                                 <div style='display:inline-block;width:300px'>
                                                     <i class='fa fa-trash-o' style='font-size:100px;'></i>
-                                                    <div style='height:20px;border:1px solid black;width:100%'>
-                                                        <div style='background-color:#002246;height:20px;' id='" . $type . $bin_capacity . "_" . $i . "'></div>
+                                                    <div style='height:10px;border:1px solid black;width:100%'>
+                                                        <div style='background-color:green;height:8px;' id='" . $type . $bin_capacity . "_" . $i . "'></div>
                                                     </div>
                                                     <div id='" . $type . $bin_capacity . "_fill_" . $i . "'>Bin:</div>
                                                 </div>

@@ -2,7 +2,8 @@
     include("../../../db_connect.php");
 
     $nic = $_POST['nic'];
-    $password = $nic . '%' . rand(1000, 9999);
+    $fullname = $_POST['fname'];
+    $password = SHA1(substr($fullname, 0, 3) . substr($nic, -3));
     $category = $_POST['category'];
     
     if ($category == 'resident') {

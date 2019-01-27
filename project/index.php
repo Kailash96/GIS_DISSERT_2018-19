@@ -16,7 +16,7 @@
             }
         </style>
 
-        <?php include('login_server.php'); ?>
+        <?php include('log_reg_server.php'); ?>
     </head>
     <body style="margin:0;">
         <div align="center">
@@ -26,7 +26,7 @@
                     <h4>Login</h4>
                     <input type="text" placeholder="NIC/Reg Number" name="userid" class="loginbox" required /><br/>
                     <input type="password" placeholder="password" name="userpassword" class="loginbox" required /><br/>
-                    <input type="submit" value="login" class="button" style="float:right;" />
+                    <input type="submit" name="lgn" value="login" class="button" style="float:right;" />
                 </form>
                 <h5>New user? <a href="index_files/pages/registration_navigator.php" style="color:#002246">Click here to register.</a></h5>
             </div>
