@@ -45,7 +45,6 @@
             // QUERY FOR INDUSTRIALS
             // QUERY FOR COMMERCIALS
 
-
         ?>
         
         <div id="map"></div>
@@ -57,7 +56,6 @@
                 attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
             }).addTo(map);
 
-
             <?php
                 // temp for dcof region to be changes to session[collectorsID] on login
                 $getPolygonCoords_query = "SELECT coordinates FROM zone WHERE collectorsID = 'DCOF' LIMIT 1";
@@ -68,30 +66,12 @@
                 }
             ?>
 
-            var polygon = L.polygon(<?php echo $coords; ?>, {color: 'red'});
+            var polygon = L.polygon(<?php echo $coords; ?>, {color: '#002246'});
             polygon.addTo(map);
 
             map.fitBounds(polygon.getBounds());
 
             // CHECK IF COORDINATE IS IN ZONE
-            /*
-            function inside(point, vs) {
-                var x = point[0], y = point[1];
-
-                var inside = false;
-                for (var i = 0, j = vs.length - 1; i < vs.length; j = i++) {
-                    var xi = vs[i][0], yi = vs[i][1];
-                    var xj = vs[j][0], yj = vs[j][1];
-
-                    var intersect = ((yi > y) != (yj > y))
-                        && (x < (xj - xi) * (y - yi) / (yj - yi) + xi);
-                    if (intersect) inside = !inside;
-                }
-
-                return inside;
-            };
-            */
-
             <?php
                 function inside($point, $vs) {
 

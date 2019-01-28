@@ -48,11 +48,11 @@
                         var i;
                         for (i = 0; i < numOfBins; i++){
                             if (new_level <= 100) {
-                                document.getElementById(level_bar_id + "_" + i).style.width = new_level + '%';
+                                document.getElementById(level_bar_id + "_" + i).style.width = (100 - new_level) + '%';
                                 document.getElementById(level_bar_id + "_fill_" + i).innerHTML = new_level + '%';
                                 new_level = 0;
                             } else {
-                                document.getElementById(level_bar_id + "_" + i).style.width = "100%";
+                                document.getElementById(level_bar_id + "_" + i).style.width = "0%";
                                 document.getElementById(level_bar_id + "_fill_" + i).innerHTML = '100%';
                                 new_level -= 100;
                             }  
