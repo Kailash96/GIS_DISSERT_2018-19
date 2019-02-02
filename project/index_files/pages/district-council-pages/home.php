@@ -66,7 +66,7 @@
                 }
             ?>
 
-            var polygon = L.polygon(<?php echo $coords; ?>, {color: '#002246'});
+            var polygon = L.polygon(<?php echo $coords; ?>, {color: 'red'});
             polygon.addTo(map);
 
             map.fitBounds(polygon.getBounds());
@@ -85,7 +85,8 @@
                         $xj = $vs[$j][0];
                         $yj = $vs[$j][1];
                         
-                        $intersect = (($yi > $y) != ($yj > $y)) && ($x < ($xj - $xi) * ($y - $yi) / ($yj - $yi) + $xi);
+                        $intersect = (($yi > $y) != ($yj > $y))
+                        && ($x < ($xj - $xi) * ($y - $yi) / ($yj - $yi) + $xi);
                         if ($intersect) $inside = !$inside;
                     }
 
