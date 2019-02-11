@@ -26,17 +26,18 @@
 
       function initMap() {
         var map = new google.maps.Map(document.getElementById('map'), {
-          zoom: 5,
-          center: {lat: 24.886, lng: -70.268},
-          mapTypeId: 'terrain'
+          zoom: 13,
+          center: {lat: -20.252293, lng: 57.588131},
+          mapTypeId: 'roadmap'
         });
 
         // Define the LatLng coordinates for the polygon's path.
         var triangleCoords = [
-          {lat: 25.774, lng: -80.190},
-          {lat: 18.466, lng: -66.118},
-          {lat: 32.321, lng: -64.757},
-          {lat: 25.774, lng: -80.190}
+          {lat: -20.225070, lng: 57.538450},
+          {lat: -20.216790, lng: 57.623000},
+          {lat: -20.285640, lng: 57.661280},
+          {lat: -20.283670, lng: 57.550400},
+          {lat: -20.225070, lng: 57.538450}
         ];
 
         // Construct the polygon.
