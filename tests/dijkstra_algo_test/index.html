@@ -13,8 +13,37 @@
                 graph = new Graph(map);
             */
 
+			// temp array
+			var crds = [10, 20, 30, 40];
+
+			function mapping(){
+				var i, j, map = "";
+				for (i = 0; i < crds.length; i++) {
+					map += "crds" + i + ":{";
+					for (j = 0; j < crds.length; j++) {
+						if (j != i) {
+							map += "crds" + j + ":";
+							map += 10;
+							if (j != (crds.length - 1) && !(i == (crds.length - 1) && (j == (i - 1)))) {
+								map += ",";
+							}
+						}
+					}
+					map += "}";
+					if (i != (crds.length - 1)) {
+						map += ",";
+					}
+				}
+				
+				return map;
+			}
+
+			console.log(mapping());
+
             var map = {a:{b:2,e:3},b:{a:2,f:1},c:{f:4,d:2},d:{c:2,g:8,f:5},e:{f:7,a:3},f:{e:7,g:3,d:5},g:{d:8,f:3}},
-                graph = new Graph(map);
+				graph = new Graph(map);
+				
+				/*
 
 			console.log(graph.findShortestPath('a', 'g'));
 			console.log(graph.findShortestPath('a', 'c'));
@@ -24,6 +53,7 @@
             console.log(graph.findShortestPath('c', 'b', 'a'));
             
 			document.getElementById("test").innerHTML = graph.findShortestPath('a', 'g');
+			*/
         </script>
 		
 	</body>
