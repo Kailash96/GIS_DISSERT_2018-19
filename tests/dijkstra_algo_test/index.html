@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Dijkstra</title>
+		<script src="graph.js"></script>
+	</head>
+	<body>
+			<div id="test"></div>
+		<script>
+            /*
+			var map = {a:{b:3,c:1},b:{a:2,c:1},c:{a:4,b:1}},
+                graph = new Graph(map);
+            */
+
+            var map = {a:{b:2,e:3},b:{a:2,f:1},c:{f:4,d:2},d:{c:2,g:8,f:5},e:{f:7,a:3},f:{e:7,g:3,d:5},g:{d:8,f:3}},
+                graph = new Graph(map);
+
+			console.log(graph.findShortestPath('a', 'g'));
+			console.log(graph.findShortestPath('a', 'c'));
+			console.log(graph.findShortestPath('b', 'a'));
+			console.log(graph.findShortestPath('b', 'c', 'b'));
+			console.log(graph.findShortestPath('c', 'a', 'b'));
+            console.log(graph.findShortestPath('c', 'b', 'a'));
+            
+			document.getElementById("test").innerHTML = graph.findShortestPath('a', 'g');
+        </script>
+		
+	</body>
+</html>
