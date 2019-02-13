@@ -14,16 +14,16 @@
             */
 
 			// temp array
-			var crds = [10, 20, 30, 40];
+			var arrOfCoords = [10, 10, 20, 30];
 
-			function mapping(){
+			function mapping(crds){
 				var i, j, map = "";
 				for (i = 0; i < crds.length; i++) {
-					map += "crds" + i + ":{";
+					map += "crds" + String(i) + ":{";
 					for (j = 0; j < crds.length; j++) {
 						if (j != i) {
-							map += "crds" + j + ":";
-							map += 10;
+							map += "crds" + String(j) + ":";
+							map += crds[i];
 							if (j != (crds.length - 1) && !(i == (crds.length - 1) && (j == (i - 1)))) {
 								map += ",";
 							}
@@ -35,14 +35,17 @@
 					}
 				}
 				
-				return map;
+				map += "{" + map + "}";
+				return JSON.stringify(map);
 			}
 
-			console.log(mapping());
+			console.log(mapping(arrOfCoords));
 
-            var map = {a:{b:2,e:3},b:{a:2,f:1},c:{f:4,d:2},d:{c:2,g:8,f:5},e:{f:7,a:3},f:{e:7,g:3,d:5},g:{d:8,f:3}},
-				graph = new Graph(map);
-				
+			var map = mapping(arrOfCoords); // {a:{b:3,c:3,d:3,e:3,f:3,g:3},b:{a:2,c:3,d:3,e:3,f:1,g:3},c:{a:3,b:3,d:3,e:3,f:4,g:3},d:{c:2,g:8,f:5},e:{f:7,a:3},f:{e:7,g:3,d:5},g:{d:8,f:3}};
+			// var map = {crds0:{crds1:10,crds2:10,crds3:10},crds1:{crds0:10,crds2:10,crds3:10},crds2:{crds0:20,crds1:20,crds3:20},crds3:{crds0:30,crds1:30,crds2:30}};
+			graph = new Graph(map);
+
+				console.log(graph.findShortestPath('crds0', 'crds3'));	
 				/*
 
 			console.log(graph.findShortestPath('a', 'g'));
