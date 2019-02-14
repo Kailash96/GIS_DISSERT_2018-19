@@ -49,8 +49,8 @@
             L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
                 attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
             }).addTo(map);
-
-            /*             
+            
+            /*
             <?php
                 
                 // temp for dcof region to be changes to session[collectorsID] on login
@@ -105,17 +105,32 @@
             var editableLayers = new L.FeatureGroup();
             map.addLayer(editableLayers);
 
+
+            var mainArray = [], cFormatArray = [];
+
             map.on('draw:created', function(e) {
                 var type = e.layerType,
                     layer = e.layer;
 
                 if (type == 'polygon') {
                     var points= layer._latlngs;
-                    console.log(points[0][0]);
+                    mainArray.push(points[0]);
+                    
+                    var i, j, cFormat = "";
+                    for (i = 0; i < mainArray.length; i++){
+                        cFormat += "[";
+                        for (j = 0; j < mainArray[i].length; j++){
+                            cFormat += "[" + mainArray[0][j].lat + "," + mainArray[0][j].lng + "]";
+                        }
+                        cFormat += "]";
+                        cFormatArray.push(cFormat);
+                    }
                 }
                 editableLayers.addLayer(layer);
             });
-        </script>
 
+        </script>
+        
+        <input type="button" value="submit" />
     </body>
 </html>
