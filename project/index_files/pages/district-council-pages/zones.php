@@ -50,7 +50,6 @@
                 attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
             }).addTo(map);
             
-            /*
             <?php
                 
                 // temp for dcof region to be changes to session[collectorsID] on login
@@ -58,16 +57,16 @@
                 if ($results = mysqli_query($conn, $getPolygonCoords_query)) {
                     while ($row = mysqli_fetch_assoc($results)) {
                         $coords = $row['coordinates'];
+                        echo "
+                            var polygon = L.polygon(" . $coords . ", {color: 'red'});
+                            polygon.addTo(map);
+                        ";
                     }
                 }
                 
             ?>
 
-            var polygon = L.polygon(<?php echo $coords; ?>, {color: 'red'});
-            polygon.addTo(map);
-
-            map.fitBounds(polygon.getBounds());
-            */
+            // map.fitBounds(polygon.getBounds());
 
             // Initialise the FeatureGroup to store editable layers
             var editableLayers = new L.FeatureGroup();
@@ -106,7 +105,7 @@
             map.addLayer(editableLayers);
 
 
-            var mainArray = [], cFormatArray = [];
+            var mainArray = [];
 
             map.on('draw:created', function(e) {
                 var type = e.layerType,
@@ -114,23 +113,37 @@
 
                 if (type == 'polygon') {
                     var points= layer._latlngs;
-                    mainArray.push(points[0]);
-                    
-                    var i, j, cFormat = "";
-                    for (i = 0; i < mainArray.length; i++){
-                        cFormat += "[";
-                        for (j = 0; j < mainArray[i].length; j++){
-                            cFormat += "[" + mainArray[0][j].lat + "," + mainArray[0][j].lng + "]";
+                    var cFormat = "[";
+                    var i;
+                    for (i = 0; i < points[0].length; i++) {
+                        cFormat += "[" + points[0][i].lat + "," + points[0][i].lng;
+                        if (i != (points[0].length - 1)) {
+                            cFormat += "],";
+                        } else {
+                            cFormat += "]";
                         }
-                        cFormat += "]";
-                        cFormatArray.push(cFormat);
                     }
+                    cFormat += "]";
+                    mainArray.push(cFormat);
                 }
                 editableLayers.addLayer(layer);
             });
 
+            function save_changes(){
+                var save = new XMLHttpRequest();
+                save.onreadystatechange = function(){
+                    if (this.readyState == 4 && this.status == 200) {
+                        console.log("success");
+                    }
+                }
+                save.open("POST", "save_zones.php", true);
+                save.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+                save.send("coords=" + JSON.stringify(mainArray));
+
+                mainArray.length = 0; // empty the array
+            }
         </script>
         
-        <input type="button" value="submit" />
+        <input type="button" value="Save Changes" onclick="save_changes()" />
     </body>
 </html>
