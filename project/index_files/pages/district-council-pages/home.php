@@ -4,22 +4,12 @@
         <title>Home | Binswiper</title>
         <link rel="stylesheet" href="../../css_files/style.css" />
 
-        <!-- ARCGIS CONNECTION -->
-        <link rel="stylesheet" href="https://js.arcgis.com/4.9/esri/css/main.css">
-        
-
-        <!-- MAP CSS AND JAVASCRIPT -->
         <link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css"
         integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="
         crossorigin=""/>
         <script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js"
         integrity="sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg=="
         crossorigin=""></script>
-
-        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.2.0/dist/leaflet.css" />
-        <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css" />
-        <script src="https://unpkg.com/leaflet@1.2.0/dist/leaflet.js"></script>
-        <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
 
         <style>
             #home_selected{
@@ -56,21 +46,53 @@
                 attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
             }).addTo(map);
 
+            var polygon = [];
+            function setLayer() {
+                var layer = new XMLHttpRequest();
+                layer.onreadystatechange = function(){
+                    if (this.readyState == 4 && this.status == 200) {
+                        var data = JSON.parse(this.responseText);
+                        // for (var i = 0; i < data[1].length; i++) {
+                            var polygons = L.polygon(data[1][1], {color: 'red', weight: 1});
+                            polygons.addTo(map);
+                        // }
+                    }
+                }
+                layer.open("POST", "getmarkers.php", true);
+                layer.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+                layer.send();
+            }
+            
+            function setPolygon(){
+                for (var i = 0; i < polygon.length; i++) {
+                    // polygon[i].addTo(map);
+                    console.log(polygon[i]);
+                };
+            }
+
+            setLayer();
+
+            /*
             <?php
                 // temp for dcof region to be changes to session[collectorsID] on login
-                $getPolygonCoords_query = "SELECT coordinates FROM zone WHERE collectorsID = 'DCOF' LIMIT 1";
+                $getPolygonCoords_query = "SELECT coordinates FROM zone WHERE collectorsID = 'DCOF'";
                 if ($results = mysqli_query($conn, $getPolygonCoords_query)) {
                     while ($row = mysqli_fetch_assoc($results)) {
                         $coords = $row['coordinates'];
+                        echo "
+                            polygon.push(L.polygon(" . $coords . ", {color: 'red', weight: 1}));
+                            zone_coords.push(" . $coords . ");
+                        ";
                     }
                 }
+
             ?>
 
-            var polygon = L.polygon(<?php echo $coords; ?>, {color: 'red'});
-            polygon.addTo(map);
+            */
 
-            map.fitBounds(polygon.getBounds());
+            // map.fitBounds(polygon[0].getBounds());
 
+            /*
             // CHECK IF COORDINATE IS IN ZONE
             <?php
                 function inside($point, $vs) {
@@ -94,9 +116,12 @@
 
                 };
             ?>
-            
+            */
+
+            /*
             // ROUTING WITH COORDINATES
             var data = [
+            
 
             <?php
  
@@ -104,11 +129,13 @@
                 if ($results = mysqli_query($conn, $active_user_query)){
                     $counter = mysqli_num_rows($results);
                     while($row = mysqli_fetch_assoc($results)){
-                        $loc_coords = explode(",", $row['LocationCoordinate']);
 
+                        $loc_coords = explode(",", $row['LocationCoordinate']);
+                        
                         if (inside($loc_coords, json_decode($coords))) {
                             $coord = $loc_coords;
                         }
+                        
                         
                         echo "
                             {
@@ -116,17 +143,22 @@
                                 'lng': '$coord[1]'
                             },
                         ";
+                        
 
                     };
                 };
                 
             ?>
 
+            
             ];
+
 
             var routeControl = L.Routing.control({
             }).addTo(map);
             routeControl.setWaypoints(data);
+            */
+
 
         </script>
 
