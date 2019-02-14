@@ -4,12 +4,17 @@
         <title>Home | Binswiper</title>
         <link rel="stylesheet" href="../../css_files/style.css" />
 
+        <!-- MAP CSS AND JAVASCRIPT -->
         <link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css"
         integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="
         crossorigin=""/>
         <script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js"
         integrity="sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg=="
         crossorigin=""></script>
+
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.css"/>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.js"></script>
+
 
         <style>
             #home_selected{
@@ -31,7 +36,7 @@
             include("../../../db_connect.php");
 
             // QUERY FOR RESIDENTS
-            $active_user_query = "SELECT LocationCoordinate FROM residents WHERE Active = 1";
+            $active_user_query = "SELECT LocationCoordinate FROM residents WHERE Active = 1 LIMIT 1";
             // QUERY FOR INDUSTRIALS
             // QUERY FOR COMMERCIALS
 
@@ -46,49 +51,54 @@
                 attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
             }).addTo(map);
 
-            var polygon = [];
+            var polygons_coords = [], data = "";
             function setLayer() {
                 var layer = new XMLHttpRequest();
                 layer.onreadystatechange = function(){
                     if (this.readyState == 4 && this.status == 200) {
-                        var data = JSON.parse(this.responseText);
-                        // for (var i = 0; i < data[1].length; i++) {
-                            var polygons = L.polygon(data[1][1], {color: 'red', weight: 1});
-                            polygons.addTo(map);
-                        // }
+                        data = JSON.parse(this.responseText);
+                        for (var i = 0; i < data[1].length; i++) {
+                            polygons_coords.push(data[1][i]);
+                        }
                     }
                 }
-                layer.open("POST", "getmarkers.php", true);
+                layer.open("POST", "getmarkers.php", false);
                 layer.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
                 layer.send();
-            }
-            
-            function setPolygon(){
-                for (var i = 0; i < polygon.length; i++) {
-                    // polygon[i].addTo(map);
-                    console.log(polygon[i]);
-                };
             }
 
             setLayer();
 
-            /*
-            <?php
-                // temp for dcof region to be changes to session[collectorsID] on login
-                $getPolygonCoords_query = "SELECT coordinates FROM zone WHERE collectorsID = 'DCOF'";
-                if ($results = mysqli_query($conn, $getPolygonCoords_query)) {
-                    while ($row = mysqli_fetch_assoc($results)) {
-                        $coords = $row['coordinates'];
-                        echo "
-                            polygon.push(L.polygon(" . $coords . ", {color: 'red', weight: 1}));
-                            zone_coords.push(" . $coords . ");
-                        ";
-                    }
+            for (var j = 0; j < polygons_coords.length; j++) {
+                L.polygon(JSON.parse(polygons_coords[j]), {color: 'red', weight: 1}).addTo(map);
+            }
+
+            // CHECK IF COORDINATE IS IN ZONE
+            function inside(point, vs) {
+
+                var x = point[0];
+                var y = point[1];
+
+                var inside = false;
+                for (var i = 0, j = vs.length - 1; i < vs.length; j = i++) {
+                    var xi = vs[i][0];
+                    var yi = vs[i][1];
+                    var xj = vs[j][0];
+                    var yj = vs[j][1];
+                    
+                    var intersect = ((yi > y) != (yj > y))
+                    && (x < (xj - xi) * (y - yi) / (yj - yi) + xi);
+                    if (intersect) inside = !inside;
                 }
 
-            ?>
+                return inside;
 
-            */
+            };
+
+            for (var c = 0; c < data[0].length; c++) {
+                var mark_coord = "[" + data[0][c] + "]";
+                L.marker(JSON.parse(mark_coord)).addTo(map);
+            }
 
             // map.fitBounds(polygon[0].getBounds());
 
