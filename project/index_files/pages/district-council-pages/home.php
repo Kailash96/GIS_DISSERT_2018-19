@@ -114,10 +114,17 @@
                 // [0] = coordinate
                 // [1] = name
                 // [2] = address
+                // [3] = USER ID
                 var content = "";
                 content += "<h2 class='text'>" + userDataArr[1] + "</h2>";
                 content += "<h4 class='text'>" + userDataArr[2] + "</h4>";
                 content += "<h5 class='text'>" + userDataArr[0] + "</h5>";
+
+                for (var i = 0; i < data[2].length; i++) {
+                    if (data[2][i][0] == userDataArr[3]) {
+                        content += "<h5>" + data[2][i][1] + "</h5>";
+                    }
+                }
 
                 return content;
             }
