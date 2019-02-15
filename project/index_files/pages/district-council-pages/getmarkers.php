@@ -1,11 +1,11 @@
 <?php
     include("../../../db_connect.php");
 
-    $coords = array();
-    $getMarkersQuery = "SELECT LocationCoordinate FROM residents WHERE Active = 1";
+    $user_data = array();
+    $getMarkersQuery = "SELECT * FROM residents WHERE Active = 1";
     if ($result = mysqli_query($conn, $getMarkersQuery)) {
         while($row = mysqli_fetch_assoc($result)){
-            array_push($coords, $row['LocationCoordinate']);
+            array_push($user_data, array($row['LocationCoordinate'], $row['Name'], $row['Address']));
         }
     }
 
@@ -18,8 +18,8 @@
     }
     
     $data = array(
-        ($coords),
-        ($zone_coords)
+        ($zone_coords),
+        ($user_data)
     );
 
     echo json_encode($data);

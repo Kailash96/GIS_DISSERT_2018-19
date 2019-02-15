@@ -25,6 +25,10 @@
             #map{
                 height:550px;
             }
+
+            .text{
+                text-transform:capitalize;
+            }
         </style>
 
     </head>
@@ -57,8 +61,8 @@
                 layer.onreadystatechange = function(){
                     if (this.readyState == 4 && this.status == 200) {
                         data = JSON.parse(this.responseText);
-                        for (var i = 0; i < data[1].length; i++) {
-                            polygons_coords.push(data[1][i]);
+                        for (var i = 0; i < data[0].length; i++) {
+                            polygons_coords.push(data[0][i]);
                         }
                     }
                 }
@@ -95,9 +99,27 @@
 
             };
 
-            for (var c = 0; c < data[0].length; c++) {
-                var mark_coord = "[" + data[0][c] + "]";
-                L.marker(JSON.parse(mark_coord)).addTo(map);
+            for (var c = 0; c < data[1].length; c++) {
+                var crds = data[1][c][0].split(",");
+                for (var k = 0; k < polygons_coords.length; k++) {
+                    if (inside(crds, JSON.parse(polygons_coords[k]))){
+                        var mark_coord = "[" + data[1][c][0] + "]";
+                        L.marker(JSON.parse(mark_coord)).addTo(map)
+                            .bindPopup(createContent(data[1][c]));
+                    }
+                }
+            }
+
+            function createContent(userDataArr){
+                // [0] = coordinate
+                // [1] = name
+                // [2] = address
+                var content = "";
+                content += "<h2 class='text'>" + userDataArr[1] + "</h2>";
+                content += "<h4 class='text'>" + userDataArr[2] + "</h4>";
+                content += "<h5 class='text'>" + userDataArr[0] + "</h5>";
+
+                return content;
             }
 
             // map.fitBounds(polygon[0].getBounds());
