@@ -58,7 +58,7 @@
                     while ($row = mysqli_fetch_assoc($results)) {
                         $coords = $row['coordinates'];
                         echo "
-                            var polygon = L.polygon(" . $coords . ", {color: 'red'});
+                            var polygon = L.polygon(" . $coords . ", {color: 'red', weight: 1});
                             polygon.addTo(map);
                         ";
                     }
