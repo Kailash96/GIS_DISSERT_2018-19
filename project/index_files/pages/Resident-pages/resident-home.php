@@ -38,6 +38,36 @@
                 display:flex;
                 flex-wrap: wrap;
             }
+
+            input[type=number]::-webkit-inner-spin-button, 
+            input[type=number]::-webkit-outer-spin-button { 
+                -webkit-appearance: none;
+            }
+
+            input[type=number]{
+                text-align:center;
+                outline:none;
+                height:34px;
+                border-radius:3px;
+                border:1px solid #A0A0A0;
+            }
+
+            .button_inc_dec{
+                border:2px solid #A0A0A0;
+                background-color:white;
+                padding:0 8px;
+                border-radius:4px;
+                cursor:pointer;
+                width:40px;
+                height:35px;
+                color:#A0A0A0;
+                outline:none;
+            }
+
+            .button_inc_dec:hover{
+                border:2px solid green;
+                color:green;
+            }
         </style>
         <script>
             function level_update(user_id, act){
@@ -70,6 +100,45 @@
                 fetch_update.send(data_send);
 
             }
+
+            function inc_dec_level(bin_type, crr_value, act){
+                var new_value;
+                if (act == 1) {
+                    // increment
+                    new_value = document.getElementById(bin_type + "_level").value = parseInt(crr_value) + 1;
+                    range_check_update(bin_type, crr_value, new_value);
+                } else {
+                    // decrement
+                    new_value = document.getElementById(bin_type + "_level").value = parseInt(crr_value) - 1;
+                    range_check_update(bin_type, crr_value, new_value);
+                }             
+            }
+
+            function range_check_update(bin_type, prev_value, updated_value){
+                if (updated_value > 20) {
+                    document.getElementById(bin_type + "_level").value = 20;
+                    update_circular_level(bin_type, prev_value, 20);
+                } else if (updated_value < 0) {
+                    document.getElementById(bin_type + "_level").value = 0;
+                    update_circular_level(bin_type, prev_value, 0);
+                } else {
+                    update_circular_level(bin_type, prev_value, updated_value);
+                }
+            }
+
+            function update_circular_level(bin_type, prev_value, updated_value){
+                var element = document.getElementById(bin_type + "_circle");
+
+                var prev_percentage_level = parseInt((prev_value / 20) * 100);
+                var updated_percentage_level = parseInt((updated_value / 20) * 100);
+
+                document.getElementById(bin_type + "_level_p").innerHTML = updated_percentage_level + "%";
+                element.classList.remove("p" + prev_percentage_level);
+                element.classList.add("p" + updated_percentage_level);
+
+                document.getElementById(bin_type + "_prev_level").value = updated_value;
+                
+            }
         </script>
     </head>
     <input type="hidden" value="<?php echo $_SESSION['userID']; ?>" id='userid' />
@@ -97,24 +166,25 @@
         <!-- All Bins -->
         <div class="all_bins_container">
             <!-- Domestic Bin Box -->
-            <table class="bins_box">
+            <table class="bins_box" border="1">
                 <tr>
                     <td align="center">
-                        <h3 style="color:grey;">Organic Waste</h3>
+                        <h3 style="color:white;margin:0;background-color:grey;display:block;border-radius:3px;padding:4px 0">Organic Waste</h3>
                     </td>
-                    <td style="font-size:13px;color:red;" align="center">
-                        Not Saved!
+                    <td>
+                        Collection Date:
+                        <div style="font-size:20px;color:green">
+                            <i class="fa fa-calendar"></i> 16 Feb 2019
+                        </div>
                     </td>
-                    <td align="right" style="font-size:14px;">
-                        Collection Date: -- | --
-                    </td>
+                    <td></td>
                 </tr>
                 <tr>
-                    <td align="center">
+                    <td align="center" rowspan="3">
                         <img src="img/organic_bin.png" style="width:160px;" />
                     </td>
-                    <td style="width:33.3%;padding:0 0 0 6.5%;text-align:center">
-                        <div class="c100 p25">
+                    <td>
+                        <div class="c100" id="domestic_circle" style="margin-left:20px">
                             <span id="domestic_level_p">0%</span>
                             <div class="slice">
                                 <div class="bar"></div>
@@ -123,8 +193,17 @@
                         </div>
                     </td>
                     <td>
-                        capacity: 20kg
-                        <input type="text" value="0" id="domestic_level" />
+                    </td>
+                </tr>
+                <tr>
+                    <td rowspan="2"><i class='fa fa-trash'></i> capacity: 20kg</td>
+                </tr>
+                <tr>
+                    <td align="center">
+                        <input type="button" value="- 1" onclick="inc_dec_level('domestic', domestic_level.value, 0)" class="button_inc_dec" />
+                        <input type="hidden" value="0" id="domestic_prev_level" />
+                        <input type="number" style="width:40px;" min="0" max="20" onchange="range_check_update('domestic', domestic_prev_level.value, this.value)" value="0" id="domestic_level" />
+                        <input type="button" value="+ 1" onclick="inc_dec_level('domestic', domestic_level.value, 1)" class="button_inc_dec" /> kg
                     </td>
                 </tr>
             </table>
