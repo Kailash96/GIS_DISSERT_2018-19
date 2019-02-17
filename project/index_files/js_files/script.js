@@ -28,14 +28,33 @@ function level_update(user_id, generator_type, act){
             if (data[0] == "false"){
                 // data[1] = domestic level
                 var domestic_level_in_kg = parseInt((data[1] / 100) * 20);
+                
                 // get previous value
                 var prev_value_domestic = document.getElementById('domestic_level').value;
                 document.getElementById('domestic_level').value = domestic_level_in_kg;
                 range_check_update('domestic', prev_value_domestic, domestic_level_in_kg);
+
                 // data[2] = plastic level
+                var plastic_level_in_kg = parseInt((data[2] / 100) * 20);
+                // get previous value
+                var prev_value_plastic = document.getElementById('plastic_level').value;
+                document.getElementById('plastic_level').value = plastic_level_in_kg;
+                range_check_update('plastic', prev_value_plastic, plastic_level_in_kg);
+
                 // data[3] = paper level
+                var paper_level_in_kg = parseInt((data[3] / 100) * 20);
+                // get previous value
+                var prev_value_paper = document.getElementById('paper_level').value;
+                document.getElementById('paper_level').value = paper_level_in_kg;
+                range_check_update('paper', prev_value_paper, paper_level_in_kg);
+
                 // data[4] = other level
-                console.log(data[5]);
+                var other_level_in_kg = parseInt((data[4] / 100) * 20);
+                // get previous value
+                var prev_value_other = document.getElementById('other_level').value;
+                document.getElementById('other_level').value = other_level_in_kg;
+                range_check_update('other', prev_value_other, other_level_in_kg);
+
             }
         }
     }

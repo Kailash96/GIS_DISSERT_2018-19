@@ -17,7 +17,7 @@
         <style>
             .bins_box{
                 box-shadow:0 0 4px #002246;
-                padding:10px;
+                padding:8px 10px;
                 margin:10px 10px;
                 border-radius:3px;
                 width:48%;
@@ -93,8 +93,6 @@
             </div>
         </div>
 
-        <h3>My Bins</h3>
-        
         <!-- All Bins -->
         <div class="all_bins_container">
             <!-- Domestic Bin Box -->
@@ -148,24 +146,37 @@
             </table>
 
             <!-- Plastic Bin Box -->
-            <table class="bins_box">
+            <table class="bins_box" border="0">
                 <tr>
                     <td align="center">
-                        <h3 style="color:grey;">Plastic Waste</h3>
+                        <h3 style="color:white;margin:0;background-color:#E27525;display:block;border-radius:3px;padding:5px 0">Plastic Waste</h3>
                     </td>
-                    <td style="font-size:13px;color:red;" align="center">
-                        Not Saved!
+                    <td style="font-size:14px;padding-left:14px">
+                        Previous Collection:
+                        <div style="font-size:18px;color:blue">
+                            <i class="fa fa-calendar"></i> 16 Feb 2019
+                        </div>
                     </td>
-                    <td align="right" style="font-size:14px;">
-                        Collection Date: -- | --
+                    <td style="font-size:14px">
+                        Next Collection:
+                        <div style="font-size:18px;color:red">
+                            <i class="fa fa-calendar"></i> 16 Feb 2019
+                        </div>
                     </td>
                 </tr>
                 <tr>
-                    <td align="center">
+                    <td align="center" rowspan="3">
                         <img src="img/plastic_bin.png" style="width:160px;" />
                     </td>
-                    <td style="width:33.3%;padding:0 0 0 6.5%;text-align:center">
-                        <div class="c100 p25">
+                    <td style="width:200px;padding-left:14px;font-size:16px;" rowspan="2">
+                        <i class='fa fa-trash'></i> capacity: 20kg<br/><br/>
+                        Status<br/>
+                        <span style="font-size:40px;" id="plastic_bin_status">
+                            0/20 kg
+                        </span>
+                    </td>
+                    <td>
+                        <div class="c100" id="plastic_circle" style="margin:8px 0 4px 4px">
                             <span id="plastic_level_p">0%</span>
                             <div class="slice">
                                 <div class="bar"></div>
@@ -173,65 +184,99 @@
                             </div>
                         </div>
                     </td>
+                </tr>
+                <tr>
                     <td>
-                        capacity: 20kg
-                        <input type="text" value="0" id="plastic_level" />
+                        <input type="button" value="- 1" onclick="inc_dec_level('plastic', plastic_level.value, 0)" class="button_inc_dec" />
+                        <input type="hidden" value="0" id="plastic_prev_level" />
+                        <input type="number" style="width:40px;" min="0" max="20" onchange="range_check_update('plastic', plastic_prev_level.value, this.value)" value="0" id="plastic_level" />
+                        <input type="button" value="+ 1" onclick="inc_dec_level('plastic', plastic_level.value, 1)" class="button_inc_dec" /> kg
                     </td>
                 </tr>
             </table>
 
             <!-- Paper Bin Box -->
-            <table class="bins_box">
+            <table class="bins_box" border="0">
                 <tr>
                     <td align="center">
-                        <h3 style="color:grey;">Paper Waste</h3>
+                        <h3 style="color:white;margin:0;background-color:#278DC7;display:block;border-radius:3px;padding:5px 0">Paper Waste</h3>
                     </td>
-                    <td style="font-size:13px;color:red;" align="center">
-                        Not Saved!
+                    <td style="font-size:14px;padding-left:14px">
+                        Previous Collection:
+                        <div style="font-size:18px;color:blue">
+                            <i class="fa fa-calendar"></i> 16 Feb 2019
+                        </div>
                     </td>
-                    <td align="right" style="font-size:14px;">
-                        Collection Date: -- | --
+                    <td style="font-size:14px">
+                        Next Collection:
+                        <div style="font-size:18px;color:red">
+                            <i class="fa fa-calendar"></i> 16 Feb 2019
+                        </div>
                     </td>
                 </tr>
                 <tr>
-                    <td align="center">
+                    <td align="center" rowspan="3">
                         <img src="img/paper_bin.png" style="width:160px;" />
                     </td>
-                    <td style="width:33.3%;padding:0 0 0 6.5%;text-align:center">
-                        <div class="c100 p25">
-                            <span id="domestic_level_p">0%</span>
+                    <td style="width:200px;padding-left:14px;font-size:16px;" rowspan="2">
+                        <i class='fa fa-trash'></i> capacity: 20kg<br/><br/>
+                        Status<br/>
+                        <span style="font-size:40px;" id="paper_bin_status">
+                            0/20 kg
+                        </span>
+                    </td>
+                    <td>
+                        <div class="c100" id="paper_circle" style="margin:8px 0 4px 4px">
+                            <span id="paper_level_p">0%</span>
                             <div class="slice">
                                 <div class="bar"></div>
                                 <div class="fill"></div>
                             </div>
                         </div>
                     </td>
+                </tr>
+                <tr>
                     <td>
-                        capacity: 20kg
-                        <input type="text" value="0" id="paper_level" />
+                        <input type="button" value="- 1" onclick="inc_dec_level('paper', paper_level.value, 0)" class="button_inc_dec" />
+                        <input type="hidden" value="0" id="paper_prev_level" />
+                        <input type="number" style="width:40px;" min="0" max="20" onchange="range_check_update('paper', paper_prev_level.value, this.value)" value="0" id="paper_level" />
+                        <input type="button" value="+ 1" onclick="inc_dec_level('paper', paper_level.value, 1)" class="button_inc_dec" /> kg
                     </td>
                 </tr>
             </table>
 
             <!-- Other Bin Box -->
-            <table class="bins_box">
+            <table class="bins_box" border="0">
                 <tr>
                     <td align="center">
-                        <h3 style="color:grey;">Other Waste</h3>
+                        <h3 style="color:white;margin:0;background-color:red;display:block;border-radius:3px;padding:5px 0">Other Waste</h3>
                     </td>
-                    <td style="font-size:13px;color:red;" align="center">
-                        Not Saved!
+                    <td style="font-size:14px;padding-left:14px">
+                        Previous Collection:
+                        <div style="font-size:18px;color:blue">
+                            <i class="fa fa-calendar"></i> 16 Feb 2019
+                        </div>
                     </td>
-                    <td align="right" style="font-size:14px;">
-                        Collection Date: -- | --
+                    <td style="font-size:14px">
+                        Next Collection:
+                        <div style="font-size:18px;color:red">
+                            <i class="fa fa-calendar"></i> 16 Feb 2019
+                        </div>
                     </td>
                 </tr>
                 <tr>
-                    <td align="center">
+                    <td align="center" rowspan="3">
                         <img src="img/other_bin.png" style="width:160px;" />
                     </td>
-                    <td style="width:33.3%;padding:0 0 0 6.5%;text-align:center">
-                        <div class="c100 p25">
+                    <td style="width:200px;padding-left:14px;font-size:16px;" rowspan="2">
+                        <i class='fa fa-trash'></i> capacity: 20kg<br/><br/>
+                        Status<br/>
+                        <span style="font-size:40px;" id="other_bin_status">
+                            0/20 kg
+                        </span>
+                    </td>
+                    <td>
+                        <div class="c100" id="other_circle" style="margin:8px 0 4px 4px">
                             <span id="other_level_p">0%</span>
                             <div class="slice">
                                 <div class="bar"></div>
@@ -239,9 +284,13 @@
                             </div>
                         </div>
                     </td>
+                </tr>
+                <tr>
                     <td>
-                        capacity: 20kg
-                        <input type="text" value="0" id="other_level" />
+                        <input type="button" value="- 1" onclick="inc_dec_level('other', other_level.value, 0)" class="button_inc_dec" />
+                        <input type="hidden" value="0" id="other_prev_level" />
+                        <input type="number" style="width:40px;" min="0" max="20" onchange="range_check_update('other', other_prev_level.value, this.value)" value="0" id="other_level" />
+                        <input type="button" value="+ 1" onclick="inc_dec_level('other', other_level.value, 1)" class="button_inc_dec" /> kg
                     </td>
                 </tr>
             </table>

@@ -18,7 +18,7 @@
                     
                     $row = mysqli_fetch_assoc($checkCat);
                     if ($row['Category'] == 'resident') {
-                        $getDataQuery = "SELECT * FROM residents WHERE NIC = '$userid'";
+                        $getDataQuery = "SELECT * FROM tbl_residents WHERE NIC = '$userid'";
                     } else if ($row['Category'] == 'commercial') {
                         // SELECT FROM TABLE COMMERCIAL
                     } else if ($row['Category'] == 'industrial') {
@@ -53,7 +53,7 @@
             $country = $_POST["country"];
             $locationCoordinate = $_POST["locationCoordinate"];
 
-            $add_data = "INSERT INTO residents (NIC, Name, Address, PhoneNumber, LocationCoordinate, Email, country, region)
+            $add_data = "INSERT INTO tbl_residents (NIC, Name, Address, PhoneNumber, LocationCoordinate, Email, country, region)
                         VALUES ('$nic', '$fullname', '$address', $phone, '$locationCoordinate', '$email', '$country', '$region')";
 
             if (mysqli_query($conn, $add_data)){
