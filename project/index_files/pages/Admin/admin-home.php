@@ -5,8 +5,8 @@
         <link rel="stylesheet" href="../../css_files/style.css" />
         <style>
             #home_selected{
-                background-color:#002246;
-                color:white;
+                background-color:#DCDCDC;
+                border-left:4px solid #002246;
             }
         </style>
     </head>

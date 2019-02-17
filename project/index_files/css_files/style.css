@@ -43,12 +43,18 @@ ul li a{
     color:#002246;
     display:block;
     padding:5px 40px;
+    border-left:4px solid transparent;
 }
 
 ul li a:hover{
-    background-color:#002246;
-    color:white;
+    background-color:#DCDCDC;
 }
+
+.logo_space{
+    display:inline-block;
+    width:25px;
+}
+
 
 body{
     margin:4.7% 0 0 20%;

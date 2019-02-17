@@ -6,8 +6,8 @@
         <link rel="stylesheet" href="../../css_files/style.css" />
         <style>
             #register-employee_selected{
-                background-color:#002246;
-                color:white;
+                background-color:#DCDCDC;
+                border-left:4px solid #002246;
             }
             #edit-data-box-blur, #edit-data-box{
                 display:none;

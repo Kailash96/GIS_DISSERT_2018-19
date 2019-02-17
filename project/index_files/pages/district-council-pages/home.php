@@ -18,8 +18,8 @@
 
         <style>
             #home_selected{
-                background-color:#002246;
-                color:white;
+                background-color:#DCDCDC;
+                border-left:4px solid #002246;
             }
 
             #map{
