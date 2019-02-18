@@ -1,8 +1,6 @@
 <?php
     include("../../../db_connect.php");
 
-    $array_of_zones = json_decode($_POST['zone_array']);
-
     function inside($point, $vs) {
 
         $x = $point[0];
@@ -40,27 +38,48 @@
                 if ($flag) {
                     return $row['regionID'];
                     break;
-                } else {
-                    return 0;
                 }
             }
+            return 0;
         }
         
     }
-    
-    for ($j = 0; $j < sizeof($array_of_zones); $j++) {
-        $zone = $array_of_zones[$j];
-        $zone_coords = json_encode($zone);
 
-        $region_id = checkInRegion($zone);
-        if ($region_id != 0) {
-            $save_query = "INSERT INTO tbl_zones (coordinates, regionID) VALUES ('$zone_coords', $region_id)";
-            if (mysqli_query($conn, $save_query)){
-                echo json_encode("Success");
-            };
-        } else {
-            echo json_encode("not in region");
+    function draw_zone(){
+        $zones = array();
+        // SETS THE ZONES
+        $getZonesCoords_query = "SELECT coordinates FROM tbl_zones";
+        if ($results = mysqli_query($GLOBALS['conn'], $getZonesCoords_query)) {
+            while ($row = mysqli_fetch_assoc($results)) {
+                $coords = $row['coordinates'];
+                array_push($zones, $coords);
+            }
         }
+
+        echo json_encode($zones);
+    }
+    
+    $act = $_POST['act'];
+    if ($act == 1) {
+        $array_of_zones = json_decode($_POST['zone_array']);
+        for ($j = 0; $j < sizeof($array_of_zones); $j++) {
+            $zone = $array_of_zones[$j];
+            $zone_coords = json_encode($zone);
+    
+            $region_id = checkInRegion($zone);
+            if ($region_id != 0) {
+                $save_query = "INSERT INTO tbl_zones (coordinates, regionID) VALUES ('$zone_coords', $region_id)";
+                if (mysqli_query($conn, $save_query)){
+                    draw_zone();
+                };
+            } else {
+                echo json_encode("not in region");
+            }
+        }
+    } else if ($act == 0) {
+
+        draw_zone();
+
     }
 
 ?>

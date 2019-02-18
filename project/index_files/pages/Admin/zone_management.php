@@ -4,6 +4,7 @@
         <title>Home | Binswiper</title>
         <link rel="stylesheet" href="../../css_files/style.css" />
         <script type="text/javascript" src="../../js_files/script.js" /></script>
+        <script type="text/javascript" src="../../js_files/admin_script.js" /></script>
 
         <!-- JQUERY -->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -73,7 +74,7 @@
         </style>
 
     </head>
-    <body>
+    <body onload="save_zone(0)">
         <?php include("admin-left_side_nav_bar.php"); ?>
         <?php include("admin-top-nav-bar.html"); ?>
 
@@ -106,18 +107,6 @@
                         $coords = $row['coordinates'];
                         echo "
                             var polygon = L.polygon(" . $coords . ", {color: 'blue', weight: 1});
-                            polygon.addTo(map);
-                        ";
-                    }
-                }
-
-                // SETS THE ZONES
-                $getZonesCoords_query = "SELECT coordinates FROM tbl_zones";
-                if ($results = mysqli_query($conn, $getZonesCoords_query)) {
-                    while ($row = mysqli_fetch_assoc($results)) {
-                        $coords = $row['coordinates'];
-                        echo "
-                            var polygon = L.polygon(" . $coords . ", {color: 'red', weight: 1});
                             polygon.addTo(map);
                         ";
                     }
@@ -191,48 +180,63 @@
 
             function save_changes(collector_id, region_name){
 
-                var save = new XMLHttpRequest();
-                save.onreadystatechange = function(){
-                    if (this.readyState == 4 && this.status == 200) {
-                        console.log("success");
-                    }
+            var save = new XMLHttpRequest();
+            save.onreadystatechange = function(){
+                if (this.readyState == 4 && this.status == 200) {
+                    console.log("success");
                 }
-                save.open("POST", "admin_save_region.php", true);
-                save.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-                save.send("coords=" + JSON.stringify(regionArray) + "&collectors_id=" + collector_id + "&region_name=" + region_name);
+            }
+            save.open("POST", "admin_save_region.php", true);
+            save.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+            save.send("coords=" + JSON.stringify(regionArray) + "&collectors_id=" + collector_id + "&region_name=" + region_name);
 
-                regionArray.length = 0; // empty the array
+            regionArray.length = 0; // empty the array
 
             }
 
-            function save_zone(){
-                var store_zones = new XMLHttpRequest();
-                store_zones.onreadystatechange = function(){
-                    if (this.readyState == 4 && this.status == 200) {
-                        var response = JSON.parse(this.responseText);
-                        console.log(response);
+            var polygon = [];
+            function save_zone(act){
+            var data;
+            if (act == 0){
+                data = "act=" + act;
+            } else {
+                data = "zone_array=" + JSON.stringify(zoneArray) + "&act=" + act;
+            }
+
+            var store_zones = new XMLHttpRequest();
+            store_zones.onreadystatechange = function(){
+                if (this.readyState == 4 && this.status == 200) {
+                    var draw_zone = JSON.parse(this.responseText);
+                    for (var r = 0; r < polygon.length; r++) {
+                        map.removeLayer(polygon[r]);
+                    }
+                    for (var z = 0; z < draw_zone.length; z++) {
+                        polygon[z] = L.polygon(JSON.parse(draw_zone[z]), {color: 'red', weight: 1});
+                        polygon[z].addTo(map);
                     }
                 }
-                store_zones.open("POST", "admin_save_zones.php", true);
-                store_zones.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-                store_zones.send("zone_array=" + JSON.stringify(zoneArray));
+            }
+            store_zones.open("POST", "admin_save_zones.php", true);
+            store_zones.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+            store_zones.send(data);
+
             }
 
             function submit_changes(){
-                var region = document.getElementById("region").checked;
-                var zone = document.getElementById("zone").checked;
+            var region = document.getElementById("region").checked;
+            var zone = document.getElementById("zone").checked;
 
-                if (region) {
-                    $("#board").fadeIn();
-                } else if (zone) {
-                    // save in table zone
-                    save_zone();
-                }
+            if (region) {
+                $("#board").fadeIn();
+            } else if (zone) {
+                // save in table zone
+                save_zone(1);
+            }
 
             }
 
             function cancel(){
-                $("#board").fadeOut();
+            $("#board").fadeOut();
             }
         </script>
         
