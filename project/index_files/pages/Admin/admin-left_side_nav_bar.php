@@ -30,7 +30,8 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 <div class="left-nav-bar">
-    <h3 style="background-color:#008E32;color:white;display:inline-block;width:200px;padding:4px;border-radius:3px;">Administrator</h3>
+    <img src="../../img/logo.jpg" style="width:200px;" />
+    <h4 style="background-color:#00802D;color:white;display:inline-block;width:164px;padding:3px 3px 4px 3px;border-radius:2px;box-shadow:0 0 3px black"><i style="color:white;margin-right:12px" class="fa fa-user-o"></i>Administrator</h4>
     <ul>
         <li><a href="admin-home.php" id="home_selected"><i class="logo_space fa fa-cubes"></i> Dashboard</a></li>
         <li><a href="register_new_user.php" id="register_selected"><i class="logo_space fa fa-address-book-o"></i> Register New User</a></li>

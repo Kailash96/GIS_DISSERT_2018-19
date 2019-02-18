@@ -7,7 +7,7 @@
     $category = $_POST['category'];
     
     if ($category == 'resident') {
-        $act_query = "UPDATE residents SET Active = 1 WHERE NIC = '$nic'";
+        $act_query = "UPDATE tbl_residents SET Active = 1 WHERE NIC = '$nic'";
     } else if ($category == 'commercial') {
         // UPDATE COMMERCIAL
     } else if ($category == 'industrial') {
