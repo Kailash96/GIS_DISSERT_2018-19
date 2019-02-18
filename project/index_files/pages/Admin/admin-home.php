@@ -5,8 +5,8 @@
         <link rel="stylesheet" href="../../css_files/style.css" />
         <style>
             #home_selected{
-                background-color:#002246;
-                color:white;
+                background-color:#DCDCDC;
+                border-left:4px solid #002246;
             }
         </style>
     </head>
@@ -14,6 +14,8 @@
         <?php include("admin-left_side_nav_bar.php"); ?>
         <?php include("admin-top-nav-bar.html"); ?>
         
-        Dashboard
+        <div class="body_container">
+            Dashboard
+        </div>
     </body>
 </html>

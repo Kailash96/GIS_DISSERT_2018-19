@@ -8,19 +8,45 @@
     color:#002246;
 }
 
+body{
+    margin:52px 0 0 260px;
+}
+
+.body_container{
+    border:1px solid black;
+    padding:20px;
+}
+
+.logo_title{
+    padding:10px 0;margin:0;
+    color:#002246;
+    display:inline-block;
+    width:260px;
+    text-align:center;
+}
+
+.top_side_settings{
+    float:right;
+    border:1px solid black;
+    padding:8px;
+    font-size:24px;
+    margin-right:20px;
+}
+
 .left-nav-bar{
     font-size:15px;
-    z-index:2;
+    z-index:1;
     position:fixed;
     left:0;
     top:0;
     display:block;
     background-color:white;
-    width:20%;
+    width:260px;
     color:#002246;
     text-align:center;
     box-shadow:0 0 10px #002246;
     height:100%;
+    padding:60px 0 0 0;
 }
 
 .left-nav-bar h3{
@@ -43,19 +69,20 @@ ul li a{
     color:#002246;
     display:block;
     padding:5px 40px;
+    border-left:4px solid transparent;
 }
 
 ul li a:hover{
-    background-color:#002246;
-    color:white;
+    background-color:#DCDCDC;
 }
 
-body{
-    margin:4.7% 0 0 20%;
+.logo_space{
+    display:inline-block;
+    width:25px;
 }
 
 .top-nav-bar{
-    z-index:1;
+    z-index:2;
     background-color:white;
     box-shadow:0 0 8px #002246;
     display:block;
@@ -63,19 +90,11 @@ body{
     position:fixed;
     top:0;
     left:0;
-    padding:8px 0 8px 22%;
+    padding:0;
 }
 
 ul li i{
     margin-right:4px;
-}
-
-#home, #registeruser{
-    padding-left:2px;
-}
-
-#schedule, #truck{
-    padding-left:1px;
 }
 
 .input-box{

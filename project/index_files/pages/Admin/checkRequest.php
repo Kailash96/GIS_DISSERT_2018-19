@@ -5,7 +5,7 @@
     $return_arr = array(1);
 
     $value_check = $_POST["checker"];
-    $checkQuery = "SELECT * FROM residents WHERE Active = 0";
+    $checkQuery = "SELECT * FROM tbl_residents WHERE Active = 0";
 
     $data = "
         <table border='0' width='100%' style='font-size:14px;text-transform:capitalize'>
