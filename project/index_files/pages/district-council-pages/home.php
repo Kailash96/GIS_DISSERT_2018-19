@@ -40,7 +40,7 @@
             include("../../../db_connect.php");
 
             // QUERY FOR RESIDENTS
-            $active_user_query = "SELECT LocationCoordinate FROM residents WHERE Active = 1 LIMIT 1";
+            $active_user_query = "SELECT LocationCoordinate FROM tbl_residents WHERE Active = 1 LIMIT 1";
             // QUERY FOR INDUSTRIALS
             // QUERY FOR COMMERCIALS
 

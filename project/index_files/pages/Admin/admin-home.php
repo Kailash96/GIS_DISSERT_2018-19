@@ -14,6 +14,8 @@
         <?php include("admin-left_side_nav_bar.php"); ?>
         <?php include("admin-top-nav-bar.html"); ?>
         
-        Dashboard
+        <div class="body_container">
+            Dashboard
+        </div>
     </body>
 </html>
