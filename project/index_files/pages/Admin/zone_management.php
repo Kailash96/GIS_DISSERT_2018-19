@@ -3,7 +3,7 @@
     <head>
         <title>Home | Binswiper</title>
         <link rel="stylesheet" href="../../css_files/style.css" />
-        <link rel="stylesheet" href="../../js_files/script.js" />
+        <script type="text/javascript" src="../../js_files/script.js" /></script>
 
         <!-- JQUERY -->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -99,8 +99,21 @@
             <?php
                 
                 // temp for dcof region to be changes to session[collectorsID] on login
+                // SETS THE REGION
                 $getPolygonCoords_query = "SELECT coordinates FROM tbl_region";
                 if ($results = mysqli_query($conn, $getPolygonCoords_query)) {
+                    while ($row = mysqli_fetch_assoc($results)) {
+                        $coords = $row['coordinates'];
+                        echo "
+                            var polygon = L.polygon(" . $coords . ", {color: 'blue', weight: 1});
+                            polygon.addTo(map);
+                        ";
+                    }
+                }
+
+                // SETS THE ZONES
+                $getZonesCoords_query = "SELECT coordinates FROM tbl_zones";
+                if ($results = mysqli_query($conn, $getZonesCoords_query)) {
                     while ($row = mysqli_fetch_assoc($results)) {
                         $coords = $row['coordinates'];
                         echo "
