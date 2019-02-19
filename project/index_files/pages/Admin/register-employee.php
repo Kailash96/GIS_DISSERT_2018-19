@@ -7,7 +7,7 @@
         <style>
             #register-employee_selected{
                 background-color:#DCDCDC;
-                border-left:4px solid #002246;
+                border-left:4px solid #009DC4;
             }
             #edit-data-box-blur, #edit-data-box{
                 display:none;

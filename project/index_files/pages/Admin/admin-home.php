@@ -6,7 +6,7 @@
         <style>
             #home_selected{
                 background-color:#DCDCDC;
-                border-left:4px solid #002246;
+                border-left:4px solid #009DC4;
             }
         </style>
     </head>

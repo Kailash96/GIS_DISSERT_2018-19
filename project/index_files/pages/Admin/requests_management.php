@@ -8,7 +8,7 @@
         <style>
             #requests_selected{
                 background-color:#DCDCDC;
-                border-left:4px solid #002246;
+                border-left:4px solid #009DC4;
             }
 
             .selection_button{
@@ -124,7 +124,7 @@
         <?php include("admin-left_side_nav_bar.php"); ?>
         <?php include("admin-top-nav-bar.html"); ?>
         
-        <div style="padding:0 20px;" id="listofrequestscontainer">
+        <div style="padding:10px 20px;" id="listofrequestscontainer">
             <h3>List of Account Activation Requests</h3>
             <input type="button" class="selection_button" value="Resident" />
             <input type="button" class="selection_button" value="Commercial" />
@@ -157,11 +157,11 @@
                         <input type="button" class="submit_button" style="width:48%;color:red;box-shadow:0 0 8px red" value="Reject Request" />
                     </form>
                 </div>
-                <div align="right" style="padding:10px;">
+                <div align="right" style="padding:10px">
                     <?php include('../getlocationmap.php'); ?>
                     <script>
                         function viewDetails(data){
-                    
+
                             var arrdata = data.split("-");
                             var nic = arrdata[0];
                             var category = arrdata[1];
@@ -189,7 +189,7 @@
                             userdetails.open("POST", "getuserdetails.php", true);
                             userdetails.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
                             userdetails.send('id=' + nic + '&category=' + category);
-                            
+
                         }
                     </script>
                 </div>

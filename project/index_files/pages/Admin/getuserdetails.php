@@ -6,7 +6,7 @@
 
     
     if ($category == 'resident'){
-        $getdetailsquery = "SELECT * FROM residents WHERE NIC = '$userID' LIMIT 1";
+        $getdetailsquery = "SELECT * FROM tbl_residents WHERE NIC = '$userID' LIMIT 1";
     } else if ($category == 'commercial') {
         $getdetailsquery = "SELECT * FROM commercial WHERE RegNo = '$userID' LIMIT 1";
     } else if ($category == 'industrial') {
