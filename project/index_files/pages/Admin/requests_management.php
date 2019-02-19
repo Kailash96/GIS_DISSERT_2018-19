@@ -161,7 +161,7 @@
                     <?php include('../getlocationmap.php'); ?>
                     <script>
                         function viewDetails(data){
-                    
+
                             var arrdata = data.split("-");
                             var nic = arrdata[0];
                             var category = arrdata[1];
@@ -189,7 +189,7 @@
                             userdetails.open("POST", "getuserdetails.php", true);
                             userdetails.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
                             userdetails.send('id=' + nic + '&category=' + category);
-                            
+
                         }
                     </script>
                 </div>

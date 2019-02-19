@@ -89,14 +89,16 @@
             $locationCoordinate = $_POST["locationCoordinate"];
 
             $zone_ID = checkInZone($locationCoordinate);
-
-            $add_data = "INSERT INTO tbl_residents (NIC, Name, Address, PhoneNumber, LocationCoordinate, Email, country, region, zoneID)
-                        VALUES ('$nic', '$fullname', '$address', $phone, '$locationCoordinate', '$email', '$country', '$region', $zone_ID)";
-
+            $dateReg = date('Y-m-d');
+            
+            $add_data = "INSERT INTO tbl_residents (NIC, Name, Address, PhoneNumber, LocationCoordinate, Email, country, region, zoneID, DateReg)
+                        VALUES ('$nic', '$fullname', '$address', $phone, '$locationCoordinate', '$email', '$country', '$region', $zone_ID, '$dateReg')";
+            
             if (mysqli_query($conn, $add_data)){
                 echo "Data submitted successfully. Admin will verify your data.";
             } else {
                 echo "failed";
+                echo date('Y-m-d');
             }
 
         }
