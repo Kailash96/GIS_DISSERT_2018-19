@@ -11,11 +11,12 @@
         <table border='0' width='100%' style='font-size:14px;text-transform:capitalize'>
             <tr>
                 <td width='25%'><b>NIC</b></td>
-                <td width='55%'><b>Name</b></td>
-                <td width='5%'></td>
-                <td width='20%'></td>
+                <td width='25%'><b>Name</b></td>
+                <td width='16%'>Date Registered</td>
+                <td width='16%'></td>
+                <td width='16%'></td>
             </tr>
-            <tr><td colspan='4'><hr></td></tr>
+            <tr><td colspan='5'><hr></td></tr>
     ";
     
     if ($result = mysqli_query($conn, $checkQuery)){
@@ -25,10 +26,11 @@
                 <tr>
                     <td style='text-transform:uppercase'>" . $row['NIC'] . "</td>
                     <td>" . $row['Name'] . "</td>
+                    <td>" . $row['dateReg'] . "</td>
                     <td><div style='border:0px solid black;padding:5px 0;width:100px;box-shadow:0 0 8px green;border-radius:2px;background-color:green;color:white;text-align:center;'>Resident</div></td>
                     <td align='right'><input type='button' value='View Details' id='" . $row['NIC'] . "-resident' onclick='viewDetails(this.id)' style='padding:5px 20px' class='button' /></td>
                 </tr>
-                <tr><td colspan='4'><hr></td></tr>
+                <tr><td colspan='5'><hr></td></tr>
             ";
         }
         $data .= '</table>';

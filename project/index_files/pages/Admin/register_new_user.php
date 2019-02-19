@@ -6,7 +6,7 @@
         <style>
             #register_selected{
                 background-color:#DCDCDC;
-                border-left:4px solid #002246;
+                border-left:4px solid #009DC4;
             }
             .container-box{
                 width:200px;
