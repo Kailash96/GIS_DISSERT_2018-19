@@ -87,7 +87,6 @@
                 "region: " + region_val,
               );
               // GEOCODE
-              // L.esri.Geocoding.geocode().country(country_val).address(address_val).region(region_val).subregion('Albion').postal(postal_val).run(function(err, result, response){
               L.esri.Geocoding.geocode().text(address_val + ' ' + region_val + ' ' + country_val).run(function(err, result, response){
                 // result_layer.clearLayers();
                 console.log(result.results[0].latlng);
