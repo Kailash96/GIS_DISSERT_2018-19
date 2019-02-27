@@ -26,48 +26,81 @@
                background-color:#DCDCDC;
            }
 
-           .slots{
-               cursor:pointer;
-               background-color:#45FF66;
-           }
-
-           .slots:hover{
-               background-color:#00B9E3;
-           }
-
            .fillslotbox{
                border:1px solid black;
            }
 
+           .timeline{
+               display:flex;
+               flex-direction:row;
+               width:100%;
+           }
+
+           .timeline div{
+               width:20%;
+               text-align:center;
+               border-left:1px solid black;
+           }
+
+           .schedule_table td{
+               border-right:1px solid black;
+               border-left:1px solid black;
+               border-bottom:1px solid black;
+           }
+
+           .duration_holder{
+                display:flex;
+                flex-direction:row;
+                cursor:pointer;
+                height:50px;
+           }
+
+           .duration_holder div:hover{
+               background-color:#00A1E7;
+           }
+
+           .duration_holder div{
+               border-left:1px solid black;
+               box-sizing:border-box;
+               padding:2px;
+               background-color:#74FFA6;
+           }
+
         </style>
         <script type="text/javascript">
-            function schedule(slot){
-                var data = slot.split("_");
-                document.getElementById("zone").value = data[2];
-                document.getElementById("shift").value = data[1];
-                console.log(slot);
-                console.log(data[0]);
-                console.log(data[1]);
-                console.log(data[2]);
+            function draw_schedule_box(){
+                var draw = new XMLHttpRequest();
+                draw.onreadystatechange = function(){
+                    if (this.readyState == 4 && this.status == 200) {
+                        var schedule_box = JSON.parse(this.responseText);
+                        document.getElementById("schedule_box").innerHTML = schedule_box;
+                    }
+                }
+                draw.open("POST", "schedule_box.php", true);
+                draw.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+                draw.send();
             }
 
-            function save_schedule(day, zone, shift, route, truck){
+            function select_slot(slot_zone){
+                console.log(slot_zone);
+                document.getElementById("zone").value = slot_zone;
+            }
+
+            function save_schedule(day, zone, route, truck, duration){
                 var save = new XMLHttpRequest();
-                save.onreadystatechange = function () {
+                save.onreadystatechange = function(){
                     if (this.readyState == 4 && this.status == 200) {
-                        var response = JSON.parse(this.responseText);
-                        if (response == true){
-                            location.reload();
-                        }
+                        var success = JSON.parse(this.responseText);
+                        console.log(success);
                     }
                 }
                 save.open("POST", "save_schedule.php", true);
                 save.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-                save.send("day=" + day + "&zone=" + zone + "&shift=" + shift + "&route=" + route + "&truck=" + truck);
+                save.send("day=" + day + "&zone=" + zone + "&route=" + route + "&truck=" + truck + "&duration=" + duration);
             }
         </script>
     </head>
-    <body>
+    <body onload="draw_schedule_box()">
         <?php include("left_side_nav_bar.html"); ?>
         <?php include("top-nav-bar.html"); ?>
 
@@ -85,70 +118,9 @@
                 <tr>
                     <td colspan="6">
                         <br/>
-                        <table border="1" cellspacing="0" width="100%">
-                            <tr>
-                                <td></td>
-                                <td colspan="2" align="center">Morning</td>
-                                <td colspan="2" align="center">Afternoon</td>
-                            </tr>
-                            <tr>
-                                <td width="4%">Zones</td>
-                                <td align="center" width='24%'><b>Shift A</b></td>
-                                <td align="center" width='24%'><b>Shift B</b></td>
-                                <td align="center" width='24%'><b>Shift C</b></td>
-                                <td align="center" width='24%'><b>Shift D</b></td>
-                            </tr>
-                            <?php
-                                $zones = "";
-
-                                $getZones = "SELECT tbl_zones.zoneID AS zoneID, tbl_schedule.Day AS day, tbl_schedule.truckID AS truckID, tbl_schedule.Shift_A AS shift_a, tbl_schedule.Shift_B AS shift_b, tbl_schedule.Shift_C AS shift_c, tbl_schedule.Shift_D AS shift_d FROM tbl_zones LEFT JOIN tbl_schedule ON tbl_zones.zoneID = tbl_schedule.zoneID WHERE regionID = 1 ORDER BY tbl_zones.zoneID ASC"; // region ID should be changed according to region
-                                if ($myResults = mysqli_query($conn, $getZones)) {
-                                    while ($myZones = mysqli_fetch_assoc($myResults)){
-                                        $zones .= "
-                                            <tr>
-                                                <td align='center'>" . $myZones['zoneID'] . "</td>
-                                                <td>";
-                                                if ($myZones['shift_a'] > 0) {
-                                                    $zones .= $myZones['truckID'];
-                                                } else {
-                                                    $zones .= "
-                                                        <div onclick='schedule(this.id)' id='M_A_" . $myZones['zoneID'] . "' class='slots'>slot 1</div>
-                                                    ";
-                                                }
-                                        $zones .= "
-                                                </td>
-                                                <td>";
-                                                if ($myZones['shift_b'] > 0) {
-                                                    $zones .= $myZones['truckID'];
-                                                } else {
-                                                    $zones .= "<div onclick='schedule(this.id)' id='M_B_" . $myZones['zoneID'] . "' class='slots'>slot 2</div>";
-                                                }
-                                        $zones .= "
-                                                </td>
-                                                <td id='A_sft_B_z_" . $myZones['zoneID'] . "'>";
-                                                if ($myZones['shift_c'] > 0) {
-                                                    $zones .= $myZones['truckID'];
-                                                } else {
-                                                    $zones .= "<div onclick='schedule(this.id)' id='A_C_" . $myZones['zoneID'] . "' class='slots'>slot 3</div>";
-                                                }
-                                        $zones .= "
-                                                </td>
-                                                <td id='A_sft_B_z_" . $myZones['zoneID'] . "'>";
-                                                if ($myZones['shift_d'] > 0) {
-                                                    $zones .= $myZones['truckID'];
-                                                } else {
-                                                    $zones .= "<div onclick='schedule(this.id)' id='A_D_" . $myZones['zoneID'] . "' class='slots'>slot 4</div>";
-                                                }
-                                        $zones .= "
-                                                </td>
-                                            </tr>
-                                        ";
-                                    }
-                                }
-
-                                echo $zones;
-                            ?>
-                        </table>
+                        
+                        <!-- SCHEDULE BOX -->
+                        <div id="schedule_box"></div>
 
                     </td>
                 </tr>
@@ -162,7 +134,6 @@
             Slot Selected: Morning Shift A<br/>
             <input type="hidden" id="day" value="Monday" /> <!-- temp -->
             <input type="hidden" id="zone" value="" />
-            <input type="hidden" id="shift" value="" />
             <input type="hidden" id="route" value="1" />
             <select id='truck'>
                 <?php
@@ -176,7 +147,14 @@
                     echo $data;
                 ?>
             </select>
-            <input type="button" value="Submit" onclick="save_schedule(day.value, zone.value, shift.value, route.value, truck.value)" />
+            <select id="duration">
+                <option value="1">1hr</option>
+                <option value="2">2hrs</option>
+                <option value="3">3hrs</option>
+                <option value="4">4hrs</option>
+                <option value="5">5hrs</option>
+            </select>
+            <input type="button" value="Submit" onclick="save_schedule(day.value, zone.value, route.value, truck.value, duration.value)" />
         </div>
 
     </body>
