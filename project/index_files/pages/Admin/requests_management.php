@@ -102,6 +102,7 @@
                 $("#viewDetailsContainer").css('visibility', 'hidden');
                 $(".blurry-background").css('visibility', 'hidden');
             }
+
             var thiscategory = "";
             function edit(nic, fullname){
                 event.preventDefault();
@@ -116,6 +117,22 @@
                 activate.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
                 activate.send("nic=" + nic + "&fname=" + fullname + "&category=" + thiscategory);
                 
+            }
+
+            function reject_account(nic){
+                var reject = new XMLHttpRequest();
+                reject.onreadystatechange = function (){
+                    if (this.readyState == 4 && this.status == 200){
+                        var response = JSON.parse(this.responseText);
+                        if (response == true) {
+                           closeme();
+                        }
+                        console.log(response);
+                    }
+                }
+                reject.open("POST", "reject_request.php", true);
+                reject.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+                reject.send("nic=" + nic);
             }
 
         </script>
@@ -154,7 +171,7 @@
                         
                         <input type="hidden" name="locationCoordinate" value="" /><br/><br/>
                         <input type="submit" class="submit_button" style="width:50%;color:green;box-shadow:0 0 8px green" value="Activate Account" />
-                        <input type="button" class="submit_button" style="width:48%;color:red;box-shadow:0 0 8px red" value="Reject Request" />
+                        <input type="button" class="submit_button" style="width:48%;color:red;box-shadow:0 0 8px red" onclick='reject_account(nic.value)' value="Reject Request" />
                     </form>
                 </div>
                 <div align="right" style="padding:10px">

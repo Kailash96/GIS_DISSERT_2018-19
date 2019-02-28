@@ -35,9 +35,10 @@
               zoom: 12
             });
 
+            // https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 attribution: '&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors',
-                maxZoom: 16
+                maxZoom: 15
             }).addTo(map);
             
             /*

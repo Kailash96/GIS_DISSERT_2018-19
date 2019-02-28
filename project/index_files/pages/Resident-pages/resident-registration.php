@@ -58,7 +58,7 @@
             <div class="reg-form-box">
                 <div>
                     <form method="POST" onsubmit="<?php $_SERVER['PHP_SELF'] ?>">
-                        <input type="text" name="nic" placeholder="NIC" style="text-transform:uppercase" class="input-box" required /><br/>
+                        <input type="text" name="nic" placeholder="NIC" style="text-transform:uppercase;" class="input-box" required /><br/>
                         <input type="text" name="fullname" placeholder="Full Name" style="text-transform:capitalize" class="input-box" required /><br/>
                         <input type="number" name="phone" placeholder="Phone" class="input-box" required /><br/>
                         <input type="text" name="email" placeholder="Email" class="input-box" style="text-transform:none" /><br/>
