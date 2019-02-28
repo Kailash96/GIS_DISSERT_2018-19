@@ -97,6 +97,7 @@
             if (mysqli_query($conn, $add_data)){
                 echo "Data submitted successfully. Admin will verify your data.";
             } else {
+                echo $locationCoordinate;
                 echo "failed";
                 echo date('Y-m-d');
             }
