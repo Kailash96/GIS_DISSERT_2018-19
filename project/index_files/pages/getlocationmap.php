@@ -26,8 +26,27 @@
     </style>
   </head>
   <body>
-  <div class="map-holder">
-    <div id="map"></div>
+  <div class="map-holder" style="position:relative">
+    <div style="display:flex;flex-direction:column;position:absolute;top:10px;right:10px;z-index:2">
+      <input type="hidden" name="country" value="Mauritius" />
+      <select class="input-box" name="region" required>
+        <option selected="true" disabled="true">Select Region</option>
+        <option value="Flacq">Flacq</option>
+        <option value="Grand Port">Grand Port</option>
+        <option value="Moka">Moka</option>
+        <option value="Pamplemousses">Pamplemousses</option>
+        <option value="Plaines Wilhiems">Plaines Wilhiems</option>
+        <option value="Port Louis">Port Louis</option>
+        <option value="Riviere Du Rempart">Riviere Du Rempart</option>
+        <option value="Riviere Noire">Riviere Noire</option>
+        <option value="Savanne">Savanne</option>
+      </select>
+      <!-- <input type="text" name="region" placeholder="Region" autocomplete="off" style="width:100%;text-transform:capitalize" class="input-box" required /> -->
+      <input type="text" name="address" placeholder="Address" autocomplete="off" style="width:100%;text-transform:capitalize" class="input-box" required /><br/>
+      <input type="button" onclick="searchLoc('Mauritius', address.value, region.value)" value="Set my Location" class="submit_button" style="background-color:white;padding:8px 0;margin:0;width:100%" /><br/>
+      <input type="submit" class="submit_button" name="reg" value="Register" style="background-color:white;width:100%" />
+    </div>
+    <div id="map" style="z-index:1"></div>
   </div>
         <script>
             var map = L.map('map', {
