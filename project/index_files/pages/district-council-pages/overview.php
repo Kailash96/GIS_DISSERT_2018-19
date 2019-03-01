@@ -50,7 +50,23 @@
                 display:none;
             }
         </style>
+        <script>
+            $(document).keydown(function(event) {
+            if (event.ctrlKey==true && (event.which == '61' || event.which == '107' || event.which == '173' || event.which == '109'  || event.which == '187'  || event.which == '189'  ) ) {
+                    event.preventDefault();
+                }
+                // 107 Num Key  +
+                // 109 Num Key  -
+                // 173 Min Key  hyphen/underscor Hey
+                // 61 Plus key  +/= key
+            });
 
+            $(window).bind('mousewheel DOMMouseScroll', function (event) {
+                if (event.ctrlKey == true) {
+                event.preventDefault();
+                }
+            });
+        </script>
     </head>
     <body>
         <?php include("left_side_nav_bar.html"); ?>
@@ -167,7 +183,7 @@
                 }
 
                 // SET MARKERS
-                $getCoordsQuery = "SELECT * FROM (((tbl_residents LEFT JOIN tbl_zones ON tbl_residents.zoneID = tbl_zones.zoneID) LEFT JOIN tbl_region ON tbl_region.regionID = tbl_zones.regionID) LEFT JOIN tbl_waste_gen ON tbl_residents.NIC = tbl_waste_gen.generatorID) WHERE tbl_residents.Active = 1 AND tbl_region.regionName = 'Flacq'"; // to be changed to tbl_region.regionID = (the id of the region)
+                $getCoordsQuery = "SELECT * FROM tbl_residents LEFT JOIN tbl_waste_gen ON (tbl_residents.NIC = tbl_waste_gen.generatorID) WHERE tbl_residents.Active = 1 AND tbl_residents.region = 'Flacq'"; // to be changed to region = region
                 if ($results = mysqli_query($conn, $getCoordsQuery)) {
                     while ($row = mysqli_fetch_assoc($results)) {
                         $binLevelDomestic = $row['Domestic'];
@@ -184,7 +200,9 @@
                             $iconColor = "blueIcon";
                         }
                         $userID = $row['NIC'];
+                        
                         echo "marker = new L.marker([" . $row['LocationCoordinate'] . "], {markerID:" . json_encode($userID) . ", icon: " . $iconColor . "}).addTo(map).on('click', popupInfo);";
+                        
                     }
                 }
                 
