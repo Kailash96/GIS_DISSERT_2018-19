@@ -16,7 +16,7 @@
             }
         </style>
 
-        <?php include('log_reg_server.php'); ?>
+        <?php include_once('log_reg_server.php'); ?>
     </head>
     <body style="margin:0;">
         <div align="center">
@@ -24,7 +24,7 @@
             <div style='box-shadow:0 0 8px #002246;display:block;width:300px;text-align:left;padding:0 20px;border:1px solid transparent;border-radius:4px'>
                 <form method="post" action="<?php $_SERVER['PHP_SELF']; ?>">
                     <h4>Login</h4>
-                    <input type="text" placeholder="NIC/Reg Number" name="userid" class="loginbox" required /><br/>
+                    <input type="text" placeholder="NIC/Reg Number" name="userid" style="text-transform:uppercase;" class="loginbox" required /><br/>
                     <input type="password" placeholder="password" name="userpassword" class="loginbox" required /><br/>
                     <input type="submit" name="lgn" value="login" class="button" style="float:right;" />
                 </form>

@@ -79,13 +79,13 @@
         } else if (($_SERVER['REQUEST_METHOD'] == 'POST') && (isset($_POST['reg']))) {
         
             // REGISTRATION CODE
-            $nic = $_POST["nic"];
-            $fullname = $_POST["fullname"];
+            $nic = strtoupper($_POST["nic"]);
+            $fullname = ucwords($_POST["surname"] . " " . $_POST['firstname']);
             $phone = $_POST["phone"];
-            $email = $_POST["email"];
-            $address = $_POST["address"];
-            $region = $_POST["region"];
-            $country = $_POST["country"];
+            $email = strtolower($_POST["email"]);
+            $address = ucwords($_POST["address"]);
+            $region = ucwords($_POST["region"]);
+            $country = ucwords($_POST["country"]);
             $locationCoordinate = $_POST["locationCoordinate"];
 
             $zone_ID = checkInZone($locationCoordinate);
@@ -95,8 +95,7 @@
                         VALUES ('$nic', '$fullname', '$address', $phone, '$locationCoordinate', '$email', '$country', '$region', $zone_ID, '$dateReg')";
             
             if (mysqli_query($conn, $add_data)){
-                echo "Data submitted successfully. Admin will verify your data.";
-                header('location: ../../../index.php');
+                header("Location: registration_done.php");
             } else {
                 echo $locationCoordinate;
                 echo "failed";
