@@ -101,16 +101,12 @@ function inc_dec_level(bin_type, crr_value, act){
         // increment
         new_value = document.getElementById(bin_type + "_level").value = parseInt(crr_value) + 1;
         range_check_update(bin_type, crr_value, new_value);
-
         save_request();
-    } else {
-        if (crr_value != eval("crr_level_" + bin_type)) {
-            // decrement
-            new_value = document.getElementById(bin_type + "_level").value = parseInt(crr_value) - 1;
-            range_check_update(bin_type, crr_value, new_value);
-
-            save_request();
-        }
+    } else {        
+        // decrement
+        new_value = document.getElementById(bin_type + "_level").value = parseInt(crr_value) - 1;
+        range_check_update(bin_type, crr_value, new_value);
+        save_request();
     }
 }
 
@@ -121,7 +117,7 @@ function range_check_update(bin_type, prev_value, updated_value){
     } else if (updated_value < 0) {
         document.getElementById(bin_type + "_level").value = 0;
         update_circular_level(bin_type, prev_value, 0);
-    } else if (updated_value < eval("crr_level_" + bin_type)) {
+    } else if (updated_value < parseInt(eval("crr_level_" + bin_type))) {
         document.getElementById(bin_type + "_level").value = eval("crr_level_" + bin_type);
         update_circular_level(bin_type, prev_value, eval("crr_level_" + bin_type));
     } else {
