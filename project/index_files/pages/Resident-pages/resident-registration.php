@@ -1,6 +1,7 @@
 <!DOCTYPE HTML>
 <html>
     <head>
+        <?php include_once('../../../log_reg_server.php'); ?>
         <title>Resident Registration | Binswiper</title>
         <link type="text/css" rel="stylesheet" href="../../css_files/style.css" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -66,6 +67,14 @@
                 color:red;
                 font-size:13px;
             }
+
+            #next_button{
+                display:none;
+            }
+
+            input[name='reg'] {
+                display:none;
+            }
         </style>
         <script>
             function setValue(coordinates){
@@ -87,20 +96,129 @@
             }
 
             function validate(checker_name, input_value){
+                var error = true;
+                var valid = "<i class='fa fa-check' style='color:green'></i>";
                 if (checker_name == "nic") {
-                    if (input_value.match(/[A-z]/i)) {
-                        console.log("valid");
+                    var nic_error = document.getElementById("nic_format");
+                    // CHECK FIRST LETTER
+                    if (!input_value.charAt(0).match(/^[a-zA-Z]+$/)) {
+                        nic_error.innerHTML = "NIC should start with an alphabet!";
+                        $("input[name='nic']").css('border', '1px solid red');
+                        error = true;
+                    } else if (!input_value.match(/^[A-z0-9]+$/)) {
+                        nic_error.innerHTML = "Special characters not allowed!";
+                        $("input[name='nic']").css('border', '1px solid red');
+                        error = true;
+                    }else if ((input_value.length < 14) || (input_value.length > 14)) {
+                        nic_error.innerHTML = "NIC should contain 14 characters!"
+                        $("input[name='nic']").css('border', '1px solid red');
+                        error = true;
+                    } else {
+                        $("input[name='nic']").css('border', '1px solid green');
+                        nic_error.innerHTML = valid;
+                        error = false;
                     }
-                } else if (checker_name == "fullname") {
-
-                } else if (checker_name == "phone") {
-
+                } else if (checker_name == "surname") {
+                    var name_error = document.getElementById("last_format");
+                    if (!input_value.match(/^[a-zA-Z]+$/)) {
+                        name_error.innerHTML = "Name should contain Only letters!";
+                        $("input[name='surname']").css('border', '1px solid red');
+                        error = true;
+                    } else {
+                        name_error.innerHTML = valid;
+                        $("input[name='surname']").css('border', '1px solid green');
+                        error = false;
+                    }
+                } else if (checker_name == "firstname") {
+                    var name_error = document.getElementById("first_format");
+                    if (!input_value.match(/^[a-zA-Z]+$/)) {
+                        name_error.innerHTML = "Name should contain Only letters!";
+                        $("input[name='firstname']").css('border', '1px solid red');
+                        error = true;
+                    } else {
+                        name_error.innerHTML = valid;
+                        $("input[name='firstname']").css('border', '1px solid green');
+                        error = false;
+                    }
+                }else if (checker_name == "phone") {
+                    var name_error = document.getElementById("phone_format");
+                    if (!input_value.match(/^[0-9]+$/)) {
+                        name_error.innerHTML = "Only numerical value accepted!";
+                        $("input[name='phone']").css('border', '1px solid red');
+                        error = true;
+                    } else if ((input_value.charAt(0) == 5) && ((input_value.length < 8) || (input_value.length > 8))) {
+                        name_error.innerHTML = "Mobile number: 8 characters!";
+                        $("input[name='phone']").css('border', '1px solid red');
+                        error = true;
+                    } else if ((input_value.charAt(0) != 5) && ((input_value.length < 7) || (input_value.length > 7))) {
+                        name_error.innerHTML = "Home number: 7 characters!";
+                        $("input[name='phone']").css('border', '1px solid red');
+                        error = true;
+                    } else {
+                        name_error.innerHTML = valid;
+                        $("input[name='phone']").css('border', '1px solid green');
+                        error = false;
+                    }
                 } else if (checker_name == "email"){
+                    var email_error = document.getElementById("email_format");
+                    var email_format = /\S+@\S+\.\S+/;
+                    if (!email_format.test(input_value)) {
+                        email_error.innerHTML = "someone@example.com";
+                        $("input[name='email']").css('border', '1px solid red');
+                        error = true;
+                    } else {
+                        email_error.innerHTML = valid;
+                        $("input[name='email']").css('border', '1px solid green');
+                        error = false;
+                    }
+                }
 
+                var nic = $("input[name='nic']").val();
+                var surname = $("input[name='surname']").val();
+                var firstname = $("input[name='firstname']").val();
+                var phone = $("input[name='phone']").val();
+                var email = $("input[name='email']").val();
+
+                if (nic == "" || surname == "" || firstname == "" || phone == "" || email == "") {
+                    error = true;
+                }
+                
+                if (!error) {
+                    document.getElementById("next_button").style.display = "block";
+                } else {
+                    document.getElementById("next_button").style.display = "none";
+                }
+            }
+
+            function validate_step_2(){
+                var error = true;
+                var select = $("select[name='region'] option:selected").val();
+
+                if (select != "Select Region") {
+                    $("select[name='region'").css({'border':'1px solid green', 'color':'green'});
+                    error = false;
+                } else {
+                    $("select[name='region'").css({'border':'1px solid red', 'color':'red'});
+                    error = true;
+                }
+
+                if ($("input[name='address']").val() == "") {
+                    $("input[name='address']").css('border','1px solid red');
+                    error = true;
+                } else {
+                    $("input[name='address']").css('border','1px solid green');
+                    error = false;
+                }
+
+                if (error) {
+                    $("input[name='reg']").css('display', 'none');
+                    return false;
+                } else {
+                    $("input[name='reg']").css('display', 'block');
+                    return true;
                 }
             }
         </script>
-        <?php include('../../../log_reg_server.php'); ?>
     </head>
     <body style="margin:0;padding:0;background-color:#F6F6F6">
         <table border="0" width="100%" style="padding:0px 200px;">
@@ -128,19 +246,25 @@
                 <td colspan="2">
                     <form method="POST" onsubmit="<?php $_SERVER['PHP_SELF'] ?>" style="position:relative">
                         <!-- account registration -->
-                        <div style="width:50%;" id="reg_form">
-                            Create your personal account<br/><br/>
-                            <div id="nic_format"></div>            
-                            <input type="text" name="nic" placeholder="NIC" onkeyup="validate(this.name, this.value)" style="text-transform:uppercase;" class="input-box" autocomplete="off" required /><br/>
-                            <div id="name_format"></div>
-                            <input type="text" name="fullname" placeholder="Full Name" onkeyup="validate(this.name, this.value)" style="text-transform:capitalize" class="input-box" autocomplete="off" required /><br/>
-                            <div id="phone_format"></div>
-                            <input type="number" name="phone" placeholder="Phone" onkeyup="validate(this.name, this.value)" class="input-box" autocomplete="off" required /><br/>
-                            <div id="email_format"></div>
-                            <input type="text" name="email" placeholder="Email" onkeyup="validate(this.name, this.value)" class="input-box" autocomplete="off" style="text-transform:none" /><br/><br/>
+                        <div style="display:flex;flex-direction:row">
+                            <div style="width:50%;" id="reg_form">
+                                Create your personal account<br/><br/>
+                                <div id="nic_format"></div>            
+                                <input type="text" name="nic" placeholder="NIC" onkeyup="validate(this.name, this.value)" style="text-transform:uppercase;" class="input-box" autocomplete="off" required /><br/>
+                                <div id="last_format"></div>
+                                <input type="text" name="surname" placeholder="Last Name" onkeyup="validate(this.name, this.value)" style="text-transform:capitalize" class="input-box" autocomplete="off" required /><br/>
+                                <div id="first_format"></div>
+                                <input type="text" name="firstname" placeholder="First Name" onkeyup="validate(this.name, this.value)" style="text-transform:capitalize" class="input-box" autocomplete="off" required /><br/>
+                                <div id="phone_format"></div>
+                                <input type="number" name="phone" placeholder="Home/Mobile" onkeyup="validate(this.name, this.value)" class="input-box" autocomplete="off" required /><br/>
+                                <div id="email_format"></div>
+                                <input type="text" name="email" placeholder="Email" onkeyup="validate(this.name, this.value)" class="input-box" autocomplete="off" style="text-transform:none" /><br/><br/>
 
-                            <button class="submit_button" onclick="next()">Next <i class="fa fa-toggle-right"></i></button>
-                            
+                                <button class="submit_button" id="next_button" onclick="next()">Next <i class="fa fa-toggle-right"></i></button>
+                            </div>
+                            <div style="width:50%;padding:50px 30px 0 30px">
+                                <img src="img/sorting.png" style="width:100%"/>
+                            </div>
                         </div>
                         <!-- mapping -->
                         <div id="mapping" style="position:absolute;top:0;width:100%">

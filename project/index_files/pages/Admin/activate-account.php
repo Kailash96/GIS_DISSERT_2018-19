@@ -3,7 +3,7 @@
 
     $nic = $_POST['nic'];
     $fullname = $_POST['fname'];
-    $password = SHA1(substr($fullname, 0, 3) . substr($nic, -3));
+    $password = SHA1(strtolower(substr($fullname, 0, 3) . substr($nic, -3)));
     $category = $_POST['category'];
     
     if ($category == 'resident') {

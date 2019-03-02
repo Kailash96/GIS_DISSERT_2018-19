@@ -29,7 +29,7 @@
   <div class="map-holder" style="position:relative">
     <div style="display:flex;flex-direction:column;position:absolute;top:10px;right:10px;z-index:2">
       <input type="hidden" name="country" value="Mauritius" />
-      <select class="input-box" name="region" required>
+      <select class="input-box" name="region" onchange="validate_step_2()" required>
         <option selected="true" disabled="true">Select Region</option>
         <option value="Flacq">Flacq</option>
         <option value="Grand Port">Grand Port</option>
@@ -42,7 +42,7 @@
         <option value="Savanne">Savanne</option>
       </select>
       <!-- <input type="text" name="region" placeholder="Region" autocomplete="off" style="width:100%;text-transform:capitalize" class="input-box" required /> -->
-      <input type="text" name="address" placeholder="Address" autocomplete="off" style="width:100%;text-transform:capitalize" class="input-box" required /><br/>
+      <input type="text" name="address" onkeyup="validate_step_2()" placeholder="Address" autocomplete="off" style="width:100%;text-transform:capitalize" class="input-box" required /><br/>
       <input type="button" onclick="searchLoc('Mauritius', address.value, region.value)" value="Set my Location" class="submit_button" style="background-color:white;padding:8px 0;margin:0;width:100%" /><br/>
       <input type="submit" class="submit_button" name="reg" value="Register" style="background-color:white;width:100%" />
     </div>
@@ -59,78 +59,37 @@
                 attribution: '&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors',
                 maxZoom: 15
             }).addTo(map);
-            
-            /*
-            var geocodeService = L.esri.Geocoding.geocodeService();
-
-            map.on('click', function(e) {
-                geocodeService.reverse().latlng(e.latlng).run(function(error, result) {
-                    L.marker(result.latlng).addTo(map).bindPopup(result.address.Match_addr).openPopup();
-                    console.log(result.latlng);
-                });
-            });
-            */
-
-            // GEOCODE CONTROL
-            /*
-            var searchControl = L.esri.Geocoding.geosearch({position:'topright'}).addTo(map);
-
-            searchControl.on('results', function(data){
-                // results.clearLayers();
-                // for (var i = data.results.length - 1; i >= 0; i--) {
-                    // results.addLayer(L.marker(data.results[0].latlng));
-                    L.marker(data.latlng).addTo(map);
-                    console.log(data.latlng);
-                // }
-                
-            });
-            */
-            // results.addTo(map);
-            
-
-            // TRIAL
-            /*
-            var searchPlace = 'TAGOR ROAD, FLACQ, MAURITIUS';
-            L.esri.Geocoding.geocode().text(searchPlace).run(function(err, result, response){
-              console.log(result.results[0].latlng);
-              L.marker(result.results[0].latlng).addTo(map);
-            });
-            */
 
             // var result_layer = L.layerGroup().addTo(map);
             // FULLY FUNCTIONAL
             var prevMarker = "";
             function searchLoc(country_val, address_val, region_val){
-              console.log(
-                "country: " + country_val,
-                "address: " + address_val,
-                "region: " + region_val,
-              );
-              // GEOCODE
-              L.esri.Geocoding.geocode().text(address_val + ' ' + region_val + ' ' + country_val).run(function(err, result, response){
-                // result_layer.clearLayers();
-                console.log(result.results[0].latlng);
-                console.log(result.results.length);
-                // result_layer.addLayer(
-                  if (prevMarker != ""){
-                    map.removeLayer(prevMarker);
-                  }
-                  
-                  prevMarker = L.marker(result.results[0].latlng, {draggable:'true'}).addTo(map);
-                  var position = prevMarker.getLatLng();
-                  var reformat = position.lat + "," + position.lng;
-                  map.setView([position.lat, position.lng], 16);
-                  setValue(reformat);
-
-                  prevMarker.on('dragend', function(event){
-                    position = prevMarker.getLatLng();
-                    // function to set value in input type hidden
-                    reformat = position.lat + "," + position.lng;
+              if (validate_step_2()){
+                // GEOCODE
+                L.esri.Geocoding.geocode().text(address_val + ' ' + region_val + ' ' + country_val).run(function(err, result, response){
+                  // result_layer.addLayer(
+                    if (prevMarker != ""){
+                      map.removeLayer(prevMarker);
+                    }
+                    
+                    prevMarker = L.marker(result.results[0].latlng, {draggable:'true'}).addTo(map);
+                    var position = prevMarker.getLatLng();
+                    var reformat = position.lat + "," + position.lng;
                     map.setView([position.lat, position.lng], 16);
                     setValue(reformat);
-                  });
-                // );
-              });
+
+                    prevMarker.on('dragend', function(event){
+                      position = prevMarker.getLatLng();
+                      // function to set value in input type hidden
+                      reformat = position.lat + "," + position.lng;
+                      map.setView([position.lat, position.lng], 16);
+                      setValue(reformat);
+                    });
+                  // );
+                });
+
+              }
+              
               
             };
             

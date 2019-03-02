@@ -190,11 +190,11 @@
                         $binLevelPlastic = $row['Plastic'];
                         $binLevelPaper = $row['Paper'];
                         $binLevelOther = $row['Other'];
-                        if (($binLevelDomestic > 70) || ($binLevelPlastic > 70) || ($binLevelPaper > 70) || ($binLevelOther > 70)) {
+                        if (($binLevelDomestic >= 80) || ($binLevelPlastic >= 80) || ($binLevelPaper >= 80) || ($binLevelOther >= 80)) {
                             $iconColor = "redIcon";
-                        } else if (($binLevelDomestic > 50) || ($binLevelPlastic > 50) || ($binLevelPaper > 50) || ($binLevelOther > 50)) {
+                        } else if (($binLevelDomestic >= 50) || ($binLevelPlastic >= 50) || ($binLevelPaper >= 50) || ($binLevelOther >= 50)) {
                             $iconColor = "yellowIcon";
-                        } else if (($binLevelDomestic > 30) || ($binLevelPlastic > 30) || ($binLevelPaper > 30) || ($binLevelOther > 30)) {
+                        } else if (($binLevelDomestic > 0) || ($binLevelPlastic > 0) || ($binLevelPaper > 0) || ($binLevelOther > 0)) {
                             $iconColor = "greenIcon";
                         } else {
                             $iconColor = "blueIcon";

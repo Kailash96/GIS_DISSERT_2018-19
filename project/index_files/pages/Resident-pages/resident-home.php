@@ -34,6 +34,7 @@
                 padding:5px 10px;
                 border-radius:3px;
                 color:red;
+                margin-right:50px;
             }
 
             .all_bins_container{
@@ -70,6 +71,14 @@
                 border:2px solid green;
                 color:green;
             }
+
+            #savechanges{
+                display:none;
+            }
+
+            #changessaved{
+                display:none;
+            }
         </style>
 
     </head>
@@ -80,7 +89,8 @@
             <h1 style="display:inline-block;margin:8px 0;"><i class='fa fa-trash'></i> Binswiper</h1>
             <!-- OPTIONS CONTAINER -->
             <div style="float:right;display:block-inline;margin-top:20px;">
-                <input type='button' value="Save Changes" class="button" onclick="level_update(userid.value, 'citizen', 1)" />
+                <span id="savechanges" class="button" onclick="level_update(userid.value, 'citizen', 1)"><i class="fa fa-database" style="color:red;"></i> Save Changes?</span>
+                <span style="cursor:default;color:green;border:2px solid green;border-radius:4px" id="changessaved" class="button">Changes Saved <i class="fa fa-check-square-o"></i></span>
                 <span style="margin-right:50px;text-transform:capitalize"><i class="fa fa-user-circle-o"></i> <?php echo $_SESSION['username'] ?></span>
                 <a href="" style="color:#002246;text-decoration:none;margin-right:50px;"><i class="fa fa-wrench"></i> Settings</a>
                 <a href="?logout=logout" style="color:#002246;text-decoration:none;"><i class="fa fa-sign-out"></i> Logout</a>
@@ -139,7 +149,7 @@
                     <td>
                         <input type="button" value="- 1" onclick="inc_dec_level('domestic', domestic_level.value, 0)" class="button_inc_dec" />
                         <input type="hidden" value="0" id="domestic_prev_level" />
-                        <input type="number" style="width:40px;" min="0" max="20" onchange="range_check_update('domestic', domestic_prev_level.value, this.value)" value="0" id="domestic_level" />
+                        <input type="number" style="width:40px;" min="0" max="20" onkeyup="save_request()" onchange="range_check_update('domestic', domestic_prev_level.value, this.value)" value="0" id="domestic_level" />
                         <input type="button" value="+ 1" onclick="inc_dec_level('domestic', domestic_level.value, 1)" class="button_inc_dec" /> kg
                     </td>
                 </tr>
@@ -189,7 +199,7 @@
                     <td>
                         <input type="button" value="- 1" onclick="inc_dec_level('plastic', plastic_level.value, 0)" class="button_inc_dec" />
                         <input type="hidden" value="0" id="plastic_prev_level" />
-                        <input type="number" style="width:40px;" min="0" max="20" onchange="range_check_update('plastic', plastic_prev_level.value, this.value)" value="0" id="plastic_level" />
+                        <input type="number" style="width:40px;" min="0" max="20" onkeyup="save_request()" onchange="range_check_update('plastic', plastic_prev_level.value, this.value)" value="0" id="plastic_level" />
                         <input type="button" value="+ 1" onclick="inc_dec_level('plastic', plastic_level.value, 1)" class="button_inc_dec" /> kg
                     </td>
                 </tr>
@@ -239,7 +249,7 @@
                     <td>
                         <input type="button" value="- 1" onclick="inc_dec_level('paper', paper_level.value, 0)" class="button_inc_dec" />
                         <input type="hidden" value="0" id="paper_prev_level" />
-                        <input type="number" style="width:40px;" min="0" max="20" onchange="range_check_update('paper', paper_prev_level.value, this.value)" value="0" id="paper_level" />
+                        <input type="number" style="width:40px;" min="0" max="20" onkeyup="save_request()" onchange="range_check_update('paper', paper_prev_level.value, this.value)" value="0" id="paper_level" />
                         <input type="button" value="+ 1" onclick="inc_dec_level('paper', paper_level.value, 1)" class="button_inc_dec" /> kg
                     </td>
                 </tr>
@@ -289,7 +299,7 @@
                     <td>
                         <input type="button" value="- 1" onclick="inc_dec_level('other', other_level.value, 0)" class="button_inc_dec" />
                         <input type="hidden" value="0" id="other_prev_level" />
-                        <input type="number" style="width:40px;" min="0" max="20" onchange="range_check_update('other', other_prev_level.value, this.value)" value="0" id="other_level" />
+                        <input type="number" style="width:40px;" min="0" max="20" onkeyup="save_request()" onchange="range_check_update('other', other_prev_level.value, this.value)" value="0" id="other_level" />
                         <input type="button" value="+ 1" onclick="inc_dec_level('other', other_level.value, 1)" class="button_inc_dec" /> kg
                     </td>
                 </tr>
