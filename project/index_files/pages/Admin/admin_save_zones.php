@@ -21,7 +21,6 @@
         return $inside;
     };
 
-
     function checkInRegion($individualZone) {
         $flag = false;
         $region_query = "SELECT * FROM tbl_region";

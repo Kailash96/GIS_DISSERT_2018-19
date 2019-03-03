@@ -71,6 +71,18 @@
             input[type=button]:hover{
                 box-shadow:0 0 2px black;
             }
+
+            #on{
+                display:none;
+            }
+
+            #no_zone_users_counter{
+                border:1px solid red;
+                background-color:red;
+                color:white;
+                padding:0 5px;
+                border-radius:3px;
+            }
         </style>
 
     </head>
@@ -196,55 +208,123 @@
 
             var polygon = [];
             function save_zone(act){
-            var data;
-            if (act == 0){
-                data = "act=" + act;
-            } else {
-                data = "zone_array=" + JSON.stringify(zoneArray) + "&act=" + act;
-            }
+                var data;
+                if (act == 0){
+                    data = "act=" + act;
+                } else {
+                    data = "zone_array=" + JSON.stringify(zoneArray) + "&act=" + act;
+                }
 
-            var store_zones = new XMLHttpRequest();
-            store_zones.onreadystatechange = function(){
-                if (this.readyState == 4 && this.status == 200) {
-                    var draw_zone = JSON.parse(this.responseText);
-                    for (var r = 0; r < polygon.length; r++) {
-                        map.removeLayer(polygon[r]);
-                    }
-                    for (var z = 0; z < draw_zone.length; z++) {
-                        polygon[z] = L.polygon(JSON.parse(draw_zone[z]), {color: 'red', weight: 1});
-                        polygon[z].addTo(map);
+                var store_zones = new XMLHttpRequest();
+                store_zones.onreadystatechange = function(){
+                    if (this.readyState == 4 && this.status == 200) {
+                        var draw_zone = JSON.parse(this.responseText);
+                        for (var r = 0; r < polygon.length; r++) {
+                            map.removeLayer(polygon[r]);
+                        }
+                        for (var z = 0; z < draw_zone.length; z++) {
+                            polygon[z] = L.polygon(JSON.parse(draw_zone[z]), {color: 'red', weight: 1});
+                            polygon[z].addTo(map);
+                        }
                     }
                 }
-            }
-            store_zones.open("POST", "admin_save_zones.php", true);
-            store_zones.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-            store_zones.send(data);
-
+                store_zones.open("POST", "admin_save_zones.php", true);
+                store_zones.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+                store_zones.send(data);
             }
 
             function submit_changes(){
-            var region = document.getElementById("region").checked;
-            var zone = document.getElementById("zone").checked;
+                var region = document.getElementById("region").checked;
+                var zone = document.getElementById("zone").checked;
 
-            if (region) {
-                $("#board").fadeIn();
-            } else if (zone) {
-                // save in table zone
-                save_zone(1);
-            }
+                if (region) {
+                    $("#board").fadeIn();
+                } else if (zone) {
+                    // save in table zone
+                    save_zone(1);
+                    var zoneAssignment = new XMLHttpRequest();
+                    zoneAssignment.onreadystatechange = function(){
+                        // to redraw markers function redraw_markers() -> need region parameter
+                    }
+                    zoneAssignment.open("POST", "checkZoneAssignment.php", true);
+                    zoneAssignment.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+                    zoneAssignment.send();
+                }
 
             }
 
             function cancel(){
-            $("#board").fadeOut();
+                $("#board").fadeOut();
+            }
+
+            var marker = [];
+            function redraw_markers(region){
+                var getmarkers = new XMLHttpRequest();
+                getmarkers.onreadystatechange = function(){
+                    if (this.readyState == 4 && this.status == 200){
+                        var coordinates = JSON.parse(this.responseText);
+                        for (var i = 0; i < coordinates.length; i++) {
+                            var coordsbreak = coordinates[i].split(",");
+                            marker.push(L.marker([coordsbreak[0], coordsbreak[1]]).addTo(map));
+                        }
+                    }
+                }
+                getmarkers.open("POST", "no_zone_markers.php", true);
+                getmarkers.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+                getmarkers.send("region=" + region);
+            }
+
+            function toggle_switch(opt, region){
+                if (opt == "off") {
+                    $("#on").css('display','block');
+                    $("#off").css('display','none');
+
+                    redraw_markers(region);
+                } else {
+                    $("#off").css('display', 'block');
+                    $("#on").css('display', 'none');
+
+                    for (var i = 0; i < marker.length; i++) {
+                        map.removeLayer(marker[i]);
+                    }
+                    marker.length = 0;
+                }
             }
         </script>
         
-        <div style="z-index:2;position:fixed;top:200px;right:10px;background-color:white;display:block;width:200px;box-shadow:0 0 2px black;padding:8px">
-            <input type="radio" name="zone_opt" id="region" value="region" checked /> Set Region<br/><br/>
-            <input type="radio" name="zone_opt" id="zone" onchange="cancel()" value="zone" /> Set Zone<br/><br/>
-            <input type="button" value="Submit Changes" onclick="submit_changes()" />
-        </div>
+        <table style="background-color:white;font-size:14px;z-index:2;position:fixed;top:200px;right:10px;width:350px;box-shadow:0 0 2px black;border-radius:3px" cellspacing="0">
+            <tr>
+                <td>
+                    <!-- ZONING ISSUES -->
+                    <div style="padding:10px">
+                        <select style="border:1px solid black;padding:4px;width:100%;" id="regioning">
+                            <option selected="true" disabled="true">Select Region</option>
+                            <option value="Flacq">Flacq</option>
+                            <option value="Grand Port">Grand Port</option>
+                            <option value="Moka">Moka</option>
+                            <option value="Pamplemousses">Pamplemousses</option>
+                            <option value="Plaines Wilhiems">Plaines Wilhiems</option>
+                            <option value="Port Louis">Port Louis</option>
+                            <option value="Riviere Du Rempart">Riviere Du Rempart</option>
+                            <option value="Riviere Noire">Riviere Noire</option>
+                            <option value="Savanne">Savanne</option>
+                        </select>
+
+                        <br/><br/>
+                        Show/Hide users without zones <span id="no_zone_users_counter">0</span><br/>
+                        <i class="fa fa-toggle-off" id="off" style="color:red;font-size:24px;cursor:pointer" onclick="toggle_switch(this.id, regioning.value)"></i>
+                        <i class="fa fa-toggle-on" id="on" style="color:green;font-size:24px;cursor:pointer" onclick="toggle_switch(this.id, regioning.value)"></i>
+                    </div>
+
+                    <!-- DRAW ZONES OR REGIONS -->
+                    <div style="background-color:white;">
+                        <input type="radio" name="zone_opt" id="region" value="region" checked /> Set Region<br/><br/>
+                        <input type="radio" name="zone_opt" id="zone" onchange="cancel()" value="zone" /> Set Zone<br/><br/>
+                        <input type="button" value="Submit Changes" onclick="submit_changes()" />
+                    </div>
+                </td>
+            </tr>
+        </table>
 
         <div class="board" id="board">
             <b style="font-size:14px;">Region Name</b><br/>

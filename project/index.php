@@ -25,7 +25,7 @@
                 <form method="post" action="<?php $_SERVER['PHP_SELF']; ?>">
                     <h4>Login</h4>
                     <input type="text" placeholder="NIC/Reg Number" name="userid" style="text-transform:uppercase;" class="loginbox" required /><br/>
-                    <input type="password" placeholder="password" name="userpassword" class="loginbox" required /><br/>
+                    <input type="password" placeholder="PASSWORD" name="userpassword" class="loginbox" required /><br/>
                     <input type="submit" name="lgn" value="login" class="button" style="float:right;" />
                 </form>
                 <h5>New user? <a href="index_files/pages/registration_navigator.php" style="color:#002246">Click here to register.</a></h5>
