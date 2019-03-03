@@ -21,11 +21,13 @@
         xmlhttp.onreadystatechange = function(){
             if (this.readyState == 4 && this.status == 200){
                 var dataValue = JSON.parse(this.responseText);
-                if ((dataValue[0] > 0) && (dataValue[0] != current_value)){
+                if ((dataValue[0] >= 0) && (dataValue[0] != current_value)){
                     document.getElementById("counter").style.visibility = "visible";
                     document.getElementById("counter").innerHTML = dataValue[0];
                     current_value = dataValue[0];
-                    document.getElementById("LORequests").innerHTML = dataValue[1];
+                    if (document.getElementById("LORequests")) {
+                        document.getElementById("LORequests").innerHTML = dataValue[1];
+                    }
                 } else if (dataValue[0] == 0) {
                     document.getElementById("counter").style.visibility = "hidden";
                 }                  
@@ -35,7 +37,7 @@
         xmlhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
         xmlhttp.send("checker=" + current_value);
     }
-    setInterval(update, 1000);
+    setInterval(update, 100);
 
     function getNoZone(){
         var nozoner = new XMLHttpRequest();
