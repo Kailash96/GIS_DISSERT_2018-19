@@ -95,9 +95,25 @@
                 step2.classList.add("active");
             }
 
+            var exist = false;
+            function checkindb(nic){
+                var check = new XMLHttpRequest();
+                check.onreadystatechange = function(){
+                    if (this.readyState == 4 && this.status == 200) {
+                        exist = JSON.parse(this.responseText);
+                    }
+                }
+                check.open("POST", "checkNIC.php", true);
+                check.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+                check.send("nic=" + nic);
+
+                return exist;
+            }
+
             function validate(checker_name, input_value){
                 var error = true;
                 var valid = "<i class='fa fa-check' style='color:green'></i>";
+
                 if (checker_name == "nic") {
                     var nic_error = document.getElementById("nic_format");
                     // CHECK FIRST LETTER
@@ -113,6 +129,10 @@
                         nic_error.innerHTML = "NIC should contain 14 characters!"
                         $("input[name='nic']").css('border', '1px solid red');
                         error = true;
+                    } else if (checkindb(input_value)) {
+                        nic_error.innerHTML = "NIC already registered!"
+                        $("input[name='nic']").css('border', '1px solid red');
+                        error = true;
                     } else {
                         $("input[name='nic']").css('border', '1px solid green');
                         nic_error.innerHTML = valid;
@@ -120,7 +140,11 @@
                     }
                 } else if (checker_name == "surname") {
                     var name_error = document.getElementById("last_format");
-                    if (!input_value.match(/^[a-zA-Z]+$/)) {
+                    if (input_value == "") {
+                        name_error.innerHTML = "Field cannot be empty!";
+                        $("input[name='surname']").css('border', '1px solid red');
+                        error = true;
+                    } else if (!input_value.match(/^[a-zA-Z]+$/)) {
                         name_error.innerHTML = "Name should contain Only letters!";
                         $("input[name='surname']").css('border', '1px solid red');
                         error = true;
@@ -131,7 +155,11 @@
                     }
                 } else if (checker_name == "firstname") {
                     var name_error = document.getElementById("first_format");
-                    if (!input_value.match(/^[a-zA-Z]+$/)) {
+                    if (input_value == "") {
+                        name_error.innerHTML = "Field cannot be empty!";
+                        $("input[name='surname']").css('border', '1px solid red');
+                        error = true;
+                    } else if (!input_value.match(/^[a-zA-Z]+$/)) {
                         name_error.innerHTML = "Name should contain Only letters!";
                         $("input[name='firstname']").css('border', '1px solid red');
                         error = true;
@@ -250,13 +278,13 @@
                             <div style="width:50%;" id="reg_form">
                                 Create your personal account<br/><br/>
                                 <div id="nic_format"></div>            
-                                <input type="text" name="nic" placeholder="NIC" onkeyup="validate(this.name, this.value)" style="text-transform:uppercase;" class="input-box" autocomplete="off" required /><br/>
+                                <input type="text" name="nic" placeholder="NIC" onfocusout="validate(this.name, this.value)" onkeyup="validate(this.name, this.value)" style="text-transform:uppercase;" class="input-box" autocomplete="off" required /><br/>
                                 <div id="last_format"></div>
-                                <input type="text" name="surname" placeholder="Last Name" onkeyup="validate(this.name, this.value)" style="text-transform:capitalize" class="input-box" autocomplete="off" required /><br/>
+                                <input type="text" name="surname" placeholder="Last Name" onfocusout="validate(this.name, this.value)" style="text-transform:capitalize" class="input-box" autocomplete="off" required /><br/>
                                 <div id="first_format"></div>
-                                <input type="text" name="firstname" placeholder="First Name" onkeyup="validate(this.name, this.value)" style="text-transform:capitalize" class="input-box" autocomplete="off" required /><br/>
+                                <input type="text" name="firstname" placeholder="First Name" onfocusout="validate(this.name, this.value)" style="text-transform:capitalize" class="input-box" autocomplete="off" required /><br/>
                                 <div id="phone_format"></div>
-                                <input type="number" name="phone" placeholder="Home/Mobile" onkeyup="validate(this.name, this.value)" class="input-box" autocomplete="off" required /><br/>
+                                <input type="number" name="phone" placeholder="Home/Mobile" onfocusout="validate(this.name, this.value)" class="input-box" autocomplete="off" required /><br/>
                                 <div id="email_format"></div>
                                 <input type="text" name="email" placeholder="Email" onkeyup="validate(this.name, this.value)" class="input-box" autocomplete="off" style="text-transform:none" /><br/><br/>
 
