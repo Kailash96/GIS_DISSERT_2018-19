@@ -1,3 +1,15 @@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<style>
+    #counter{
+        visibility:hidden;
+    }
+
+    #notif_icon{
+        display:none;
+    }
+</style>
 <script type="text/javascript">
     var current_value = 0;
     function update(){
@@ -23,11 +35,27 @@
         xmlhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
         xmlhttp.send("checker=" + current_value);
     }
-    setInterval(update, 100);
+    setInterval(update, 1000);
+
+    function getNoZone(){
+        var nozoner = new XMLHttpRequest();
+        nozoner.onreadystatechange = function(){
+            if (this.readyState == 4 && this.status == 200){
+                var counter = JSON.parse(this.responseText);
+                if (counter > 0) {
+                    $("#notif_icon").fadeIn();
+                    if (document.getElementById("no_zone_users_counter")) {
+                        document.getElementById("no_zone_users_counter").innerHTML = counter;
+                    }
+                }
+            }
+        }
+        nozoner.open("POST", "count_no_zoner.php", true);
+        nozoner.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+        nozoner.send();
+    }
+    getNoZone();
 </script>
-
-
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 <div class="left-nav-bar">
     <img src="../../img/logo.jpg" style="width:200px;" />
@@ -36,7 +64,7 @@
         <li><a href="admin-home.php" id="home_selected"><i class="logo_space fa fa-cubes"></i> Dashboard</a></li>
         <li><a href="register_new_user.php" id="register_selected"><i class="logo_space fa fa-address-book-o"></i> Register New User</a></li>
         <li><a href="user-management.php" id="user_mngt_selected"><i class="logo_space fa fa-group"></i> User Management</a></li>
-        <li><a href="zone_management.php" id="zone_mngt_selected"><i class="logo_space fa fa-map-o"></i> Zones Management</a></li>
+        <li><a href="zone_management.php" id="zone_mngt_selected"><i class="logo_space fa fa-map-o"></i> Zones Management <i class="material-icons" id='notif_icon' style='font-size:13px;color:red'>&#xe7f7;</i></a></li>
         <li><a href="requests_management.php" id="requests_selected"><i class="logo_space fa fa-bell-o"></i> Requests <span style="background-color:red;padding:0px 6px 0px 5px;border-radius:3px;color:white;" id="counter"></span></a></li>
         <li><a href="register-employee.php" id="register-employee_selected"><i class="logo_space fa fa-address-card-o"></i> Manage Employee</a></li>
     </ul>
