@@ -70,37 +70,76 @@
             }
 
             /* DAY CALENDAR CLASSES */
-            .calendar_day_view_banner{
+            .day_calendar_banner{
                 display:grid;
-                border:1px solid black;
-                padding:10px;
-                width:1050px;
+                overflow:hidden;
+                overflow-x:auto;
             }
 
-            .calendar_day_view_banner > div {
-                border:1px solid black;
+            ::-webkit-scrollbar{
+                display:none;
             }
 
-            .calendar_day_view{
-                height:570px;
-                overflow-y:auto;
-                white-space:wrap;
-                text-overflow:hidden;
+            .day_calendar_banner > div{
+                border-left:1px solid black;
+                height:20px;
+                font-size:14px;
+            }
+
+            .day_calendar_view{
                 display:grid;
-                border:1px solid black;
-                padding:10px;
-                grid-template-columns:50px 159px 159px 159px 159px 159px 159px;
-                width:1050px;
+                padding:10px 10px;
+                width:1085px;
             }
 
-            #day_calendar_container{
-                
+            .calendar_day_time{
+                display:grid;
+                overflow:hidden;
+                overflow-x:auto;
+                padding:0 10px 0 10px;
             }
+
+            .calendar_day_time > div {
+                border:1px solid black;
+                height:22px;
+                font-size:14px;
+                margin:0 0 1px 0;
+            }
+        
         </style>
         <script type="text/javascript">
             function day_view(day){
                 $("#week_calendar_container").fadeOut(100);
             }
+
+            $(document).ready(function(){
+                $('#one').scroll(function(){
+                    var length = $(this).scrollTop();
+                    $('#two').scrollTop(length);
+                });
+            });
+
+            $(document).ready(function(){
+                $('#two').scroll(function(){
+                    var length = $(this).scrollTop();
+                    $('#one').scrollTop(length);
+                });
+            });
+
+            $(document).ready(function(){
+                $('#three').scroll(function(){
+                    var length = $(this).scrollLeft();
+                    $('#four').scrollLeft(length);
+                });
+            });
+
+            $(document).ready(function(){
+                $('#four').scroll(function(){
+                    var length = $(this).scrollLeft();
+                    $('#three').scrollLeft(length);
+                });
+            });
+
         </script>
     </head>
     <body>
@@ -243,27 +282,83 @@
         <div align="center" id="day_calendar_container">
 
             <!-- DAY CALENDAR VIEW BANNER -->
-            <div class="calendar_day_view_banner" style="grid-template-columns:50px 100px 100px 100px 100px 100px 100px 100px 100px 100px 100px 100px 100px 100px 100px 100px">
-                <div>zones</div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
+            <div style="grid-gap:10px;padding:10px 10px;display:grid;grid-template-columns:50px 1000px;width:1085px;">
+
+                <div style='font-size:14px'>
+                    zones
+                </div>
+                <div>
+
+                    <!-- DAY CALENDAR BANNER -->
+                    <div class="day_calendar_banner" id="four" style="grid-template-columns:100px 100px 100px 100px 100px 100px 100px 100px 100px 100px 100px 100px 100px 100px 100px;">
+                        <div>5am - 6am</div>
+                        <div>6am - 7am</div>
+                        <div>7am - 8am</div>
+                        <div>8am - 9am</div>
+                        <div>9am - 10am</div>
+                        <div>10am - 11am</div>
+                        <div>11am - 12pm</div>
+                        <div>12pm - 1pm</div>
+                        <div>1pm - 2pm</div>
+                        <div>2pm - 3pm</div>
+                        <div>3pm - 4pm</div>
+                        <div>4pm - 5pm</div>
+                        <div>5pm - 6pm</div>
+                        <div>6pm - 7pm</div>
+                        <div style='border-right:1px solid black;'>7pm - 8pm</div>
+                    </div>
+
+                </div>
+
             </div>
 
             <!-- DAY CALENDAR VIEW -->
-            <div class="calendar_day_view">
+            <div class="day_calendar_view" style="grid-template-columns:50px auto">
+                <div style="height:540px;overflow:hidden;overflow-y:auto;" id="one">
+                <?php
+                    $day_calendar_zone = "";
+                    $getZones = "SELECT * FROM tbl_zones WHERE regionID = 1";
+                    if ($zoning_result = mysqli_query($conn, $getZones)) {
+                        while ($zoning = mysqli_fetch_assoc($zoning_result)) {
+                            $day_calendar_zone .= "
+                                <div style='border-radius:2px;border:1px solid black;height:22px;font-size:14px;margin:0 0 1px 0'>" . $zoning['zoneID'] . "</div>
+                            ";
+                        }
+                    }
+                    echo $day_calendar_zone;
+                ?>
+                </div>
+                <div style="overflow:hidden;height:540px;overflow-y:auto;" id="two">
+                    <!-- CALENDAR DAY TIME-->
+                    <div class="calendar_day_time" id="three" style="grid-template-columns:100px 100px 100px 100px 100px 100px 100px 100px 100px 100px 100px 100px 100px 100px 100px">
+                        <?php
+                            $inside_zone = "";
+                            if ($zones_result = mysqli_query($conn, $getZones)) {
+                                while ($innerzone = mysqli_fetch_assoc($zones_result)) {
+                                    $inside_zone .= "
+                                        <div></div>
+                                        <div></div>
+                                        <div></div>
+                                        <div></div>
+                                        <div></div>
+                                        <div></div>
+                                        <div></div>
+                                        <div></div>
+                                        <div></div>
+                                        <div></div>
+                                        <div></div>
+                                        <div></div>
+                                        <div></div>
+                                        <div></div>
+                                        <div></div>
+                                    ";
+                                }
+                            }
+
+                            echo $inside_zone;
+                        ?>
+                    </div>
+                </div>
             </div>
 
         </div>
