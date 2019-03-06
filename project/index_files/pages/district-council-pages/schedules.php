@@ -3,158 +3,269 @@
     <head>
         <?php include("../../../db_connect.php") ?>
         <link rel="stylesheet" href="../../css_files/style.css" />
+        <script src="../../js_files/jquery_lib.js"></script>
         <style>
             #schedule_selected{
                 background-color:#DCDCDC;
                 border-left:4px solid #009DC4;
             }
-           
-           .tr td{
-                width:16.7%;
+
+            *{
+                box-sizing:border-box;
+            }
+
+            /* WEEK CALENDAR CLASSES */
+            .calendar_week_view_banner{
+                display:grid;
+                border:1px solid black;
+                padding:10px;
+                grid-template-columns:50px 159px 159px 159px 159px 159px 159px;
+                grid-gap:2px;
+                width:1050px;
+            }
+
+            .calendar_week_view_banner > div{
+                border:1px solid black;
                 text-align:center;
-           }
-
-           .tr td h4{
-               margin:0;
-               border:1px solid black;
-               padding:8px 0;
-               border-radius:3px 3px 0 0;
-               cursor:pointer;
-           }
-
-           .tr td h4:hover{
-               background-color:#DCDCDC;
-           }
-
-           .fillslotbox{
-               border:1px solid black;
-           }
-
-           .timeline{
-               display:flex;
-               flex-direction:row;
-               width:100%;
-           }
-
-           .timeline div{
-               width:20%;
-               text-align:center;
-               border-left:1px solid black;
-           }
-
-           .schedule_table td{
-               border-right:1px solid black;
-               border-left:1px solid black;
-               border-bottom:1px solid black;
-           }
-
-           .duration_holder{
-                display:flex;
-                flex-direction:row;
                 cursor:pointer;
-                height:50px;
-           }
+            }
 
-           .duration_holder div:hover{
-               background-color:#00A1E7;
-           }
+            .calendar_week_view_banner > div:hover{
+                background-color:#0082D6;
+                color:white;
+            }
 
-           .duration_holder div{
-               border-left:1px solid black;
-               box-sizing:border-box;
-               padding:2px;
-               background-color:#74FFA6;
-           }
+            .calendar_week_view{
+                height:570px;
+                overflow-y:auto;
+                white-space:wrap;
+                text-overflow:hidden;
+                display:grid;
+                border:1px solid black;
+                padding:10px;
+                grid-template-columns:50px 159px 159px 159px 159px 159px 159px;
+                grid-gap:2px;
+                width:1050px;
+            }
 
+            .calendar_week_view > div{
+                height:116px;
+                border-radius:2px;
+                background-color:default;
+                border:1px solid black;
+            }
+            
+            .truck_slot{
+                margin:4px;
+                padding:4px;
+                background-color:#0082D6;
+                border-radius:2px;
+                color:white;
+                box-shadow:0 0 2px black;
+                cursor:pointer;
+            }
+
+            #week_calendar_container{
+                display:none; /* temporary */
+            }
+
+            /* DAY CALENDAR CLASSES */
+            .calendar_day_view_banner{
+                display:grid;
+                border:1px solid black;
+                padding:10px;
+                width:1050px;
+            }
+
+            .calendar_day_view_banner > div {
+                border:1px solid black;
+            }
+
+            .calendar_day_view{
+                height:570px;
+                overflow-y:auto;
+                white-space:wrap;
+                text-overflow:hidden;
+                display:grid;
+                border:1px solid black;
+                padding:10px;
+                grid-template-columns:50px 159px 159px 159px 159px 159px 159px;
+                width:1050px;
+            }
+
+            #day_calendar_container{
+                
+            }
         </style>
         <script type="text/javascript">
-            function draw_schedule_box(){
-                var draw = new XMLHttpRequest();
-                draw.onreadystatechange = function(){
-                    if (this.readyState == 4 && this.status == 200) {
-                        var schedule_box = JSON.parse(this.responseText);
-                        document.getElementById("schedule_box").innerHTML = schedule_box;
-                    }
-                }
-                draw.open("POST", "schedule_box.php", true);
-                draw.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-                draw.send();
-            }
-
-            function select_slot(slot_zone){
-                console.log(slot_zone);
-                document.getElementById("zone").value = slot_zone;
-            }
-
-            function save_schedule(day, zone, route, truck, duration){
-                var save = new XMLHttpRequest();
-                save.onreadystatechange = function(){
-                    if (this.readyState == 4 && this.status == 200) {
-                        var success = JSON.parse(this.responseText);
-                        console.log(success);
-                    }
-                }
-                save.open("POST", "save_schedule.php", true);
-                save.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-                save.send("day=" + day + "&zone=" + zone + "&route=" + route + "&truck=" + truck + "&duration=" + duration);
+            function day_view(day){
+                $("#week_calendar_container").fadeOut(100);
             }
         </script>
     </head>
-    <body onload="draw_schedule_box()">
+    <body>
         <?php include("left_side_nav_bar.html"); ?>
         <?php include("top-nav-bar.html"); ?>
 
-        <div style="padding:20px;">
-            
-            <table border="0" width="100%" cellspacing="0">
-                <tr class="tr">
-                    <td><h4>Monday</h4></td>
-                    <td><h4>Tuesday</h4></td>
-                    <td><h4>Wednesday</h4></td>
-                    <td><h4>Thursday</h4></td>
-                    <td><h4>Friday</h4></td>
-                    <td><h4>Saturday</h4></td>
-                </tr>
-                <tr>
-                    <td colspan="6">
-                        <br/>
-                        
-                        <!-- SCHEDULE BOX -->
-                        <div id="schedule_box"></div>
+        <!-- WEEK CALENDAR CONTAINER -->
+        <div align="center" id="week_calendar_container">
 
-                    </td>
-                </tr>
-            </table>
+            <!-- CALENDAR WEEK VIEW BANNER -->
+            <div class="calendar_week_view_banner">
+                <div>zones</div>
+                <div onclick="day_view(this.id)" id="monday">Mon</div>
+                <div onclick="day_view(this.id)" id="tueday">Tue</div>
+                <div onclick="day_view(this.id)" id="wednesday">Wed</div>
+                <div onclick="day_view(this.id)" id="thursday">Thurs</div>
+                <div onclick="day_view(this.id)" id="friday">Fri</div>
+                <div onclick="day_view(this.id)" id="saturday">Sat</div>
+            </div>
+            
+            <!-- CALENDAR WEEK VIEW -->
+            <div class="calendar_week_view">
+                <?php
+                    $calendar = "";
+                    $fetch_zones_query = "SELECT * FROM tbl_zones WHERE regionID = 1";
+                    if ($getZones = mysqli_query($conn, $fetch_zones_query)) {
+                        while ($zones = mysqli_fetch_assoc($getZones)) {
+                            $zoneID = $zones['zoneID'];
+
+                            $calendar .= "
+                                <div style='border:0;background-color:#A0A0A0;color:white;height:40px;padding:11px 0'>" . $zones['zoneID'] . "</div>
+                                <div>
+                            ";
+                            
+                            $fetch_truck_query = "SELECT * FROM tbl_schedule INNER JOIN tbl_trucks ON tbl_schedule.TruckID = tbl_trucks.PlateNumber WHERE tbl_schedule.Zone = $zoneID AND tbl_trucks.Collector = 'District Council'";
+                            if ($zoning = mysqli_query($conn, $fetch_truck_query)) {
+                                while ($truck = mysqli_fetch_assoc($zoning)) {
+                                    if ($truck['Day'] == "Monday") {
+                                        $calendar .= "
+                                            <div class='truck_slot' style='text-align:left'>
+                                                " . $truck['TruckID'] . "<br/>
+                                                <span style='font-size:14px;color:white'>" . $truck['TimeStart'] . " - " . $truck['TimeEnd'] . "</span>
+                                            </div>
+                                        ";
+                                    }
+                                }
+                            }
+
+                            $calendar .= "</div>
+                                <div>";
+                                
+                                if ($zoning = mysqli_query($conn, $fetch_truck_query)) {
+                                    while ($truck = mysqli_fetch_assoc($zoning)) {
+                                        if ($truck['Day'] == "Tuesday") {
+                                            $calendar .= "
+                                                <div class='truck_slot' style='text-align:left'>
+                                                    " . $truck['TruckID'] . "<br/>
+                                                    <span style='font-size:14px;color:white'>" . $truck['TimeStart'] . " - " . $truck['TimeEnd'] . "</span>
+                                                </div>
+                                            ";
+                                        }
+                                    }
+                                }
+
+                            $calendar .= "</div>
+                                <div>";
+
+                                if ($zoning = mysqli_query($conn, $fetch_truck_query)) {
+                                    while ($truck = mysqli_fetch_assoc($zoning)) {
+                                        if ($truck['Day'] == "Wednesday") {
+                                            $calendar .= "
+                                                <div class='truck_slot' style='text-align:left'>
+                                                    " . $truck['TruckID'] . "<br/>
+                                                    <span style='font-size:14px;color:white'>" . $truck['TimeStart'] . " - " . $truck['TimeEnd'] . "</span>
+                                                </div>
+                                            ";
+                                        }
+                                    }
+                                }
+
+                            $calendar .= "</div>
+                                <div>";
+                                
+                                if ($zoning = mysqli_query($conn, $fetch_truck_query)) {
+                                    while ($truck = mysqli_fetch_assoc($zoning)) {
+                                        if ($truck['Day'] == "Thursday") {
+                                            $calendar .= "
+                                                <div class='truck_slot' style='text-align:left'>
+                                                    " . $truck['TruckID'] . "<br/>
+                                                    <span style='font-size:14px;color:white'>" . $truck['TimeStart'] . " - " . $truck['TimeEnd'] . "</span>
+                                                </div>
+                                            ";
+                                        }
+                                    }
+                                }
+
+                            $calendar .= "</div>
+                                <div>";
+                                
+                                if ($zoning = mysqli_query($conn, $fetch_truck_query)) {
+                                    while ($truck = mysqli_fetch_assoc($zoning)) {
+                                        if ($truck['Day'] == "Friday") {
+                                            $calendar .= "
+                                                <div class='truck_slot' style='text-align:left'>
+                                                    " . $truck['TruckID'] . "<br/>
+                                                    <span style='font-size:14px;color:white'>" . $truck['TimeStart'] . " - " . $truck['TimeEnd'] . "</span>
+                                                </div>
+                                            ";
+                                        }
+                                    }
+                                }
+
+                            $calendar .= "</div>
+                                <div>";
+
+                                if ($zoning = mysqli_query($conn, $fetch_truck_query)) {
+                                    while ($truck = mysqli_fetch_assoc($zoning)) {
+                                        if ($truck['Day'] == "Saturday") {
+                                            $calendar .= "
+                                                <div class='truck_slot' style='text-align:left'>
+                                                    " . $truck['TruckID'] . "<br/>
+                                                    <span style='font-size:14px;color:white'>" . $truck['TimeStart'] . " - " . $truck['TimeEnd'] . "</span>
+                                                </div>
+                                            ";
+                                        }
+                                    }
+                                }
+
+                            $calendar .= "</div>
+                            ";
+                        }
+                    }
+                    echo $calendar;
+                ?>
+            </div>
 
         </div>
 
-        <!-- fill slot box -->
-        <div class="fillslotbox">
-            Day: Monday<br/><br/>
-            Slot Selected: Morning Shift A<br/>
-            <input type="hidden" id="day" value="Monday" /> <!-- temp -->
-            <input type="hidden" id="zone" value="" />
-            <input type="hidden" id="route" value="1" />
-            <select id='truck'>
-                <?php
-                    $data = "";
-                    $getTrucksQuery = "SELECT * FROM tbl_trucks";
-                    if ($getTrucks = mysqli_query($conn, $getTrucksQuery)) {
-                        while ($trucks = mysqli_fetch_assoc($getTrucks)) {
-                            $data .= "<option value='" . $trucks['PlateNumber'] . "'>" . $trucks['PlateNumber'] . "</option>";
-                        }
-                    }
-                    echo $data;
-                ?>
-            </select>
-            <select id="duration">
-                <option value="1">1hr</option>
-                <option value="2">2hrs</option>
-                <option value="3">3hrs</option>
-                <option value="4">4hrs</option>
-                <option value="5">5hrs</option>
-            </select>
-            <input type="button" value="Submit" onclick="save_schedule(day.value, zone.value, route.value, truck.value, duration.value)" />
+        <!-- DAY CALENDAR CONTAINER -->
+        <div align="center" id="day_calendar_container">
+
+            <!-- DAY CALENDAR VIEW BANNER -->
+            <div class="calendar_day_view_banner" style="grid-template-columns:50px 100px 100px 100px 100px 100px 100px 100px 100px 100px 100px 100px 100px 100px 100px 100px">
+                <div>zones</div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+            </div>
+
+            <!-- DAY CALENDAR VIEW -->
+            <div class="calendar_day_view">
+            </div>
+
         </div>
 
     </body>
