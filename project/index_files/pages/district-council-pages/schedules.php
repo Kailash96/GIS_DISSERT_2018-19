@@ -101,6 +101,8 @@
 
             .calendar_day_time > div {
                 border:1px solid black;
+                border-right:0;
+                border-left:0;
                 height:22px;
                 font-size:14px;
                 margin:0 0 1px 0;
@@ -139,6 +141,8 @@
                     $('#three').scrollLeft(length);
                 });
             });
+
+            var day = "Monday";
 
         </script>
     </head>
@@ -333,24 +337,39 @@
                     <div class="calendar_day_time" id="three" style="grid-template-columns:100px 100px 100px 100px 100px 100px 100px 100px 100px 100px 100px 100px 100px 100px 100px">
                         <?php
                             $inside_zone = "";
+                            
                             if ($zones_result = mysqli_query($conn, $getZones)) {
                                 while ($innerzone = mysqli_fetch_assoc($zones_result)) {
+                                    $zone_id = $innerzone['zoneID'];
+                                    $t = array("", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "");
+                                    $selectedDay = "Monday";
+                                    $getSchedule = "SELECT * FROM tbl_schedule INNER JOIN tbl_trucks ON tbl_schedule.TruckID = tbl_trucks.PlateNumber WHERE Zone = $zone_id AND Day = '$selectedDay' AND Collector = 'District Council'";
+                                    if ($schedule_result = mysqli_query($conn, $getSchedule)) {
+                                        while ($schedule_row = mysqli_fetch_assoc($schedule_result)){
+
+                                           for ($i = (int)$schedule_row['TimeStart']; $i < (int)$schedule_row['TimeEnd']; $i++) {
+                                                $t[$i - 5] = "background-color:blue;";
+                                           }
+
+                                        }
+                                    }
+
                                     $inside_zone .= "
-                                        <div></div>
-                                        <div></div>
-                                        <div></div>
-                                        <div></div>
-                                        <div></div>
-                                        <div></div>
-                                        <div></div>
-                                        <div></div>
-                                        <div></div>
-                                        <div></div>
-                                        <div></div>
-                                        <div></div>
-                                        <div></div>
-                                        <div></div>
-                                        <div></div>
+                                        <div style='border-left:1px solid black;" . $t[0] . "'></div>
+                                        <div style='" . $t[1] . "'></div>
+                                        <div style='" . $t[2] . "'></div>
+                                        <div style='" . $t[3] . "'></div>
+                                        <div style='" . $t[4] . "'></div>
+                                        <div style='" . $t[5] . "'></div>
+                                        <div style='" . $t[6] . "'></div>
+                                        <div style='" . $t[7] . "'></div>
+                                        <div style='" . $t[8] . "'></div>
+                                        <div style='" . $t[9] . "'></div>
+                                        <div style='" . $t[10] . "'></div>
+                                        <div style='" . $t[11] . "'></div>
+                                        <div style='" . $t[12] . "'></div>
+                                        <div style='" . $t[13] . "'></div>
+                                        <div style='border-right:1px solid black;" . $t[14] . "'></div>
                                     ";
                                 }
                             }
