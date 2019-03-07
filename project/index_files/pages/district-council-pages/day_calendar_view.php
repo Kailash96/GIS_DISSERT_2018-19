@@ -8,8 +8,14 @@
 
     // DAY CALENDAR VIEW BANNER
     $data .= '
+        <div class="navigator_banner">
+            <span style="border:1px solid black;cursor:pointer;padding:8px 14px;border-radius:3px" onclick="week_view()">< Back</span>
+            <h2 style="display:inline-block;width:300px;text-align:center;padding:0;margin:0"><i class="fa fa-calendar"></i> 7th March 2019</h2>
+            <span style="box-shadow:0 0 2px black;padding:8px 14px;border-radius:3px;background-color:#0082D6;color:white;margin-right:50px;">Monday</span>
+            <b onclick="changeDay(this.id)" id="previous"><</b>
+            <b onclick="changeDay(this.id)" id="next">></b>
+        </div>
         <div style="grid-gap:10px;padding:10px 10px;display:grid;grid-template-columns:50px 1000px;width:1085px;">
-
         <div style="font-size:14px">
             zones
         </div>
@@ -73,7 +79,7 @@
                         $zone_id = $innerzone['zoneID'];
                         $t = array("", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "");
                         $truckData = array("", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "");
-                        $selectedDay = "monday";
+                        $selectedDay = $day;
                         $getSchedule = "SELECT * FROM tbl_schedule INNER JOIN tbl_trucks ON tbl_schedule.TruckID = tbl_trucks.PlateNumber WHERE Zone = $zone_id AND Day = '$selectedDay' AND Collector = 'District Council'";
                         
                         if ($schedule_result = mysqli_query($conn, $getSchedule)) {
