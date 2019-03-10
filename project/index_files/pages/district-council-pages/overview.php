@@ -183,7 +183,7 @@
                 }
 
                 // SET MARKERS
-                $getCoordsQuery = "SELECT * FROM tbl_residents LEFT JOIN tbl_waste_gen ON (tbl_residents.NIC = tbl_waste_gen.generatorID) WHERE tbl_residents.Active = 1 AND tbl_residents.region = 'Flacq'"; // to be changed to region = region
+                $getCoordsQuery = "SELECT * FROM tbl_generator LEFT JOIN tbl_waste_gen ON (tbl_generator.generatorID = tbl_waste_gen.generatorID) WHERE tbl_generator.Active = 1 AND tbl_generator.region = 'Flacq'"; // to be changed to region = region
                 if ($results = mysqli_query($conn, $getCoordsQuery)) {
                     while ($row = mysqli_fetch_assoc($results)) {
                         $binLevelDomestic = $row['Domestic'];
@@ -199,7 +199,7 @@
                         } else {
                             $iconColor = "blueIcon";
                         }
-                        $userID = $row['NIC'];
+                        $userID = $row['generatorID'];
                         
                         echo "marker = new L.marker([" . $row['LocationCoordinate'] . "], {markerID:" . json_encode($userID) . ", icon: " . $iconColor . "}).addTo(map).on('click', popupInfo);";
                         

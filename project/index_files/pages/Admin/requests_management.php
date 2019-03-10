@@ -103,7 +103,6 @@
                 $(".blurry-background").css('visibility', 'hidden');
             }
 
-            var thiscategory = "";
             function edit(nic, fullname){
                 event.preventDefault();
                 // ACTIVATE ACCOUNT
@@ -115,7 +114,7 @@
                 }
                 activate.open("POST", "activate-account.php", true);
                 activate.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-                activate.send("nic=" + nic + "&fname=" + fullname + "&category=" + thiscategory);
+                activate.send("nic=" + nic + "&fname=" + fullname);
                 
             }
 
@@ -177,11 +176,9 @@
                 <div align="right" style="padding:10px">
                     <?php include('../getlocationmap.php'); ?>
                     <script>
-                        function viewDetails(data){
+                        function viewDetails(genID){
 
-                            var arrdata = data.split("-");
-                            var nic = arrdata[0];
-                            var category = arrdata[1];
+                            var nic = genID;
 
                             var userdetails = new XMLHttpRequest();
                             userdetails.onreadystatechange = function(){
@@ -193,19 +190,17 @@
 
                                     $("input[name='nic']").val(data[0]);
                                     $("input[name='fullname']").val(data[1]);
-                                    $("input[name='tan']").val(data[2]);
-                                    $("input[name='phone']").val(data[4]);
-                                    $("input[name='email']").val(data[6]);
-                                    $("input[name='country']").val(data[7]);
-                                    $("input[name='region']").val(data[8]);
-                                    $("input[name='address']").val(data[3]);
+                                    $("input[name='phone']").val(data[3]);
+                                    $("input[name='email']").val(data[5]);
+                                    $("input[name='country']").val(data[6]);
+                                    $("input[name='region']").val(data[7]);
+                                    $("input[name='address']").val(data[2]);
                                     
-                                    thiscategory = category;
                                 }
                             }
                             userdetails.open("POST", "getuserdetails.php", true);
                             userdetails.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-                            userdetails.send('id=' + nic + '&category=' + category);
+                            userdetails.send('GenID=' + nic);
 
                         }
                     </script>

@@ -1,7 +1,7 @@
 <html>
     <head>
         <title>Registration Complete</title>
-        <link type="text/css" rel="stylesheet" href="../../css_files/style.css" />
+        <link type="text/css" rel="stylesheet" href="../css_files/style.css" />
     </head>
     <body>
         <h1>Registration Complete</h1>
@@ -26,7 +26,7 @@
 
         <h5>Redirecting to login page in: <span id="countdown">5</span></h5>
         <?php
-            header("refresh:5;url='../../../index.php'");
+            header("refresh:5;url='../../index.php'");
         ?>
     </body>
 </html>

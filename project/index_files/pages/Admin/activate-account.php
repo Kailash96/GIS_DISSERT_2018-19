@@ -4,18 +4,11 @@
     $nic = $_POST['nic'];
     $fullname = $_POST['fname'];
     $password = SHA1(strtolower(substr($fullname, 0, 3) . substr($nic, -3)));
-    $category = $_POST['category'];
     
-    if ($category == 'resident') {
-        $act_query = "UPDATE tbl_residents SET Active = 1 WHERE NIC = '$nic'";
-    } else if ($category == 'commercial') {
-        // UPDATE COMMERCIAL
-    } else if ($category == 'industrial') {
-        // UPDATE INDUSTRIAL
-    }
+    $act_query = "UPDATE tbl_generator SET Active = 1 WHERE GeneratorID = '$nic'";
     
     if (mysqli_query($conn, $act_query)){
-        $setacctQuery = "INSERT INTO generatorslogin (GeneratorID, Password, Category) VALUES ('$nic', '$password', '$category')";
+        $setacctQuery = "INSERT INTO tbl_generators_login (GeneratorID, Password) VALUES ('$nic', '$password')";
         mysqli_query($conn, $setacctQuery);
     }
 

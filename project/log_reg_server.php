@@ -42,8 +42,8 @@
             $userid = $_POST['userid'];
             $password = SHA1($_POST['userpassword']);
 
-            $checkID_query = "SELECT * FROM generatorslogin WHERE GeneratorID = '$userid'";
-            $checkPass_query = "SELECT * FROM generatorslogin WHERE Password = '$password'";
+            $checkID_query = "SELECT * FROM tbl_generators_login WHERE GeneratorID = '$userid'";
+            $checkPass_query = "SELECT * FROM tbl_generators_login WHERE Password = '$password'";
 
             if (mysqli_num_rows($checkCat = mysqli_query($conn, $checkID_query)) > 0){
                 if (mysqli_num_rows($result = mysqli_query($conn, $checkPass_query)) > 0){
@@ -52,13 +52,8 @@
                     $_SESSION['userID'] = $userid;
                     
                     $row = mysqli_fetch_assoc($checkCat);
-                    if ($row['Category'] == 'resident') {
-                        $getDataQuery = "SELECT * FROM tbl_residents WHERE NIC = '$userid'";
-                    } else if ($row['Category'] == 'commercial') {
-                        // SELECT FROM TABLE COMMERCIAL
-                    } else if ($row['Category'] == 'industrial') {
-                        // SELECT FROM TABLE INDUSTRIAL
-                    }
+                    $category = $row['Category'];
+                    $getDataQuery = "SELECT * FROM tbl_generator WHERE GeneratorID = '$userid'";
 
                     if ($getData = mysqli_query($conn, $getDataQuery)) {
                         $value = mysqli_fetch_assoc($getData);
@@ -77,10 +72,22 @@
             }
             
         } else if (($_SERVER['REQUEST_METHOD'] == 'POST') && (isset($_POST['reg']))) {
-        
+            
             // REGISTRATION CODE
-            $nic = strtoupper($_POST["nic"]);
-            $fullname = ucwords($_POST["surname"] . " " . $_POST['firstname']);
+            if ($_GET['reg'] == 'resident') {
+                $nic = strtoupper($_POST["gen_nic"]);
+                $fullname = ucwords($_POST["surname"] . " " . $_POST['firstname']);
+                $category = "Resident";
+            } else if ($_GET['reg'] == 'commercial') {
+                $nic = strtoupper($_POST["gen_id"]);
+                $fullname = ucwords($_POST["fullname"]);
+                $category = "Commercial";
+            } else {
+                $nic = strtoupper($_POST["gen_id"]);
+                $fullname = ucwords($_POST["fullname"]);
+                $category = "Industrial";
+            }
+
             $phone = $_POST["phone"];
             $email = strtolower($_POST["email"]);
             $address = ucwords($_POST["address"]);
@@ -91,8 +98,8 @@
             $zone_ID = checkInZone($locationCoordinate);
             $dateReg = date('Y-m-d');
             
-            $add_data = "INSERT INTO tbl_residents (NIC, Name, Address, PhoneNumber, LocationCoordinate, Email, country, region, zoneID, DateReg)
-                        VALUES ('$nic', '$fullname', '$address', $phone, '$locationCoordinate', '$email', '$country', '$region', $zone_ID, '$dateReg')";
+            $add_data = "INSERT INTO tbl_generator (GeneratorID, Name, Address, PhoneNumber, LocationCoordinate, Email, country, region, zoneID, DateReg, Category)
+                        VALUES ('$nic', '$fullname', '$address', $phone, '$locationCoordinate', '$email', '$country', '$region', $zone_ID, '$dateReg', '$category')";
             
             if (mysqli_query($conn, $add_data)){
                 header("Location: registration_done.php");

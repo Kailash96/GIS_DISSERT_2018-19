@@ -16,10 +16,10 @@
     }
 
     // GET USER DETAILS
-    $userDataQuery = "SELECT NIC, Name, Address, PhoneNumber, Email, Country, tbl_residents.ZoneID AS usr_zone, tbl_region.regionName AS usr_region FROM ((tbl_residents LEFT JOIN tbl_zones ON tbl_residents.zoneID = tbl_zones.zoneID) LEFT JOIN tbl_region ON tbl_zones.regionID = tbl_region.regionID) WHERE tbl_residents.NIC = '$userID' LIMIT 1";
+    $userDataQuery = "SELECT GeneratorID, Name, Address, PhoneNumber, Email, Country, tbl_generator.ZoneID AS usr_zone, tbl_region.regionName AS usr_region FROM ((tbl_generator LEFT JOIN tbl_zones ON tbl_generator.zoneID = tbl_zones.zoneID) LEFT JOIN tbl_region ON tbl_zones.regionID = tbl_region.regionID) WHERE tbl_generator.GeneratorID = '$userID' LIMIT 1";
     if ($result = mysqli_query($conn, $userDataQuery)) {
         $row = mysqli_fetch_assoc($result);
-        array_push($data, $row['NIC']);
+        array_push($data, $row['GeneratorID']);
         array_push($data, $row['Name']);
         array_push($data, $row['Address']);
         array_push($data, $row['PhoneNumber']);

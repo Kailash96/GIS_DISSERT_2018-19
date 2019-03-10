@@ -5,7 +5,7 @@
     $return_arr = array(1);
 
     $value_check = $_POST["checker"];
-    $checkQuery = "SELECT * FROM tbl_residents WHERE Active = 0";
+    $checkQuery = "SELECT * FROM tbl_generator WHERE Active = 0";
 
     $data = "
         <table border='0' width='100%' style='font-size:14px;text-transform:capitalize'>
@@ -24,11 +24,11 @@
         while($row = mysqli_fetch_assoc($result)){
             $data .= "
                 <tr>
-                    <td style='text-transform:uppercase'>" . $row['NIC'] . "</td>
+                    <td style='text-transform:uppercase'>" . $row['GeneratorID'] . "</td>
                     <td>" . $row['Name'] . "</td>
                     <td>" . $row['dateReg'] . "</td>
-                    <td><div style='border:0px solid black;padding:5px 0;width:100px;box-shadow:0 0 8px green;border-radius:2px;background-color:green;color:white;text-align:center;'>Resident</div></td>
-                    <td align='right'><input type='button' value='View Details' id='" . $row['NIC'] . "-resident' onclick='viewDetails(this.id)' style='padding:5px 20px' class='button' /></td>
+                    <td><div style='border:0px solid black;padding:5px 0;width:100px;box-shadow:0 0 4px green;border-radius:2px;color:green;text-align:center;'>" . $row['Category'] . "</div></td>
+                    <td align='right'><input type='button' value='View Details' id='" . $row['GeneratorID'] . "' onclick='viewDetails(this.id)' style='padding:5px 20px' class='button' /></td>
                 </tr>
                 <tr><td colspan='5'><hr></td></tr>
             ";
