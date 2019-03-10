@@ -1,9 +1,9 @@
 <!DOCTYPE HTML>
 <html>
     <head>
-        <?php include_once('../../../log_reg_server.php'); ?>
-        <title>Resident Registration | Binswiper</title>
-        <link type="text/css" rel="stylesheet" href="../../css_files/style.css" />
+        <?php include_once('../../log_reg_server.php'); ?>
+        <title>Registration Form | Binswiper</title>
+        <link type="text/css" rel="stylesheet" href="../css_files/style.css" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
         <style>
@@ -114,28 +114,58 @@
                 var error = true;
                 var valid = "<i class='fa fa-check' style='color:green'></i>";
 
-                if (checker_name == "nic") {
-                    var nic_error = document.getElementById("nic_format");
+                if (checker_name == "gen_nic") {
+                    var nic_error = document.getElementById("gen_nic_format");
                     // CHECK FIRST LETTER
                     if (!input_value.charAt(0).match(/^[a-zA-Z]+$/)) {
                         nic_error.innerHTML = "NIC should start with an alphabet!";
-                        $("input[name='nic']").css('border', '1px solid red');
+                        $("input[name='gen_nic']").css('border', '1px solid red');
                         error = true;
                     } else if (!input_value.match(/^[A-z0-9]+$/)) {
                         nic_error.innerHTML = "Special characters not allowed!";
-                        $("input[name='nic']").css('border', '1px solid red');
+                        $("input[name='gen_nic']").css('border', '1px solid red');
                         error = true;
                     }else if ((input_value.length < 14) || (input_value.length > 14)) {
                         nic_error.innerHTML = "NIC should contain 14 characters!"
-                        $("input[name='nic']").css('border', '1px solid red');
+                        $("input[name='gen_nic']").css('border', '1px solid red');
                         error = true;
                     } else if (checkindb(input_value)) {
                         nic_error.innerHTML = "NIC already registered!"
-                        $("input[name='nic']").css('border', '1px solid red');
+                        $("input[name='gen_nic']").css('border', '1px solid red');
                         error = true;
                     } else {
-                        $("input[name='nic']").css('border', '1px solid green');
+                        $("input[name='gen_nic']").css('border', '1px solid green');
                         nic_error.innerHTML = valid;
+                        error = false;
+                    }
+                } else if (checker_name == "gen_id") {
+                    var id_error = document.getElementById("gen_format");
+                    if (!input_value.match(/^[A-z0-9]+$/)) {
+                        id_error.innerHTML = "Special characters not allowed!";
+                        $("input[name='gen_id']").css('border', '1px solid red');
+                        error = true;
+                    } else if (checkindb(input_value)) {
+                        id_error.innerHTML = "Reg ID already registered!"
+                        $("input[name='gen_id']").css('border', '1px solid red');
+                        error = true;
+                    } else {
+                        $("input[name='gen_id']").css('border', '1px solid green');
+                        id_error.innerHTML = valid;
+                        error = false;
+                    }
+                } if (checker_name == "fullname") {
+                    var name_error = document.getElementById("full_name_format");
+                    if (input_value == "") {
+                        name_error.innerHTML = "Field cannot be empty!";
+                        $("input[name='fullname']").css('border', '1px solid red');
+                        error = true;
+                    } else if (!input_value.match(/^[a-zA-Z \b]+$/)) {
+                        name_error.innerHTML = "Name should contain Only letters!";
+                        $("input[name='fullname']").css('border', '1px solid red');
+                        error = true;
+                    } else {
+                        name_error.innerHTML = valid;
+                        $("input[name='fullname']").css('border', '1px solid green');
                         error = false;
                     }
                 } else if (checker_name == "surname") {
@@ -276,34 +306,72 @@
                         <!-- account registration -->
                         <div style="display:flex;flex-direction:row">
                             <div style="width:50%;" id="reg_form">
-                                Create your personal account<br/><br/>
-                                <div id="nic_format"></div>            
-                                <input type="text" name="nic" placeholder="NIC" onfocusout="validate(this.name, this.value)" onkeyup="validate(this.name, this.value)" style="text-transform:uppercase;" class="input-box" autocomplete="off" required /><br/>
-                                <div id="last_format"></div>
-                                <input type="text" name="surname" placeholder="Last Name" onfocusout="validate(this.name, this.value)" style="text-transform:capitalize" class="input-box" autocomplete="off" required /><br/>
-                                <div id="first_format"></div>
-                                <input type="text" name="firstname" placeholder="First Name" onfocusout="validate(this.name, this.value)" style="text-transform:capitalize" class="input-box" autocomplete="off" required /><br/>
+                                <?php
+                                 if ($_GET['reg'] == 'resident'){
+                                    echo '
+                                        Create your personal account<br/><br/>
+                                        <div id="gen_nic_format"></div>            
+                                        <input type="text" name="gen_nic" placeholder="NIC" onfocusout="validate(this.name, this.value)" onkeyup="validate(this.name, this.value)" style="text-transform:uppercase;" class="input-box" autocomplete="off" required /><br/>
+                                    ';
+                                 } else {
+                                     echo '
+                                        Create your account<br/><br/>
+                                        <div id="gen_format"></div>            
+                                        <input type="text" name="gen_id" placeholder="Registration Number" onfocusout="validate(this.name, this.value)" onkeyup="validate(this.name, this.value)" style="text-transform:uppercase;" class="input-box" autocomplete="off" required /><br/>
+                                     ';
+                                 }
+                                    
+                                ?>
+                                <?php
+                                    if ($_GET['reg'] == 'resident') {
+                                        echo '
+                                            <div id="last_format"></div>
+                                            <input type="text" name="surname" placeholder="Last Name" onfocusout="validate(this.name, this.value)" style="text-transform:capitalize" class="input-box" autocomplete="off" required /><br/>
+                                            <div id="first_format"></div>
+                                            <input type="text" name="firstname" placeholder="First Name" onfocusout="validate(this.name, this.value)" style="text-transform:capitalize" class="input-box" autocomplete="off" required /><br/>
+                                        ';
+                                    } else {
+                                        echo '
+                                            <div id="full_name_format"></div>
+                                            <input type="text" name="fullname" placeholder="Name" onfocusout="validate(this.name, this.value)" style="text-transform:capitalize" class="input-box" autocomplete="off" required /><br/>
+                                        ';
+                                    }
+                                ?>
+                                
                                 <div id="phone_format"></div>
-                                <input type="number" name="phone" placeholder="Home/Mobile" onfocusout="validate(this.name, this.value)" class="input-box" autocomplete="off" required /><br/>
+                                <input type="number" name="phone" placeholder="Tel/Mobile" onfocusout="validate(this.name, this.value)" class="input-box" autocomplete="off" required /><br/>
                                 <div id="email_format"></div>
                                 <input type="text" name="email" placeholder="Email" onkeyup="validate(this.name, this.value)" class="input-box" autocomplete="off" style="text-transform:none" /><br/><br/>
 
                                 <button class="submit_button" id="next_button" onclick="next()">Next <i class="fa fa-toggle-right"></i></button>
                             </div>
-                            <div style="width:50%;padding:50px 30px 0 30px">
-                                <img src="img/sorting.png" style="width:100%"/>
+                                <?php
+                                    if ($_GET['reg'] == "resident") {
+                                        echo '
+                                        <div style="width:50%;padding:50px 30px 0 30px">
+                                            <img src="Resident-pages/img/sorting.png" style="width:100%"/>';
+                                    } else if ($_GET['reg'] == "commercial") {
+                                        echo '
+                                        <div style="width:50%;padding:4px 0 0 30px">
+                                            <img src="commercial_pages/img/sorting.png" style="width:100%"/>';
+                                    } else {
+                                        echo '
+                                        <div style="width:50%;padding:50px 30px 0 30px">
+                                            <img src="industry_pages/img/sorting.png" style="width:100%"/>';
+                                    }
+                                ?>
                             </div>
                         </div>
                         <!-- mapping -->
                         <div id="mapping" style="position:absolute;top:0;width:100%">
-                            <?php include("../getlocationmap.php"); ?>
+                            <?php include("getlocationmap.php"); ?>
 
                             <input type="hidden" name="locationCoordinate" value="" /><br/><br/>
                             
                         </div> 
                     </form>
 
-                    <h5 style="text-align:center">Already a member? <a href="../../../index.php" style="color:#002246">Click here to log in</a></h5>
+                    <h5 style="text-align:center">Already a member? <a href="../../index.php" style="color:#002246">Click here to log in</a></h5>
                 </td>
             </tr>
         </table>

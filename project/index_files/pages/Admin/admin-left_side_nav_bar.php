@@ -61,11 +61,11 @@
 
 <div class="left-nav-bar">
     <img src="../../img/logo.jpg" style="width:200px;" />
-    <h4 style="background-color:#00802D;color:white;display:inline-block;width:164px;padding:3px 3px 4px 3px;border-radius:2px;box-shadow:0 0 3px black"><i style="color:white;margin-right:12px" class="fa fa-user-o"></i>Administrator</h4>
+    <h4 style="color:#00802D;display:inline-block;width:164px;padding:3px 3px 4px 3px;border-radius:3px;box-shadow:0 0 2px black"><i style="color:#00802D;margin-right:12px" class="fa fa-user-o"></i>Administrator</h4>
     <ul>
-        <li><a href="admin-home.php" id="home_selected"><i class="logo_space fa fa-cubes"></i> Dashboard</a></li>
-        <li><a href="register_new_user.php" id="register_selected"><i class="logo_space fa fa-address-book-o"></i> Register New User</a></li>
+        <li><a href="admin-home.php" id="home_selected"><i class="logo_space fa fa-bar-chart"></i> Dashboard</a></li>
         <li><a href="user-management.php" id="user_mngt_selected"><i class="logo_space fa fa-group"></i> User Management</a></li>
+        <li><a href="" id=""><i class="logo_space fa fa-trash-o"></i> User Bin Management </a></li>
         <li><a href="zone_management.php" id="zone_mngt_selected"><i class="logo_space fa fa-map-o"></i> Zones Management <i class="material-icons" id='notif_icon' style='font-size:13px;color:red'>&#xe7f7;</i></a></li>
         <li><a href="requests_management.php" id="requests_selected"><i class="logo_space fa fa-bell-o"></i> Requests <span style="background-color:red;padding:0px 6px 0px 5px;border-radius:3px;color:white;" id="counter"></span></a></li>
         <li><a href="register-employee.php" id="register-employee_selected"><i class="logo_space fa fa-address-card-o"></i> Manage Employee</a></li>

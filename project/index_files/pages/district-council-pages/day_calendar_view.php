@@ -2,7 +2,11 @@
 
     include("../../../db_connect.php");
 
-    $day = $_POST['day'];
+    $day_date = $_POST['day_date'];
+    $day_date = explode(" ", $day_date);
+    $selectedDate = $day_date[2] . "-" . $day_date[1] . "-" . $day_date[0];
+
+    $months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
     $data = "";
 
@@ -10,8 +14,8 @@
     $data .= '
         <div class="navigator_banner">
             <span style="border:1px solid black;cursor:pointer;padding:8px 14px;border-radius:3px" onclick="week_view()">< Back</span>
-            <h2 style="display:inline-block;width:300px;text-align:center;padding:0;margin:0"><i class="fa fa-calendar"></i> 7th March 2019</h2>
-            <span style="box-shadow:0 0 2px black;padding:8px 14px;border-radius:3px;background-color:#0082D6;color:white;margin-right:50px;">Monday</span>
+            <h2 style="display:inline-block;width:300px;text-align:center;padding:0;margin:0"><i class="fa fa-calendar"></i> ' . $day_date[0] . " " . $months[$day_date[1]] . " " . $day_date[2] . '</h2>
+            <span style="box-shadow:0 0 2px black;padding:8px 14px;border-radius:3px;background-color:#0082D6;color:white;margin-right:50px;" id="day_display"></span>
             <b onclick="changeDay(this.id)" id="previous"><</b>
             <b onclick="changeDay(this.id)" id="next">></b>
         </div>
@@ -79,8 +83,8 @@
                         $zone_id = $innerzone['zoneID'];
                         $t = array("", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "");
                         $truckData = array("", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "");
-                        $selectedDay = $day;
-                        $getSchedule = "SELECT * FROM tbl_schedule INNER JOIN tbl_trucks ON tbl_schedule.TruckID = tbl_trucks.PlateNumber WHERE Zone = $zone_id AND Day = '$selectedDay' AND Collector = 'District Council'";
+                        
+                        $getSchedule = "SELECT * FROM tbl_schedule INNER JOIN tbl_trucks ON tbl_schedule.TruckID = tbl_trucks.PlateNumber WHERE Zone = $zone_id AND tbl_schedule.CollectionDate = '$selectedDate' AND Collector = 'District Council'";
                         
                         if ($schedule_result = mysqli_query($conn, $getSchedule)) {
                             while ($schedule_row = mysqli_fetch_assoc($schedule_result)){
@@ -136,7 +140,7 @@
             </div>
             </div>
         ';
-        
+
     echo json_encode($data);
 
 ?>

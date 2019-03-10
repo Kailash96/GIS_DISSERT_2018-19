@@ -4,7 +4,7 @@
     $nic = $_POST['nic'];
 
     $success = false;
-    $rejectQuery = "DELETE FROM tbl_residents WHERE NIC = '$nic'";
+    $rejectQuery = "DELETE FROM tbl_generator WHERE GeneratorID = '$nic'";
     if (mysqli_query($conn, $rejectQuery)) {
         $success = true;
     }

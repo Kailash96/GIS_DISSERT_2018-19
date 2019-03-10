@@ -40,15 +40,15 @@
         
         <!-- resident, commercial or industry selection -->
         <div style="text-align:center;" id="waste-generators-type-selection-box">
-            <a href="resident-pages/resident-registration.php"><div class="container-box">
+            <a href="registration_form.php?reg=resident"><div class="container-box">
                 <i class="fa fa-home" style="font-size:80px"></i><br/><br/>
                 Resident
             </div></a>
-            <a href="commercial-registration.php"><div class="container-box">
+            <a href="registration_form.php?reg=commercial"><div class="container-box">
                 <i class="fa fa-shopping-cart" style="font-size:80px;"></i><br/><br/>
                 Commercial
             </div></a>
-            <a href="industrial-registration.php"><div class="container-box">
+            <a href="registration_form.php?reg=industry"><div class="container-box">
                 <i class="fa fa-industry" style="font-size:80px;"></i><br/><br/>
                 Industry
             </div></a>
