@@ -28,7 +28,7 @@
 
         $current_date = date("y-m-d");
         $timestamp = strtotime(date("h:i:s")) + (60 * 60 * 4);
-        $current_time = date("h:i:s", $timestamp);
+        $current_time = date("H:i:s", $timestamp);
 
         $update_query = "
             INSERT INTO tbl_waste_gen (Domestic, Plastic, Paper, Other, getDate, getTime, generatorID)
