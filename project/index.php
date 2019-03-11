@@ -11,8 +11,8 @@
                 padding:10px;
                 margin:4px 0;
                 width:100%;
-                box-sizing:border-box;
                 outline:none;
+                box-sizing:border-box;
             }
         </style>
 

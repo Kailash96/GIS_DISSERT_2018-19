@@ -4,7 +4,7 @@
     // set_time_limit(0);
 
     // GET TOTAL AMOUNT OF WASTE IN ONE ZONE
-    function getTotalInZone($waste_type, $zone){
+    function getTotalInZone($waste_type, $zone, $category){
         global $conn;
         $getTotalQuery =
             "SELECT
@@ -12,7 +12,8 @@
                 tbl_waste_gen.getDate,
                 tbl_waste_gen.getTime,
                 tbl_waste_gen.$waste_type,
-                tbl_generator.zoneID
+                tbl_generator.zoneID,
+                tbl_generator.LocationCoordinate
             FROM
                 tbl_waste_gen
             INNER JOIN
@@ -43,25 +44,28 @@
                 )
             AND
                 tbl_generator.zoneID = $zone
+            AND
+                tbl_waste_gen.$waste_type > 0
+            AND
+                tbl_generator.Category = $category
             GROUP BY
                 tbl_waste_gen.generatorID
             ORDER BY
                 tbl_waste_gen.getDate DESC
             ";
 
-        $total_waste = 0;
-        if ($getTotal = mysqli_query($conn, $getTotalQuery)){
-            while ($total = mysqli_fetch_assoc($getTotal)) {
-                $total_waste += $total[$waste_type];
+        $route_array = array();
+        if ($getCoordsAmountQuery = mysqli_query($conn, $getTotalQuery)){
+            while ($coordsAmount = mysqli_fetch_assoc($getCoordsAmountQuery)) {
+                array_push($route_array, array($coordsAmount['LocationCoordinate'], $coordsAmount[$waste_type]));
             }
         };
-        return $total_waste;
+        return $route_array;
     }
 
-    // echo getTotalInZone("Domestic", 45);
+    // getTotalInZone(wasteType, zone, Category)
+    // print_r(getTotalInZone("Domestic", 45, "Resident"));
 
-    
-
-
+        
 
 ?>
