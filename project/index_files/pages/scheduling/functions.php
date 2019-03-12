@@ -57,18 +57,28 @@
             $numOfHouses = 0;
             $total_waste = 0;
             $data_array = array();
+            $wasteAmountPerUser = array();
 
             if ($getResult = mysqli_query($conn, $generalQuery)) {
                 while ($row = mysqli_fetch_assoc($getResult)) {
-                    array_push($route_array, $row['LocationCoordinate']);
+                    $location = $row['LocationCoordinate'];
+                    array_push($route_array, $location);
+                    array_push($wasteAmountPerUser, json_decode($row[$waste_type]));
                     $numOfHouses++;
                     $total_waste += $row[$waste_type];
                 }
             }
 
-            array_push($data_array, array($route_array, $numOfHouses, $total_waste));
+            array_push($data_array, array($route_array, $numOfHouses, $total_waste, $wasteAmountPerUser));
 
             return $data_array;
+
+    }
+
+
+    function createTrips($trip_builder_array){
+
+        for () {}
 
     }
 
