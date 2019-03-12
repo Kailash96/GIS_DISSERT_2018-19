@@ -1,10 +1,10 @@
 <?php
-    include("../db_connect.php");
+    include("../../../db_connect.php");
     // ignore_user_abort(true);
     // set_time_limit(0);
 
     // GET TOTAL AMOUNT OF WASTE IN ONE ZONE
-    function getTotalInZone($waste_type, $zone, $category){
+    function planTheRoute($waste_type, $zone, $category){
         global $conn;
         $getTotalQuery =
             "SELECT
@@ -47,25 +47,57 @@
             AND
                 tbl_waste_gen.$waste_type > 0
             AND
-                tbl_generator.Category = $category
+                tbl_generator.Category = '$category'
             GROUP BY
                 tbl_waste_gen.generatorID
             ORDER BY
                 tbl_waste_gen.getDate DESC
             ";
 
+        $general_array = array();
         $route_array = array();
+        $total_house = 0;
+        $total_waste = 0;
         if ($getCoordsAmountQuery = mysqli_query($conn, $getTotalQuery)){
             while ($coordsAmount = mysqli_fetch_assoc($getCoordsAmountQuery)) {
-                array_push($route_array, array($coordsAmount['LocationCoordinate'], $coordsAmount[$waste_type]));
+                $total_house++;
+                $total_waste += $coordsAmount[$waste_type];
+                array_push($route_array, $coordsAmount['LocationCoordinate']);
             }
         };
-        return $route_array;
+        
+        array_push($general_array, array($total_house, $total_waste, $route_array));
+
+        return $general_array;
     }
 
-    // getTotalInZone(wasteType, zone, Category)
-    // print_r(getTotalInZone("Domestic", 45, "Resident"));
+    // planTheRoute(wasteType, zone, Category)
+    
+    
+    print_r(planTheRoute("Domestic", 45, "Resident"));
 
-        
+    $general_route_array = array();
+    
+    $loopRegionQuery = "SELECT * FROM tbl_Region";
+    if ($regioning = mysqli_query($conn, $loopRegionQuery)) {
+        while ($region = mysqli_fetch_assoc($regioning)) {
+
+            $region_ID = $region['regionID'];
+            $loopZoneQuery = "SELECT * FROM tbl_zone WHERE regionID = $region_ID";
+            if ($zoning = mysqli_query($conn, $loopZoneQuery)) {
+                while ($zone = mysqli_fetch_assoc($zoning)) {
+
+                    $zone_ID = $zone['zoneID'];
+                    array_push($general_route_array, array(planTheRoute("Domestic", $zone_ID, "Resident"), $zone_ID, $region_ID, "Resident"));
+                    array_push($general_route_array, array(planTheRoute("Domestic", $zone_ID, "Commercial"), $zone_ID, $region_ID, "Commercial"));
+                    array_push($general_route_array, array(planTheRoute("Domestic", $zone_ID, "Industrial"), $zone_ID, $region_ID, "Industrial"));
+
+                }
+            }
+
+        }
+    }
+
+    print_r($general_route_array); // to verify       
 
 ?>
