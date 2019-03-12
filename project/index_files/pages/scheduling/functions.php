@@ -1,18 +1,16 @@
 <?php
-    include("../db_connect.php");
-    // ignore_user_abort(true);
-    // set_time_limit(0);
 
-    // GET TOTAL AMOUNT OF WASTE IN ONE ZONE
-    function getTotalInZone($waste_type, $zone){
+    function getRoute($region, $zone, $category, $waste_type){
         global $conn;
-        $getTotalQuery =
+        $generalQuery =
             "SELECT
                 tbl_waste_gen.generatorID,
                 tbl_waste_gen.getDate,
                 tbl_waste_gen.getTime,
                 tbl_waste_gen.$waste_type,
-                tbl_generator.zoneID
+                tbl_generator.zoneID,
+                tbl_generator.Region,
+                tbl_generator.LocationCoordinate
             FROM
                 tbl_waste_gen
             INNER JOIN
@@ -43,25 +41,35 @@
                 )
             AND
                 tbl_generator.zoneID = $zone
+            AND
+                tbl_waste_gen.$waste_type > 0
+            AND
+                tbl_generator.Category = '$category'
+            AND
+                tbl_generator.Region = '$region'
             GROUP BY
                 tbl_waste_gen.generatorID
             ORDER BY
                 tbl_waste_gen.getDate DESC
             ";
 
-        $total_waste = 0;
-        if ($getTotal = mysqli_query($conn, $getTotalQuery)){
-            while ($total = mysqli_fetch_assoc($getTotal)) {
-                $total_waste += $total[$waste_type];
+            $route_array = array();
+            $numOfHouses = 0;
+            $total_waste = 0;
+            $data_array = array();
+
+            if ($getResult = mysqli_query($conn, $generalQuery)) {
+                while ($row = mysqli_fetch_assoc($getResult)) {
+                    array_push($route_array, $row['LocationCoordinate']);
+                    $numOfHouses++;
+                    $total_waste += $row[$waste_type];
+                }
             }
-        };
-        return $total_waste;
+
+            array_push($data_array, array($route_array, $numOfHouses, $total_waste));
+
+            return $data_array;
+
     }
-
-    // echo getTotalInZone("Domestic", 45);
-
-    
-
-
 
 ?>
