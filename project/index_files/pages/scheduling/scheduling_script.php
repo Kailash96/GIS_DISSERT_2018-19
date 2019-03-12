@@ -1,103 +1,59 @@
 <?php
     include("../../../db_connect.php");
+    include("functions.php");
     // ignore_user_abort(true);
-    // set_time_limit(0);
+    // set_time_limit(0);    
+    $act = $_POST['act'];
 
-    // GET TOTAL AMOUNT OF WASTE IN ONE ZONE
-    function planTheRoute($waste_type, $zone, $category){
-        global $conn;
-        $getTotalQuery =
-            "SELECT
-                tbl_waste_gen.generatorID,
-                tbl_waste_gen.getDate,
-                tbl_waste_gen.getTime,
-                tbl_waste_gen.$waste_type,
-                tbl_generator.zoneID,
-                tbl_generator.LocationCoordinate
-            FROM
-                tbl_waste_gen
-            INNER JOIN
-                tbl_generator
-            ON
-                tbl_waste_gen.generatorID = tbl_generator.GeneratorID
-            WHERE
-                tbl_waste_gen.getDate
-            IN
-                (
-                    SELECT
-                        MAX(getDate)
-                    FROM
-                        tbl_waste_gen
-                    GROUP BY
-                        generatorID
-                )
-            AND
-                tbl_waste_gen.getTime
-            IN
-                (
-                    SELECT
-                        MAX(getTime)
-                    FROM
-                        tbl_waste_gen
-                    GROUP BY
-                        generatorID
-                )
-            AND
-                tbl_generator.zoneID = $zone
-            AND
-                tbl_waste_gen.$waste_type > 0
-            AND
-                tbl_generator.Category = '$category'
-            GROUP BY
-                tbl_waste_gen.generatorID
-            ORDER BY
-                tbl_waste_gen.getDate DESC
-            ";
+    if ($act == "getRoute"){
 
-        $general_array = array();
-        $route_array = array();
-        $total_house = 0;
-        $total_waste = 0;
-        if ($getCoordsAmountQuery = mysqli_query($conn, $getTotalQuery)){
-            while ($coordsAmount = mysqli_fetch_assoc($getCoordsAmountQuery)) {
-                $total_house++;
-                $total_waste += $coordsAmount[$waste_type];
-                array_push($route_array, $coordsAmount['LocationCoordinate']);
-            }
-        };
-        
-        array_push($general_array, array($total_house, $total_waste, $route_array));
+        $tbl_route_array = array();
+        $category_array = array("Resident", "Commercial", "Industrial");
+        $waste_type_array = array("Domestic", "Plastic", "Paper", "Other");
 
-        return $general_array;
-    }
+        $region_query = "SELECT * FROM tbl_region";
+        if ($regioning = mysqli_query($conn, $region_query)) {
+            while ($region_rw = mysqli_fetch_assoc($regioning)) {
 
-    // planTheRoute(wasteType, zone, Category)
-    
-    
-    print_r(planTheRoute("Domestic", 45, "Resident"));
+                $region_ID = $region_rw['regionID'];
+                $zone_query = "SELECT * FROM tbl_zones WHERE regionID = $region_ID";
+                if ($zoning = mysqli_query($conn, $zone_query)) {
+                    while ($zone_rw = mysqli_fetch_assoc($zoning)) {
+                        
+                        for ($i = 0; $i < sizeof($category_array); $i++) {
 
-    $general_route_array = array();
-    
-    $loopRegionQuery = "SELECT * FROM tbl_Region";
-    if ($regioning = mysqli_query($conn, $loopRegionQuery)) {
-        while ($region = mysqli_fetch_assoc($regioning)) {
+                            for ($j = 0; $j < sizeof($waste_type_array); $j++) {
 
-            $region_ID = $region['regionID'];
-            $loopZoneQuery = "SELECT * FROM tbl_zone WHERE regionID = $region_ID";
-            if ($zoning = mysqli_query($conn, $loopZoneQuery)) {
-                while ($zone = mysqli_fetch_assoc($zoning)) {
+                                array_push(
+                                    $tbl_route_array,
+                                    array(
+                                        // getRoute($region_rw['regionName'], $zone_rw['zoneID'], $category_array[$i], $waste_type_array[$j]),
+                                        getRoute("Flacq", 45, "Resident", "Domestic"),
+                                        $zone_rw['zoneID'],
+                                        $region_rw['regionName'],
+                                        $category_array[$i],
+                                        $waste_type_array[$j]
+                                    )
+                                );
 
-                    $zone_ID = $zone['zoneID'];
-                    array_push($general_route_array, array(planTheRoute("Domestic", $zone_ID, "Resident"), $zone_ID, $region_ID, "Resident"));
-                    array_push($general_route_array, array(planTheRoute("Domestic", $zone_ID, "Commercial"), $zone_ID, $region_ID, "Commercial"));
-                    array_push($general_route_array, array(planTheRoute("Domestic", $zone_ID, "Industrial"), $zone_ID, $region_ID, "Industrial"));
+                            }
+
+                        }
+
+                    }
 
                 }
+
             }
-
         }
-    }
 
-    print_r($general_route_array); // to verify       
+        // REARRANGING DATA
+        $tbl_route_arranged_array = array();
+        for ($a = 0; $a < sizeof($tbl_route_array); $a++) {
+            array_push($tbl_route_arranged_array, array($tbl_route_array[$a][0][0][0], $tbl_route_array[$a][0][0][1], $tbl_route_array[$a][0][0][2], $tbl_route_array[$a][1], $tbl_route_array[$a][2], $tbl_route_array[$a][3], $tbl_route_array[$a][4]));
+        }
+
+        echo json_encode($tbl_route_arranged_array);
+    }
 
 ?>
