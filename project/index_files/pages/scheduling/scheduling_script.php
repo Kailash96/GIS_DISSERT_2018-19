@@ -105,7 +105,8 @@
 
         $waste_amount_per_user = json_decode($_POST['waste_amount_per_user']);
 
-        $loopTblRouteQuery = "SELECT * FROM tbl_route_per_zone";
+        $today = date("Y-m-d");
+        $loopTblRouteQuery = "SELECT * FROM tbl_route_per_zone WHERE Date_Created = '$today'";
         if ($getPath = mysqli_query($conn, $loopTblRouteQuery)) {
             while ($path = mysqli_fetch_assoc($getPath)) {
 
@@ -114,11 +115,11 @@
                 $path_array = json_decode($path['Route_Path']);
                 for ($i = 0; $i < sizeof($path_array); $i++) {
 
-                    array_push($tripBuilderArray, array($path_array[$i], $waste_amount_per_user[$i], $path['RegionName']));
+                    array_push($tripBuilderArray, array($path_array[$i], $waste_amount_per_user[$i]));
 
                 }
 
-                createTrips($tripBuilderArray);
+                createTrips($tripBuilderArray, $path['RegionName'], $path['Category'], $path['Waste_Type'], $path['Zone']);
 
             }
         }
