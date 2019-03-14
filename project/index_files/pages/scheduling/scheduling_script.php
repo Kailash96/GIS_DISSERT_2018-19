@@ -12,33 +12,31 @@
 
         $tbl_route_array = array();
         $category_array = array("Resident", "Commercial", "Industrial");
-        $waste_type_array = array("Domestic", "Plastic", "Paper", "Other");
+        $waste_type_array = array("Organic", "Plastic", "Paper", "Other");
 
         $region_query = "SELECT * FROM tbl_region";
         if ($regioning = mysqli_query($conn, $region_query)) {
             while ($region_rw = mysqli_fetch_assoc($regioning)) {
-
                 $region_ID = $region_rw['regionID'];
                 $zone_query = "SELECT * FROM tbl_zones WHERE regionID = $region_ID";
                 if ($zoning = mysqli_query($conn, $zone_query)) {
                     while ($zone_rw = mysqli_fetch_assoc($zoning)) {
-                        
-                        for ($i = 0; $i < sizeof($category_array); $i++) {
+                        for ($c = 0; $c < sizeof($category_array); $c++) {
 
-                            for ($j = 0; $j < sizeof($waste_type_array); $j++) {
-
+                            for ($w = 0; $w < sizeof($waste_type_array); $w++) {
+                                $region_name = $region_rw['regionName'];
+                                $zone_ID = $zone_rw['zoneID'];
                                 array_push(
                                     $tbl_route_array,
                                     array(
-                                        // getRoute($region_rw['regionName'], $zone_rw['zoneID'], $category_array[$i], $waste_type_array[$j]),
-                                        getRoute("Flacq", 45, "Resident", "Domestic"),
-                                        $zone_rw['zoneID'],
-                                        $region_rw['regionName'],
-                                        $category_array[$i],
-                                        $waste_type_array[$j]
+                                        getRoute($region_name, $zone_ID, $category_array[$c], $waste_type_array[$w]),
+                                        // getRoute("Flacq", 45, "Resident", "Organic"), // column Domestic changed to Organic to fix bugs
+                                        $zone_ID,
+                                        $region_name,
+                                        $category_array[$c],
+                                        $waste_type_array[$w]
                                     )
                                 );
-
                             }
 
                         }
@@ -127,8 +125,6 @@
             }
         }
 
-        $test_array = array();
-
         $waste_amount_per_user = json_decode($_POST['waste_amount_per_user']);
 
         $today = date("Y-m-d");
@@ -145,7 +141,6 @@
 
                 $truckRankAssigned = createTrips($tripBuilderArray, $path['RegionName'], $path['Category'], $path['Waste_Type'], $path['Zone'], $all_trucks_array);
 
-                /*
                 if ($truckRankAssigned > -1) {
                     $all_trucks_array[$truckRankAssigned][5] = 0;
                     for ($c = 0; $c < sizeof($allTrucksArrayRearranged); $c++) {
@@ -155,7 +150,7 @@
                                 $allTrucksArrayRearranged[$c][4] = $allTrucksArrayRearranged[$c][3];
                                 for ($reset = 0; $reset < sizeof($all_trucks_array); $reset++) {
                                     if (($all_trucks_array[$reset][0] == $allTrucksArrayRearranged[$c][0]) && ($all_trucks_array[$reset][1] == $allTrucksArrayRearranged[$c][1]) && ($all_trucks_array[$reset][2] == $allTrucksArrayRearranged[$c][2])) {
-                                        $all_trucks_array[$reset][5] = 1;                                                                        
+                                        $all_trucks_array[$reset][5] = 1;
                                     }
                                 }
                             }
@@ -163,14 +158,11 @@
                         }
                     }
                 }
-                */
-
-                array_push($test_array, $truckRankAssigned);
             }
         }
 
 
-        echo json_encode($test_array);
+        echo json_encode(1);
 
     }
 

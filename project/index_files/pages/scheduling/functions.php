@@ -77,45 +77,38 @@
 
     $tripArray = array();
     function createTrips($trip_builder_array, $regionName, $category, $wasteType, $zone, $allTrucks){
-        /*
         for ($t = 0; $t < sizeof($allTrucks); $t++) {
             if ($allTrucks[$t][5] == 1) {
                 if (($allTrucks[$t][0] == $category) && ($allTrucks[$t][1] == $wasteType) && ($allTrucks[$t][2] == $regionName)) {
-                    // setTrip($allTrucks[$t][2], $trip_builder_array, $allTrucks[$t][4], $zone);
+                    setTrip($allTrucks[$t][3], $trip_builder_array, $allTrucks[$t][4], $zone);
                     return $t;
                 } 
             }
         }
-        */
-        // return -1;
-        return $wasteType;
-
+        return -1;
     }
 
-    /*
     function setTrip($truckCapacity, $tripBuilder, $truck, $truckZone){
-        
+
         global $tripArray;
         $tracker = $truckCapacity;
         $tripCount = 0;
         $tripPath = array();
 
         for ($b = 0; $b < sizeof($tripBuilder); $b++) {
-            if ($tracker > $tripBuilder[i][1]) {
-                $tracker = $tracker - $tripBuilder[i][1];
-                array_push($tripPath, $tripBuilder[i][0]);
+            if ($tracker > $tripBuilder[$b][1]) {
+                $tracker = $tracker - $tripBuilder[$b][1];
+                array_push($tripPath, $tripBuilder[$b][0]);
             } else {
                 $tripCount++;
                 $tracker = $truckCapacity;
                 unset($tripPath);
                 $tripPath = array();
-                array_push($tripPath, $tripBuilder[i][0]);
-                $tracker = $truckCapacity - $tripBuilder[i][1];
+                array_push($tripPath, $tripBuilder[$b][0]);
+                $tracker = $truckCapacity - $tripBuilder[$b][1];
                 array_push($tripArray, array($tripCount, $tripPath, $truck, $truckZone));
             }
         }
-
     }
-    */
 
 ?>
