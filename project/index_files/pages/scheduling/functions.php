@@ -76,30 +76,23 @@
     }
 
     $tripArray = array();
-    function createTrips($trip_builder_array, $regionName, $category, $wasteType, $zone){
-
-        global $conn;
-        $getTrucksQuery = "SELECT * FROM tbl_trucks INNER JOIN tbl_collectors ON tbl_collectors.CollectorID = tbl_trucks.OwnerID WHERE Status = 1";
-        if ($getTrucks = mysqli_query($conn, $getTrucksQuery)) {
-            while ($trucks = mysqli_fetch_assoc($getTrucks)) {
-
-                $truck_category = $trucks['Category'];
-                $truck_wasteType = $trucks['WasteType'];
-                $truck_capacity = $trucks['Capacity'];
-                $truck_region = $trucks['RegionName'];
-                $truck_ID = $trucks['PlateNumber'];
-                
-                if (($truck_category == $category) && ($truck_wasteType == $wasteType) && ($truck_region == $regionName)) {
-                    setTrip($truck_capacity, $trip_builder_array, $truck_ID, $zone);
-                }
-
-                // buggy loop - same truck can be added to next regions
-
+    function createTrips($trip_builder_array, $regionName, $category, $wasteType, $zone, $allTrucks){
+        /*
+        for ($t = 0; $t < sizeof($allTrucks); $t++) {
+            if ($allTrucks[$t][5] == 1) {
+                if (($allTrucks[$t][0] == $category) && ($allTrucks[$t][1] == $wasteType) && ($allTrucks[$t][2] == $regionName)) {
+                    // setTrip($allTrucks[$t][2], $trip_builder_array, $allTrucks[$t][4], $zone);
+                    return $t;
+                } 
             }
         }
+        */
+        // return -1;
+        return $wasteType;
 
     }
 
+    /*
     function setTrip($truckCapacity, $tripBuilder, $truck, $truckZone){
         
         global $tripArray;
@@ -123,5 +116,6 @@
         }
 
     }
+    */
 
 ?>

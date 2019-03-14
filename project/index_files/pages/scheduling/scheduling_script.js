@@ -12,7 +12,7 @@ function schedule(){
             save_tbl_route(getData);
             
             // only for testing
-            // tripMaker();
+            // tripMaker(0);
         }
     }
     getCoords.open("POST", "scheduling_script.php", true);
@@ -45,7 +45,7 @@ function tripMaker(amount_array){
     setup.onreadystatechange = function(){
         if (this.readyState == 4 && this.status == 200) {
             var response = JSON.parse(this.responseText);
-            console.log(response[0]);
+            console.log(response);
         }
     }
     setup.open("POST", "scheduling_script.php", true);

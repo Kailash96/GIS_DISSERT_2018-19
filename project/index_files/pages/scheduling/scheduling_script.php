@@ -103,6 +103,32 @@
 
     } else if ($act == "setTrips") {
 
+        $all_trucks_array = array();
+        $getAllTrucksQuery = "SELECT * FROM tbl_trucks INNER JOIN tbl_collectors ON tbl_collectors.CollectorID = tbl_trucks.OwnerID WHERE Status = 1";
+        if ($getAllTrucks = mysqli_query($conn, $getAllTrucksQuery)) {
+            while ($allTrucks = mysqli_fetch_assoc($getAllTrucks)) {
+                array_push($all_trucks_array, array($allTrucks['Category'], $allTrucks['WasteType'], $allTrucks['RegionName'], $allTrucks['Capacity'], $allTrucks['PlateNumber'], 1));
+            }
+        }
+
+        $allTrucksArrayRearranged = array();
+        for ($r = 0; $r < sizeof($all_trucks_array); $r++) {
+            if (sizeof($allTrucksArrayRearranged) < 1) {
+                array_push($allTrucksArrayRearranged, array($all_trucks_array[$r][0], $all_trucks_array[$r][1], $all_trucks_array[$r][2], 1, 1));
+            } else {
+                for ($j = 0; $j < sizeof($allTrucksArrayRearranged); $j++) {
+                    if (($all_trucks_array[$r][0] == $allTrucksArrayRearranged[$j][0]) && ($all_trucks_array[$r][1] == $allTrucksArrayRearranged[$j][1]) && ($all_trucks_array[$r][2] == $allTrucksArrayRearranged[$j][2])) {
+                        $allTrucksArrayRearranged[$j][3] = $allTrucksArrayRearranged[$j][3] + 1;
+                        $allTrucksArrayRearranged[$j][4] = $allTrucksArrayRearranged[$j][4] + 1;
+                    } else {
+                        array_push($allTrucksArrayRearranged, array($all_trucks_array[$r][0], $all_trucks_array[$r][1], $all_trucks_array[$r][2], 1, 1));
+                    }
+                }
+            }
+        }
+
+        $test_array = array();
+
         $waste_amount_per_user = json_decode($_POST['waste_amount_per_user']);
 
         $today = date("Y-m-d");
@@ -114,17 +140,37 @@
 
                 $path_array = json_decode($path['Route_Path']);
                 for ($i = 0; $i < sizeof($path_array); $i++) {
-
                     array_push($tripBuilderArray, array($path_array[$i], $waste_amount_per_user[$i]));
-
                 }
 
-                createTrips($tripBuilderArray, $path['RegionName'], $path['Category'], $path['Waste_Type'], $path['Zone']);
+                $truckRankAssigned = createTrips($tripBuilderArray, $path['RegionName'], $path['Category'], $path['Waste_Type'], $path['Zone'], $all_trucks_array);
 
+                /*
+                if ($truckRankAssigned > -1) {
+                    $all_trucks_array[$truckRankAssigned][5] = 0;
+                    for ($c = 0; $c < sizeof($allTrucksArrayRearranged); $c++) {
+                        if (($all_trucks_array[$truckRankAssigned][0] == $allTrucksArrayRearranged[$c][0]) && ($all_trucks_array[$truckRankAssigned][1] == $allTrucksArrayRearranged[$c][1]) && ($all_trucks_array[$truckRankAssigned][2] == $allTrucksArrayRearranged[$c][2])) {
+                            $allTrucksArrayRearranged[$c][4] = $allTrucksArrayRearranged[$c][4] - 1;
+                            if ($allTrucksArrayRearranged[$c][4] < 1) {
+                                $allTrucksArrayRearranged[$c][4] = $allTrucksArrayRearranged[$c][3];
+                                for ($reset = 0; $reset < sizeof($all_trucks_array); $reset++) {
+                                    if (($all_trucks_array[$reset][0] == $allTrucksArrayRearranged[$c][0]) && ($all_trucks_array[$reset][1] == $allTrucksArrayRearranged[$c][1]) && ($all_trucks_array[$reset][2] == $allTrucksArrayRearranged[$c][2])) {
+                                        $all_trucks_array[$reset][5] = 1;                                                                        
+                                    }
+                                }
+                            }
+                            break;
+                        }
+                    }
+                }
+                */
+
+                array_push($test_array, $truckRankAssigned);
             }
         }
 
-        echo json_encode($tripBuilderArray);
+
+        echo json_encode($test_array);
 
     }
 
