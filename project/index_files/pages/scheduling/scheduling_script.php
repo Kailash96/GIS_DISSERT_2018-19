@@ -20,23 +20,28 @@
                 $region_ID = $region_rw['regionID'];
                 $zone_query = "SELECT * FROM tbl_zones WHERE regionID = $region_ID";
                 if ($zoning = mysqli_query($conn, $zone_query)) {
+
                     while ($zone_rw = mysqli_fetch_assoc($zoning)) {
+
                         for ($c = 0; $c < sizeof($category_array); $c++) {
 
                             for ($w = 0; $w < sizeof($waste_type_array); $w++) {
                                 $region_name = $region_rw['regionName'];
                                 $zone_ID = $zone_rw['zoneID'];
-                                array_push(
-                                    $tbl_route_array,
-                                    array(
-                                        getRoute($region_name, $zone_ID, $category_array[$c], $waste_type_array[$w]),
-                                        // getRoute("Flacq", 45, "Resident", "Organic"), // column Domestic changed to Organic to fix bugs
-                                        $zone_ID,
-                                        $region_name,
-                                        $category_array[$c],
-                                        $waste_type_array[$w]
-                                    )
-                                );
+                                $getRoute = getRoute($region_name, $zone_ID, $category_array[$c], $waste_type_array[$w]);
+                                if ($getRoute > 0) {
+                                    array_push(
+                                        $tbl_route_array,
+                                        array(
+                                            $getRoute,
+                                            // getRoute("Flacq", 45, "Resident", "Organic"), // column Domestic changed to Organic to fix bugs
+                                            $zone_ID,
+                                            $region_name,
+                                            $category_array[$c],
+                                            $waste_type_array[$w]
+                                        )
+                                    );
+                                }
                             }
 
                         }

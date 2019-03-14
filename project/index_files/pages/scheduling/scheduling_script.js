@@ -29,7 +29,7 @@ function save_tbl_route(datatosave){
             var response = JSON.parse(this.responseText);
             if (response != "error") {
                 var response = JSON.parse(this.responseText);
-                tripMaker(response);
+                // tripMaker(response);
             }
         }
     }

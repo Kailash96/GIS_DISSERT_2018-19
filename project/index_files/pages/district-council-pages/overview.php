@@ -186,7 +186,7 @@
                 $getCoordsQuery = "SELECT * FROM tbl_generator LEFT JOIN tbl_waste_gen ON (tbl_generator.generatorID = tbl_waste_gen.generatorID) WHERE tbl_generator.Active = 1 AND tbl_generator.region = 'Flacq'"; // to be changed to region = region
                 if ($results = mysqli_query($conn, $getCoordsQuery)) {
                     while ($row = mysqli_fetch_assoc($results)) {
-                        $binLevelDomestic = $row['Domestic'];
+                        $binLevelDomestic = $row['Organic'];
                         $binLevelPlastic = $row['Plastic'];
                         $binLevelPaper = $row['Paper'];
                         $binLevelOther = $row['Other'];

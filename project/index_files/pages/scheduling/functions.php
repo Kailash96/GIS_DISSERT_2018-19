@@ -4,6 +4,7 @@
         global $conn;
         $generalQuery =
             "SELECT
+                tbl_generator.GeneratorID,
                 tbl_waste_gen.generatorID,
                 tbl_waste_gen.getDate,
                 tbl_waste_gen.getTime,
@@ -69,9 +70,12 @@
                 }
             }
 
-            array_push($data_array, array($route_array, $numOfHouses, $total_waste, $wasteAmountPerUser));
-
-            return $data_array;
+            if (sizeof($route_array) > 0) {
+                array_push($data_array, array($route_array, $numOfHouses, $total_waste, $wasteAmountPerUser));
+                return $data_array;
+            } else {
+                return 0;
+            }
 
     }
 

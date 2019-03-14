@@ -9,7 +9,7 @@
     $userBinLevelQuery = "SELECT * FROM tbl_waste_gen WHERE generatorID = '$userID' ORDER BY wgID DESC LIMIT 1";
     if ($result = mysqli_query($conn, $userBinLevelQuery)) {
         $bin = mysqli_fetch_assoc($result);
-        array_push($data, $bin['Domestic']);
+        array_push($data, $bin['Organic']);
         array_push($data, $bin['Plastic']);
         array_push($data, $bin['Paper']);
         array_push($data, $bin['Other']);
