@@ -29,7 +29,9 @@ function save_tbl_route(datatosave){
             var response = JSON.parse(this.responseText);
             if (response != "error") {
                 var response = JSON.parse(this.responseText);
-                tripMaker(response);
+                if (response == 1){
+                    tripMaker();
+                }
             }
         }
     }
@@ -39,19 +41,33 @@ function save_tbl_route(datatosave){
 
 }
 
-function tripMaker(amount_array){
+function tripMaker(){
 
     var setup = new XMLHttpRequest();
     setup.onreadystatechange = function(){
         if (this.readyState == 4 && this.status == 200) {
             var response = JSON.parse(this.responseText);
             if (response == 1) {
-                
-            } 
+                configure_trip();
+            }
         }
     }
     setup.open("POST", "scheduling_script.php", true);
     setup.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-    setup.send("act=setTrips" + "&waste_amount_per_user=" + amount_array);
+    setup.send("act=setTrips");
 
+}
+
+// GET TRIP ARRAY AND CALCULATES DURATION OF EACH TRIPS
+function configure_trip(){
+    var getTrips = new XMLHttpRequest();
+    getTrips.onreadystatechange = function(){
+        if (this.readyState == 4 && this.status == 200){
+            var trip_array = JSON.parse(this.responseText);
+            console.log(trip_array);
+        }
+    }
+    getTrips.open("POST", "scheduling_script.php", true);
+    getTrips.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+    getTrips.send("act=getTrips");
 }

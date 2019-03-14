@@ -79,12 +79,15 @@
 
     }
 
-    $tripArray = array();
+    $tripArray = array(); $test = array();
     function createTrips($trip_builder_array, $regionName, $category, $wasteType, $zone, $allTrucks){
+        global $test;
+
         for ($t = 0; $t < sizeof($allTrucks); $t++) {
             if ($allTrucks[$t][5] == 1) {
                 if (($allTrucks[$t][0] == $category) && ($allTrucks[$t][1] == $wasteType) && ($allTrucks[$t][2] == $regionName)) {
-                    setTrip($allTrucks[$t][3], $trip_builder_array, $allTrucks[$t][4], $zone);
+                    // setTrip($allTrucks[$t][3], $trip_builder_array, $allTrucks[$t][4], $zone);
+                    array_push($test, setTrip($allTrucks[$t][3], $trip_builder_array, $allTrucks[$t][4], $zone));
                     return $t;
                 } 
             }
@@ -99,6 +102,7 @@
         $tripCount = 0;
         $tripPath = array();
 
+        /*
         for ($b = 0; $b < sizeof($tripBuilder); $b++) {
             if ($tracker > $tripBuilder[$b][1]) {
                 $tracker = $tracker - $tripBuilder[$b][1];
@@ -113,6 +117,9 @@
                 array_push($tripArray, array($tripCount, $tripPath, $truck, $truckZone));
             }
         }
+        */
+        return 2;
+
     }
 
 ?>
