@@ -29,7 +29,7 @@ function save_tbl_route(datatosave){
             var response = JSON.parse(this.responseText);
             if (response != "error") {
                 var response = JSON.parse(this.responseText);
-                // tripMaker(response);
+                tripMaker(response);
             }
         }
     }
@@ -45,7 +45,9 @@ function tripMaker(amount_array){
     setup.onreadystatechange = function(){
         if (this.readyState == 4 && this.status == 200) {
             var response = JSON.parse(this.responseText);
-            console.log(response);
+            if (response == 1) {
+                
+            } 
         }
     }
     setup.open("POST", "scheduling_script.php", true);

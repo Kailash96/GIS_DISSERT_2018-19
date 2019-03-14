@@ -68,17 +68,18 @@
         $success_count = 0;
         $fail_count = 0;
 
+        $waste_amount_per_user = array();
+
         for ($i = 0; $i < sizeof($data); $i++) {
 
-        
             $route_path = json_encode($data[$i][0]);
             $total_houses = $data[$i][1];
             $total_waste = $data[$i][2];
-            $waste_amount_per_user = json_encode($data[$i][3]);
             $zone = $data[$i][4];
             $region = $data[$i][5];
             $category = $data[$i][6];
             $waste_type = $data[$i][7];
+            array_push($waste_amount_per_user, json_encode($data[$i][3]));
 
             $today = date("Y-m-d");
 
@@ -130,7 +131,7 @@
             }
         }
 
-        $waste_amount_per_user = json_decode($_POST['waste_amount_per_user']);
+        $waste_amount_per_user = $_POST['waste_amount_per_user'];
 
         $today = date("Y-m-d");
         $loopTblRouteQuery = "SELECT * FROM tbl_route_per_zone WHERE Date_Created = '$today'";
@@ -163,9 +164,9 @@
                         }
                     }
                 }
+
             }
         }
-
 
         echo json_encode(1);
 
