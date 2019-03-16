@@ -1,6 +1,5 @@
 <?php
     include("../../../db_connect.php");
-    session_start();
     include("functions.php");
 
     date_default_timezone_set('Indian/Mauritius');
@@ -11,7 +10,6 @@
 
     if ($act == "getRoute") {
 
-        $_SESSION['tripArray'] = array();
         $tbl_route_array = array();
         $category_array = array("Resident", "Commercial", "Industrial");
         $waste_type_array = array("Organic", "Plastic", "Paper", "Other");
@@ -134,6 +132,7 @@
             }
         }
 
+        $tripArray = array();
         $today = date("Y-m-d");
         $loopTblRouteQuery = "SELECT * FROM tbl_route_per_zone WHERE Date_Created = '$today'";
         if ($getPath = mysqli_query($conn, $loopTblRouteQuery)) {
@@ -147,7 +146,7 @@
                     array_push($tripBuilderArray, array($path_array[$i], $waste_amount[$i]));
                 }
 
-                $truckRankAssigned = createTrips($tripBuilderArray, $path['RegionName'], $path['Category'], $path['Waste_Type'], $path['Zone'], $all_trucks_array);
+                $truckRankAssigned = createTrips($tripBuilderArray, $path['RegionName'], $path['Category'], $path['Waste_Type'], $all_trucks_array, $path['RPZ_ID']);
 
                 if ($truckRankAssigned > -1) {
                     $all_trucks_array[$truckRankAssigned][5] = 0;
@@ -170,11 +169,36 @@
             }
         }
         
-        echo json_encode(1);
+        echo json_encode($tripArray);
 
-    } else if ($act == "getTrips") {
+    } else if ($act == "saveTrips") {
+        $trips = json_decode($_POST['trips']);
 
-        echo json_encode($_SESSION['tripArray']);
+        $flag = 0;
+        for ($t = 0; $t < sizeof($trips); $t++) {
+            $tripPath = json_encode($trips[$t][0]);
+            $truckID = $trips[$t][1];
+            $total_waste_amount = $trips[$t][2];
+            $routeID = $trips[$t][3];
+            $numOfHouses = $trips[$t][4];
+            $duration = $trips[$t][5];
+            $distance = $trips[$t][6];
+
+            $saveQuery =
+                "INSERT INTO
+                    tbl_trips (Trips, NumberOfHouses, Waste_amount, Duration_hrs, Distance_km, RouteID, TruckID)
+                 VALUES ('$tripPath', $numOfHouses, $total_waste_amount, $duration, $distance, $routeID, '$truckID')
+                ";
+
+            if (!mysqli_query($conn, $saveQuery)) {
+                $flag = 0;
+                break;
+            } else {
+                $flag = 1;
+            }
+        }
+
+        echo json_encode($flag);
 
     }
 

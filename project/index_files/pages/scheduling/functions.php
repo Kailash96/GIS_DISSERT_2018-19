@@ -74,7 +74,7 @@
                     array_push($route_array, $location);
                     array_push($wasteAmountPerUser, $waste_amount_in_kg);
                     $numOfHouses++;
-                    $total_waste += $row[$waste_type];
+                    $total_waste += $waste_amount_in_kg;
                 }
             }
 
@@ -87,13 +87,12 @@
 
     }
 
-    function createTrips($trip_builder_array, $regionName, $category, $wasteType, $zone, $allTrucks){
-        global $test;
+    function createTrips($trip_builder_array, $regionName, $category, $wasteType, $allTrucks, $tbl_route_ID){
 
         for ($t = 0; $t < sizeof($allTrucks); $t++) {
             if ($allTrucks[$t][5] == 1) {
                 if (($allTrucks[$t][0] == $category) && ($allTrucks[$t][1] == $wasteType) && ($allTrucks[$t][2] == $regionName)) {
-                    setTrip($allTrucks[$t][3], $trip_builder_array, $allTrucks[$t][4], $zone, $category);
+                    setTrip($allTrucks[$t][3], $trip_builder_array, $allTrucks[$t][4], $category, $tbl_route_ID);
                     return $t;
                 } 
             }
@@ -101,25 +100,30 @@
         return -1;
     }
 
-    function setTrip($truckCapacity, $tripBuilder, $truck, $truckZone, $category){
+    function setTrip($truckCapacity, $tripBuilder, $truck, $category, $tbl_route_ID){
 
+        global $tripArray;
         $tracker = $truckCapacity;
         $tripPath = array();
+        $total_waste_per_trip = 0;
 
         for ($b = 0; $b < sizeof($tripBuilder); $b++) {
             if ($tracker >= $tripBuilder[$b][1]) {
                 array_push($tripPath, $tripBuilder[$b][0]);
                 $tracker = $tracker - $tripBuilder[$b][1];
+                $total_waste_per_trip += $tripBuilder[$b][1];
             } else {
-                array_push($_SESSION['tripArray'], array($tripPath, $truck, $truckZone));
+                array_push($tripArray, array($tripPath, $truck, $total_waste_per_trip, $tbl_route_ID));
                 unset($tripPath); // RESET THE ARRAY FOR NEXT TRIP
                 $tripPath = array();
                 $tracker = $truckCapacity; // RESET THE TRUCK CAPACITY COUNTER FOR NEW TRIP
                 array_push($tripPath, $tripBuilder[$b][0]);
                 $tracker = $tracker - $tripBuilder[$b][1];
+                $total_waste_per_trip = 0;
+                $total_waste_per_trip += $tripBuilder[$b][1];
             }
         }
-        array_push($_SESSION['tripArray'], array($tripPath, $truck, $truckZone));
+        array_push($tripArray, array($tripPath, $truck, $total_waste_per_trip, $tbl_route_ID));
 
     }
 
