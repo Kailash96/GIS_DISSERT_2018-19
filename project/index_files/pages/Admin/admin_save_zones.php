@@ -1,25 +1,6 @@
 <?php
     include("../../../db_connect.php");
-
-    function inside($point, $vs) {
-
-        $x = $point[0];
-        $y = $point[1];
-    
-        $inside = false;
-        for ($i = 0, $j = sizeof($vs) - 1; $i < sizeof($vs); $j = $i++) {
-            $xi = $vs[$i][0];
-            $yi = $vs[$i][1];
-            $xj = $vs[$j][0];
-            $yj = $vs[$j][1];
-            
-            $intersect = (($yi > $y) != ($yj > $y))
-            && ($x < ($xj - $xi) * ($y - $yi) / ($yj - $yi) + $xi);
-            if ($intersect) $inside = !$inside;
-        }
-    
-        return $inside;
-    };
+    include("phpfunctions.php");
 
     function checkInRegion($individualZone) {
         $flag = false;
@@ -29,7 +10,7 @@
             while ($row = mysqli_fetch_assoc($my_result)) {
 
                 for ($a = 0; $a < sizeof($individualZone); $a++) {
-                    $flag = inside($individualZone[$a], json_decode($row['coordinates']));
+                    $flag = pointinpolygon($individualZone[$a], json_decode($row['coordinates']));
                     if (!$flag){
                         break;
                     }

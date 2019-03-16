@@ -1,5 +1,6 @@
 <?php
     include("../../../db_connect.php");
+    session_start();
     include("functions.php");
 
     date_default_timezone_set('Indian/Mauritius');
@@ -10,6 +11,7 @@
 
     if ($act == "getRoute") {
 
+        $_SESSION['tripArray'] = array();
         $tbl_route_array = array();
         $category_array = array("Resident", "Commercial", "Industrial");
         $waste_type_array = array("Organic", "Plastic", "Paper", "Other");
@@ -20,23 +22,28 @@
                 $region_ID = $region_rw['regionID'];
                 $zone_query = "SELECT * FROM tbl_zones WHERE regionID = $region_ID";
                 if ($zoning = mysqli_query($conn, $zone_query)) {
+
                     while ($zone_rw = mysqli_fetch_assoc($zoning)) {
+
                         for ($c = 0; $c < sizeof($category_array); $c++) {
 
                             for ($w = 0; $w < sizeof($waste_type_array); $w++) {
                                 $region_name = $region_rw['regionName'];
                                 $zone_ID = $zone_rw['zoneID'];
-                                array_push(
-                                    $tbl_route_array,
-                                    array(
-                                        getRoute($region_name, $zone_ID, $category_array[$c], $waste_type_array[$w]),
-                                        // getRoute("Flacq", 45, "Resident", "Organic"), // column Domestic changed to Organic to fix bugs
-                                        $zone_ID,
-                                        $region_name,
-                                        $category_array[$c],
-                                        $waste_type_array[$w]
-                                    )
-                                );
+                                $getRoute = getRoute($region_name, $zone_ID, $category_array[$c], $waste_type_array[$w]);
+                                if ($getRoute > 0) {
+                                    array_push(
+                                        $tbl_route_array,
+                                        array(
+                                            $getRoute,
+                                            // getRoute("Flacq", 45, "Resident", "Organic"), // column Domestic changed to Organic to fix bugs
+                                            $zone_ID,
+                                            $region_name,
+                                            $category_array[$c],
+                                            $waste_type_array[$w]
+                                        )
+                                    );
+                                }
                             }
 
                         }
@@ -65,24 +72,23 @@
 
         for ($i = 0; $i < sizeof($data); $i++) {
 
-        
             $route_path = json_encode($data[$i][0]);
             $total_houses = $data[$i][1];
             $total_waste = $data[$i][2];
-            $waste_amount_per_user = json_encode($data[$i][3]);
             $zone = $data[$i][4];
             $region = $data[$i][5];
             $category = $data[$i][6];
             $waste_type = $data[$i][7];
+            $waste_amount_per_user = json_encode($data[$i][3]);
 
             $today = date("Y-m-d");
 
             $savetodb_query = 
             "INSERT INTO
                 tbl_route_per_zone
-                (Route_Path, Total_Houses, Total_Waste, Zone, RegionName, Category, Waste_Type, Date_Created)
+                (Route_Path, AmountPerHouse, Total_Houses, Total_Waste, Zone, RegionName, Category, Waste_Type, Date_Created)
             VALUES
-                ('$route_path', $total_houses, $total_waste, $zone, '$region', '$category', '$waste_type', '$today')
+                ('$route_path', '$waste_amount_per_user', $total_houses, $total_waste, $zone, '$region', '$category', '$waste_type', '$today')
             ";
 
             if (mysqli_query($conn, $savetodb_query)) {
@@ -94,13 +100,14 @@
         }
 
         if ($success_count == sizeof($data)) {
-            echo json_encode($waste_amount_per_user);
+            echo json_encode(1);
         } else {
-            echo json_encode("error");
+            echo json_encode(0);
         }
 
     } else if ($act == "setTrips") {
 
+        // GET ALL THE TRUCKS
         $all_trucks_array = array();
         $getAllTrucksQuery = "SELECT * FROM tbl_trucks INNER JOIN tbl_collectors ON tbl_collectors.CollectorID = tbl_trucks.OwnerID WHERE Status = 1";
         if ($getAllTrucks = mysqli_query($conn, $getAllTrucksQuery)) {
@@ -109,6 +116,8 @@
             }
         }
 
+        // SETUP OF AN ARRAY TO KEEP TRACK OF WHICH TRUCK HAS ALREADY BEEN ASSIGNED A ZONE
+        // KEEPING TRACK HELPS THE LOOP TO CHOOSE THE NEXT AVAILABLE TRUCK INSTEAD OF UNAVAILABLE ONE
         $allTrucksArrayRearranged = array();
         for ($r = 0; $r < sizeof($all_trucks_array); $r++) {
             if (sizeof($allTrucksArrayRearranged) < 1) {
@@ -125,8 +134,6 @@
             }
         }
 
-        $waste_amount_per_user = json_decode($_POST['waste_amount_per_user']);
-
         $today = date("Y-m-d");
         $loopTblRouteQuery = "SELECT * FROM tbl_route_per_zone WHERE Date_Created = '$today'";
         if ($getPath = mysqli_query($conn, $loopTblRouteQuery)) {
@@ -135,8 +142,9 @@
                 $tripBuilderArray = array();
 
                 $path_array = json_decode($path['Route_Path']);
+                $waste_amount = json_decode($path['AmountPerHouse']);
                 for ($i = 0; $i < sizeof($path_array); $i++) {
-                    array_push($tripBuilderArray, array($path_array[$i], $waste_amount_per_user[$i]));
+                    array_push($tripBuilderArray, array($path_array[$i], $waste_amount[$i]));
                 }
 
                 $truckRankAssigned = createTrips($tripBuilderArray, $path['RegionName'], $path['Category'], $path['Waste_Type'], $path['Zone'], $all_trucks_array);
@@ -158,11 +166,15 @@
                         }
                     }
                 }
+
             }
         }
-
-
+        
         echo json_encode(1);
+
+    } else if ($act == "getTrips") {
+
+        echo json_encode($_SESSION['tripArray']);
 
     }
 

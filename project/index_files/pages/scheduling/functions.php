@@ -4,6 +4,7 @@
         global $conn;
         $generalQuery =
             "SELECT
+                tbl_generator.GeneratorID,
                 tbl_waste_gen.generatorID,
                 tbl_waste_gen.getDate,
                 tbl_waste_gen.getTime,
@@ -62,25 +63,37 @@
             if ($getResult = mysqli_query($conn, $generalQuery)) {
                 while ($row = mysqli_fetch_assoc($getResult)) {
                     $location = $row['LocationCoordinate'];
+                    $waste_amount = json_decode($row[$waste_type]);
+                    if ($category == "Resident") {
+                        // CONVERT AMOUNT TO KG (ACTURALLY IN %)
+                        $waste_amount_in_kg = ($waste_amount / 100) * 20;
+                    } else {
+                        // CONVERT AMOUNT TO KG (ACTURALLY IN %)
+                        $waste_amount_in_kg = ($waste_amount / 100) * 80;
+                    }
                     array_push($route_array, $location);
-                    array_push($wasteAmountPerUser, json_decode($row[$waste_type]));
+                    array_push($wasteAmountPerUser, $waste_amount_in_kg);
                     $numOfHouses++;
                     $total_waste += $row[$waste_type];
                 }
             }
 
-            array_push($data_array, array($route_array, $numOfHouses, $total_waste, $wasteAmountPerUser));
-
-            return $data_array;
+            if (sizeof($route_array) > 0) {
+                array_push($data_array, array($route_array, $numOfHouses, $total_waste, $wasteAmountPerUser));
+                return $data_array;
+            } else {
+                return 0;
+            }
 
     }
 
-    $tripArray = array();
     function createTrips($trip_builder_array, $regionName, $category, $wasteType, $zone, $allTrucks){
+        global $test;
+
         for ($t = 0; $t < sizeof($allTrucks); $t++) {
             if ($allTrucks[$t][5] == 1) {
                 if (($allTrucks[$t][0] == $category) && ($allTrucks[$t][1] == $wasteType) && ($allTrucks[$t][2] == $regionName)) {
-                    setTrip($allTrucks[$t][3], $trip_builder_array, $allTrucks[$t][4], $zone);
+                    setTrip($allTrucks[$t][3], $trip_builder_array, $allTrucks[$t][4], $zone, $category);
                     return $t;
                 } 
             }
@@ -88,27 +101,26 @@
         return -1;
     }
 
-    function setTrip($truckCapacity, $tripBuilder, $truck, $truckZone){
+    function setTrip($truckCapacity, $tripBuilder, $truck, $truckZone, $category){
 
-        global $tripArray;
         $tracker = $truckCapacity;
-        $tripCount = 0;
         $tripPath = array();
 
         for ($b = 0; $b < sizeof($tripBuilder); $b++) {
-            if ($tracker > $tripBuilder[$b][1]) {
+            if ($tracker >= $tripBuilder[$b][1]) {
+                array_push($tripPath, $tripBuilder[$b][0]);
                 $tracker = $tracker - $tripBuilder[$b][1];
-                array_push($tripPath, $tripBuilder[$b][0]);
             } else {
-                $tripCount++;
-                $tracker = $truckCapacity;
-                unset($tripPath);
+                array_push($_SESSION['tripArray'], array($tripPath, $truck, $truckZone));
+                unset($tripPath); // RESET THE ARRAY FOR NEXT TRIP
                 $tripPath = array();
+                $tracker = $truckCapacity; // RESET THE TRUCK CAPACITY COUNTER FOR NEW TRIP
                 array_push($tripPath, $tripBuilder[$b][0]);
-                $tracker = $truckCapacity - $tripBuilder[$b][1];
-                array_push($tripArray, array($tripCount, $tripPath, $truck, $truckZone));
+                $tracker = $tracker - $tripBuilder[$b][1];
             }
         }
+        array_push($_SESSION['tripArray'], array($tripPath, $truck, $truckZone));
+
     }
 
 ?>
