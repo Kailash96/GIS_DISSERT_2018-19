@@ -1,4 +1,4 @@
-function schedule(){
+function getLocations(){
     var getCoords = new XMLHttpRequest();
     getCoords.onreadystatechange = function(){
         if (this.readyState == 4 && this.status == 200){
@@ -58,7 +58,7 @@ function tripMaker(){
 
 }
 
-// GET TRIP ARRAY AND CALCULATES DURATION OF EACH TRIPS
+// GET TRIP ARRAY, CALCULATES DURATION OF EACH TRIPS AND STORES TO DB
 function configure_trip(){
     var getTrips = new XMLHttpRequest();
     getTrips.onreadystatechange = function(){

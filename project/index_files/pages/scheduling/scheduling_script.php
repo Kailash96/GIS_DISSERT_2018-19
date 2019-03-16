@@ -1,5 +1,6 @@
 <?php
     include("../../../db_connect.php");
+    session_start();
     include("functions.php");
 
     date_default_timezone_set('Indian/Mauritius');
@@ -10,6 +11,7 @@
 
     if ($act == "getRoute") {
 
+        $_SESSION['tripArray'] = array();
         $tbl_route_array = array();
         $category_array = array("Resident", "Commercial", "Industrial");
         $waste_type_array = array("Organic", "Plastic", "Paper", "Other");
@@ -105,6 +107,7 @@
 
     } else if ($act == "setTrips") {
 
+        // GET ALL THE TRUCKS
         $all_trucks_array = array();
         $getAllTrucksQuery = "SELECT * FROM tbl_trucks INNER JOIN tbl_collectors ON tbl_collectors.CollectorID = tbl_trucks.OwnerID WHERE Status = 1";
         if ($getAllTrucks = mysqli_query($conn, $getAllTrucksQuery)) {
@@ -113,6 +116,8 @@
             }
         }
 
+        // SETUP OF AN ARRAY TO KEEP TRACK OF WHICH TRUCK HAS ALREADY BEEN ASSIGNED A ZONE
+        // KEEPING TRACK HELPS THE LOOP TO CHOOSE THE NEXT AVAILABLE TRUCK INSTEAD OF UNAVAILABLE ONE
         $allTrucksArrayRearranged = array();
         for ($r = 0; $r < sizeof($all_trucks_array); $r++) {
             if (sizeof($allTrucksArrayRearranged) < 1) {
@@ -164,13 +169,12 @@
 
             }
         }
-
+        
         echo json_encode(1);
 
     } else if ($act == "getTrips") {
 
-        // echo json_encode($tripArray);
-        echo json_encode($test);
+        echo json_encode($_SESSION['tripArray']);
 
     }
 
