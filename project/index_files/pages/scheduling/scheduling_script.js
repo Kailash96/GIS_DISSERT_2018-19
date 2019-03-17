@@ -126,5 +126,18 @@ function save_to_tbl_trips(trips_array) {
 }
 
 function update_schedule() {
-    console.log(1);
+    var workingHrs = 8;
+    var startTime = "5:00"; // 5am
+
+    var schedule = new XMLHttpRequest();
+    schedule.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+            var response = JSON.parse(this.responseText);
+            console.log(response);
+        }
+    }
+    schedule.open("POST", "scheduling_script.php", true);
+    schedule.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+    schedule.send("act=scheduling" + "&workingHours=" + workingHrs + "&starttime=" + startTime);
+
 }

@@ -200,6 +200,71 @@
 
         echo json_encode($flag);
 
+    } else if ($act == "scheduling") {
+
+        $schedule = array();
+        $dateTracker = "2019-03-18"; // should be monday's date
+        $endDate = "2019-03-24"; // should be sunday's date
+        define("WORKING_HOURS", $_POST['workingHours']); // setting $working_hours to constant variable
+
+        $timeLeft = WORKING_HOURS;
+        define("START_TIME", $_POST['starttime']); // setting START_TIME to constant variable
+        $startTracker = START_TIME;
+        $endTime = START_TIME;
+        $zoneTracker = 0;
+
+        $getTrucksQuery = "SELECT * FROM tbl_trucks";
+        if ($getTrucks = mysqli_query($conn, $getTrucksQuery)) {
+            while ($trucks = mysqli_fetch_assoc($getTrucks)) {
+                $truck_ID = $trucks['PlateNumber'];
+                
+                // loop in tbl_trips where truck = selected;
+                $getTripsQuery = "SELECT * FROM tbl_trips INNER JOIN tbl_route_per_zone ON tbl_trips.RouteID = tbl_route_per_zone.RPZ_ID WHERE TruckID = '$truck_ID'";
+                if ($getTrips = mysqli_query($conn, $getTripsQuery)) {
+                    while ($trips = mysqli_fetch_assoc($getTrips)) {
+
+                        $current_zone = $trips['Zone'];
+                        $duration = $trips['Duration_hrs'];
+                        $flag = false; // set to true to break while loop
+                        
+                        while (!$flag) {
+                            if ($duration <= $timeLeft) {
+                                $timeLeft -= $duration;
+                                if ($zoneTracker == $current_zone) {
+                                    $timestamp = strtotime($endTime) + ($duration * 3600);
+                                    $endTime = date('H:i', $timestamp);
+                                } else {
+                                    if ($zoneTracker != 0) {
+                                        $unixtimestamp = strtotime($dateTracker);
+                                        $day = date("l", $unixtimestamp);
+                                        array_push($schedule, array($zoneTracker, $startTracker, $endTime, $truck_ID, $dateTracker, $day));
+                                    }
+                                    $zoneTracker = $current_zone;
+                                    $startTracker = $endTime;
+                                    $timestamp = strtotime($endTime) + ($duration * 3600);
+                                    $endTime = date('H:i', $timestamp);
+                                }
+                                $flag = true;
+                            } else {
+                                $dateTracker = date('Y-m-d', strtotime("+1 day", strtotime($dateTracker)));
+                                if ($dateTracker == $endDate) {
+                                    $dateTracker = date('Y-m-d', strtotime("+1 day", strtotime($dateTracker))); // set to monday
+                                    $endDate = date('Y-m-d', strtotime("+7 day", strtotime($endDate))); // next sunday
+                                }
+                                $timeLeft = WORKING_HOURS;
+                                $startTracker = START_TIME;
+                                $endTime = START_TIME;
+                                $flag = false;
+                            }
+                        }
+                    }
+
+                }
+            }
+        }
+
+        echo json_encode($schedule);
+
     }
 
 ?>
