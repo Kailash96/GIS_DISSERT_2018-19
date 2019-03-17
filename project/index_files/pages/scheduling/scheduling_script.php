@@ -183,11 +183,12 @@
             $numOfHouses = $trips[$t][4];
             $duration = $trips[$t][5];
             $distance = $trips[$t][6];
+            $today = date("Y-m-d");
 
             $saveQuery =
                 "INSERT INTO
-                    tbl_trips (Trips, NumberOfHouses, Waste_amount, Duration_hrs, Distance_km, RouteID, TruckID)
-                 VALUES ('$tripPath', $numOfHouses, $total_waste_amount, $duration, $distance, $routeID, '$truckID')
+                    tbl_trips (Trips, NumberOfHouses, Waste_amount, Duration_hrs, Distance_km, RouteID, TruckID, Date_Created)
+                 VALUES ('$tripPath', $numOfHouses, $total_waste_amount, $duration, $distance, $routeID, '$truckID', '$today')
                 ";
 
             if (!mysqli_query($conn, $saveQuery)) {
@@ -218,9 +219,10 @@
         if ($getTrucks = mysqli_query($conn, $getTrucksQuery)) {
             while ($trucks = mysqli_fetch_assoc($getTrucks)) {
                 $truck_ID = $trucks['PlateNumber'];
-                
+                $today = date('Y-m-d');
+
                 // loop in tbl_trips where truck = selected;
-                $getTripsQuery = "SELECT * FROM tbl_trips INNER JOIN tbl_route_per_zone ON tbl_trips.RouteID = tbl_route_per_zone.RPZ_ID WHERE TruckID = '$truck_ID'";
+                $getTripsQuery = "SELECT * FROM tbl_trips INNER JOIN tbl_route_per_zone ON tbl_trips.RouteID = tbl_route_per_zone.RPZ_ID WHERE tbl_trips.TruckID = '$truck_ID' AND tbl_trips.Date_Created = '$today'";
                 if ($getTrips = mysqli_query($conn, $getTripsQuery)) {
                     while ($trips = mysqli_fetch_assoc($getTrips)) {
 

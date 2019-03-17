@@ -84,7 +84,7 @@
                         $t = array("", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "");
                         $truckData = array("", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "");
                         
-                        $getSchedule = "SELECT * FROM tbl_schedule INNER JOIN tbl_trucks ON tbl_schedule.TruckID = tbl_trucks.PlateNumber WHERE Zone = $zone_id AND tbl_schedule.CollectionDate = '$selectedDate' AND Collector = 'District Council'";
+                        $getSchedule = "SELECT * FROM tbl_schedule INNER JOIN tbl_trucks ON tbl_schedule.TruckID = tbl_trucks.PlateNumber WHERE Zone = $zone_id AND tbl_schedule.CollectionDate = '$selectedDate' AND tbl_trucks.Collector = 'District Council'";
                         
                         if ($schedule_result = mysqli_query($conn, $getSchedule)) {
                             while ($schedule_row = mysqli_fetch_assoc($schedule_result)){
