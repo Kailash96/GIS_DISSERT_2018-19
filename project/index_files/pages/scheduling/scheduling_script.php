@@ -212,6 +212,7 @@
         $startTracker = START_TIME;
         $endTime = START_TIME;
         $zoneTracker = 0;
+        $total_waste = 0;
 
         $getTrucksQuery = "SELECT * FROM tbl_trucks";
         if ($getTrucks = mysqli_query($conn, $getTrucksQuery)) {
@@ -223,9 +224,12 @@
                 if ($getTrips = mysqli_query($conn, $getTripsQuery)) {
                     while ($trips = mysqli_fetch_assoc($getTrips)) {
 
+                        $waste_amount_per_trip = $trips['waste_amount'];
                         $current_zone = $trips['Zone'];
                         $duration = $trips['Duration_hrs'];
                         $flag = false; // set to true to break while loop
+                        $category = $trips['Category'];
+                        $waste_type = $trips['Waste_Type'];
                         
                         while (!$flag) {
                             if ($duration <= $timeLeft) {
@@ -233,19 +237,25 @@
                                 if ($zoneTracker == $current_zone) {
                                     $timestamp = strtotime($endTime) + ($duration * 3600);
                                     $endTime = date('H:i', $timestamp);
+                                    $total_waste += $waste_amount_per_trip;
                                 } else {
                                     if ($zoneTracker != 0) {
                                         $unixtimestamp = strtotime($dateTracker);
                                         $day = date("l", $unixtimestamp);
-                                        array_push($schedule, array($zoneTracker, $startTracker, $endTime, $truck_ID, $dateTracker, $day));
+                                        array_push($schedule, array($zoneTracker, $startTracker, $endTime, $truck_ID, $dateTracker, $day, $total_waste, $category, $waste_type));
+                                        $total_waste = 0;
                                     }
                                     $zoneTracker = $current_zone;
                                     $startTracker = $endTime;
                                     $timestamp = strtotime($endTime) + ($duration * 3600);
                                     $endTime = date('H:i', $timestamp);
+                                    $total_waste += $waste_amount_per_trip;
                                 }
                                 $flag = true;
                             } else {
+                                $unixtimestamp = strtotime($dateTracker);
+                                $day = date("l", $unixtimestamp);
+                                array_push($schedule, array($zoneTracker, $startTracker, $endTime, $truck_ID, $dateTracker, $day, $total_waste, $category, $waste_type));
                                 $dateTracker = date('Y-m-d', strtotime("+1 day", strtotime($dateTracker)));
                                 if ($dateTracker == $endDate) {
                                     $dateTracker = date('Y-m-d', strtotime("+1 day", strtotime($dateTracker))); // set to monday
@@ -255,6 +265,7 @@
                                 $startTracker = START_TIME;
                                 $endTime = START_TIME;
                                 $flag = false;
+                                $total_waste = 0;
                             }
                         }
                     }
@@ -263,7 +274,35 @@
             }
         }
 
-        echo json_encode($schedule);
+        
+        for ($s = 0; $s < sizeof($schedule); $s++) {
+            $schedule_date = date("Y-m-d");
+            $schedule_zone = $schedule[$s][0];
+            $schedule_start = $schedule[$s][1];
+            $schedule_end = $schedule[$s][2];
+            $schedule_day = $schedule[$s][5];
+            $schedule_truck = $schedule[$s][3];
+            $schedule_collection_date = $schedule[$s][4];
+            $schedule_total_waste = $schedule[$s][6];
+            $schedule_category = $schedule[$s][7];
+            $schedule_waste_type = $schedule[$s][8];
+
+            // store in database
+            $storeQuery = 
+                "INSERT INTO
+                    tbl_schedule (SchedulingDate, Zone, TimeStart, TimeEnd, Day, TruckID, CollectionDate, TotalWastes, Category, WasteType)
+                VALUES
+                    ('$schedule_date', $schedule_zone, '$schedule_start', '$schedule_end', '$schedule_day', '$schedule_truck', '$schedule_collection_date', $schedule_total_waste, '$schedule_category', '$schedule_waste_type')
+            ";
+            if (mysqli_query($conn, $storeQuery)) {
+                $success = true;
+            } else {
+                $success = false;
+                break;
+            }
+        }
+
+        echo json_encode($success);
 
     }
 
