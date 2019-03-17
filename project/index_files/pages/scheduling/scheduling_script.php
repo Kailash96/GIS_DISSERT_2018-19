@@ -212,7 +212,7 @@
         $dateTracker = $next_monday; // should be monday's date
         $unixtimestampnxtsun = strtotime("next Sunday");
         $next_sunday = date("Y-m-d", $unixtimestampnxtsun);
-        $endDate = "2019-03-24"; // should be sunday's date
+        $endDate = $next_sunday; // should be sunday's date
         define("WORKING_HOURS", $_POST['workingHours']); // setting $working_hours to constant variable
 
         $timeLeft = WORKING_HOURS;
