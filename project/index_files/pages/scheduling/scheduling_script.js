@@ -9,11 +9,11 @@ function getLocations(){
             // function optimizeRoute(); should return an array to send in save_tbl_route function
 
             // SAVE IN DB
-            // save_tbl_route(getData);
+            save_tbl_route(getData);
             
             // only for testing
             // tripMaker();
-            update_schedule();
+            // update_schedule();
         }
     }
     getCoords.open("POST", "scheduling_script.php", true);
