@@ -14,10 +14,13 @@
         $category_array = array("Resident", "Commercial", "Industrial");
         $waste_type_array = array("Organic", "Plastic", "Paper", "Other");
 
+        // LOOPING INTO TABLE REGION
         $region_query = "SELECT * FROM tbl_region";
         if ($regioning = mysqli_query($conn, $region_query)) {
             while ($region_rw = mysqli_fetch_assoc($regioning)) {
                 $region_ID = $region_rw['regionID'];
+
+                // LOOPING INTO TABLE ZONES
                 $zone_query = "SELECT * FROM tbl_zones WHERE regionID = $region_ID";
                 if ($zoning = mysqli_query($conn, $zone_query)) {
 
@@ -204,7 +207,11 @@
     } else if ($act == "scheduling") {
 
         $schedule = array();
-        $dateTracker = "2019-03-18"; // should be monday's date
+        $unixtimestampnxtmon = strtotime("next Monday");
+        $next_monday = date("Y-m-d", $unixtimestampnxtmon);
+        $dateTracker = $next_monday; // should be monday's date
+        $unixtimestampnxtsun = strtotime("next Sunday");
+        $next_sunday = date("Y-m-d", $unixtimestampnxtsun);
         $endDate = "2019-03-24"; // should be sunday's date
         define("WORKING_HOURS", $_POST['workingHours']); // setting $working_hours to constant variable
 
