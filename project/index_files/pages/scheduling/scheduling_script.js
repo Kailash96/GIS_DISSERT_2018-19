@@ -70,9 +70,13 @@ function configure_trip(trip_array){
         for (var TA = 1; TA < trip_array[t][0].length; TA++) {
             var pointA = trip_array[t][0][TA - 1].split(",");
             var pointB = trip_array[t][0][TA].split(",");
-            var collection_delay = 0.034; // APPROX 0.034HR(2MINS) COLLECTION TIME BUFFER
-            total_duration += (getDuration(pointA, pointB) + collection_delay); // IN HOUR
+            var collection_delay = 3; // 3MINS COLLECTION TIME BUFFER
+            total_duration = (getDuration(pointA, pointB) + collection_delay); // IN MINS
             total_distance += getDistance(pointA, pointB) / 1000; // IN KM
+        }
+
+        if (total_duration == 0) {
+            total_duration = 3; // COLLECTION DELAY
         }
 
         trip.push([]);
@@ -87,6 +91,7 @@ function getDuration(point1, point2) {
     // change distance to KM
     var distance = getDistance(point1, point2) / 1000;
     var duration = distance / speed;
+    duration = duration * 60; // CONVERT TO MINS
     return duration;
 }
 
@@ -115,9 +120,11 @@ function save_to_tbl_trips(trips_array) {
     trips.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
             var response = JSON.parse(this.responseText);
+
             if (response == 1) {
                 update_schedule();
             }
+
         }
     }
     trips.open("POST", "scheduling_script.php", true);
@@ -126,7 +133,7 @@ function save_to_tbl_trips(trips_array) {
 }
 
 function update_schedule() {
-    var workingHrs = 8;
+    var workingHrs = 120; // IN MINS (2HOURS)
     var startTime = "5:00"; // 5am
 
     var schedule = new XMLHttpRequest();

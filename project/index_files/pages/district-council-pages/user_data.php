@@ -7,12 +7,17 @@
 
     // GET USER BIN LEVELS
     $userBinLevelQuery = "SELECT * FROM tbl_waste_gen WHERE generatorID = '$userID' ORDER BY wgID DESC LIMIT 1";
-    if ($result = mysqli_query($conn, $userBinLevelQuery)) {
+    if (mysqli_num_rows($result = mysqli_query($conn, $userBinLevelQuery)) > 0) {
         $bin = mysqli_fetch_assoc($result);
         array_push($data, $bin['Organic']);
         array_push($data, $bin['Plastic']);
         array_push($data, $bin['Paper']);
         array_push($data, $bin['Other']);
+    } else {
+        array_push($data, 0);
+        array_push($data, 0);
+        array_push($data, 0);
+        array_push($data, 0);
     }
 
     // GET USER DETAILS
