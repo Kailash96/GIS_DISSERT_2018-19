@@ -173,7 +173,7 @@
     }
 
     function least($c) {
-        $nc = 
+        
     }
 
 ?>

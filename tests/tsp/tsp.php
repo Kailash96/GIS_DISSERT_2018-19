@@ -1,6 +1,8 @@
 <?php
 
-    $route = array();
+    $route = array(
+        array()
+    );
     travellingSalesmen(0, 0);
 
     $grid = array();
