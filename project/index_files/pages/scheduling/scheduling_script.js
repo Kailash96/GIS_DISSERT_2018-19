@@ -6,10 +6,10 @@ function getLocations(){
 
             // REARRANGE ROUTE IN OPTIMIZED ROUTE
             // TO REARRANGE array amount along with location array;
-            // function optimizeRoute(); should return an array to send in save_tbl_route function
 
             // SAVE IN DB
-            save_tbl_route(getData);
+            // save_tbl_route(getData);
+            console.log(getData); // already optimized in php
             
             // only for testing
             // tripMaker();

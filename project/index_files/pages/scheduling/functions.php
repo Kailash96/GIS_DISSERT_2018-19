@@ -79,7 +79,10 @@
             }
 
             if (sizeof($route_array) > 0) {
-                array_push($data_array, array($route_array, $numOfHouses, $total_waste, $wasteAmountPerUser));
+                $tsp = travellingSalesman($route_array, $waste_amount);
+                $optimized_route = $tsp[0];
+                $optimized_route_waste_amount = $tsp[1];
+                array_push($data_array, array($optimized_route, $numOfHouses, $total_waste, $optimized_route_waste_amount));
                 return $data_array;
             } else {
                 return 0;
@@ -127,35 +130,36 @@
 
     }
 
+    function travellingSalesmen(){
+
+    }
+
+    /*
+    function takeInput($numberOfHouses, $distance) {
+        
+        for ($i = 0; $i < $numberOfHouses; $i++) {
+            Console.WriteLine("Enter the Elements of Row: " + (i+1));
+            for (j = 0; j < n; j++) {
+                ary[i,j] = Convert.ToInt32(Console.ReadLine());
+            }
+            completed[i] = 0;
+        }
+        
+        Console.WriteLine();
+        Console.WriteLine("The Cost List is: ");
+        for (i = 0; i < n; i++) {
+            Console.WriteLine();
+            for (j = 0; j < n; j++) {
+                Console.Write(ary[i,j] + " ");
+            }
+        }
+        Console.ReadKey();
+    }
+
     function travellingSalesmen() {
         int[,] ary = new int[10, 10];
 		int[] completed = new int[10];
 		int n, cost = 0;
-		
-		void takeInput() {
-			int i, j;
-			Console.Write("Enter the number of villages: ");
-			n = Convert.ToInt32(Console.ReadLine());
-			Console.WriteLine("Enter the cost Matrix");
-			
-			for (i = 0; i < n; i++) {
-				Console.WriteLine("Enter the Elements of Row: " + (i+1));
-				for (j = 0; j < n; j++) {
-					ary[i,j] = Convert.ToInt32(Console.ReadLine());
-				}
-				completed[i] = 0;
-			}
-			
-			Console.WriteLine();
-			Console.WriteLine("The Cost List is: ");
-			for (i = 0; i < n; i++) {
-				Console.WriteLine();
-				for (j = 0; j < n; j++) {
-					Console.Write(ary[i,j] + " ");
-				}
-			}
-			Console.ReadKey();
-		}
 		
 		int least(int c) {
 			int i,  nc = 999;
@@ -204,5 +208,5 @@
 			return 0;
 		}
     }
-
+    */
 ?>
