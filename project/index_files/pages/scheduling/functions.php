@@ -79,10 +79,11 @@
             }
 
             if (sizeof($route_array) > 0) {
-                $tsp = travellingSalesman($route_array, $waste_amount);
-                $optimized_route = $tsp[0];
-                $optimized_route_waste_amount = $tsp[1];
-                array_push($data_array, array($optimized_route, $numOfHouses, $total_waste, $optimized_route_waste_amount));
+                // $tsp = travellingSalesman($route_array, $wasteAmountPerUser);
+                // $optimized_route = $tsp[0];
+                // $optimized_route_waste_amount = $tsp[1];
+                // array_push($data_array, array($optimized_route, $numOfHouses, $total_waste, $optimized_route_waste_amount));
+                array_push($data_array, array($route_array, $numOfHouses, $total_waste, $wasteAmountPerUser));
                 return $data_array;
             } else {
                 return 0;
@@ -130,83 +131,49 @@
 
     }
 
-    function travellingSalesmen(){
+    $grid = array();
+    $completed = array();
+    // RETURNS AN ARRAY OF OPTIMIZED ROUTING AND REARRANGED WASTE AMOUNT ARRAY
+    function travellingSalesmen($route, $amount){
+        setDistanceGrid($route); // SET THE GRID OF ALL DISTANCES
 
+
+        // return ARRAY(ROUTE, AMOUNT);
     }
 
-    /*
-    function takeInput($numberOfHouses, $distance) {
-        
-        for ($i = 0; $i < $numberOfHouses; $i++) {
-            Console.WriteLine("Enter the Elements of Row: " + (i+1));
-            for (j = 0; j < n; j++) {
-                ary[i,j] = Convert.ToInt32(Console.ReadLine());
+    // SETS THE GRID OF DISTANCES
+    function setDistanceGrid($route) {
+        global $grid;
+        $numberofhouses = sizeof($route); // GET THE NUMBER OF HOUSES
+        for ($i = 0; $i < $numberofhouses; $i++) {
+            $distance_row = array(); // THE DISTANCE LIST ROWS
+            for ($j = 0; $j < $numberofhouses; $j++) {
+                array_push($distance_row, getDistance($route[$i], $route[$j]));
             }
-            completed[i] = 0;
+            array_push($grid, $distance_row);
+            array_push($completed, 0);
+            unset($distance_row);
         }
-        
-        Console.WriteLine();
-        Console.WriteLine("The Cost List is: ");
-        for (i = 0; i < n; i++) {
-            Console.WriteLine();
-            for (j = 0; j < n; j++) {
-                Console.Write(ary[i,j] + " ");
-            }
-        }
-        Console.ReadKey();
     }
 
-    function travellingSalesmen() {
-        int[,] ary = new int[10, 10];
-		int[] completed = new int[10];
-		int n, cost = 0;
-		
-		int least(int c) {
-			int i,  nc = 999;
-			int min = 999, kmin = 0;
-			
-			for (i = 0; i < n; i++) {
-				if ((ary[c,i] != 0) && (completed[i] == 0)) {
-					if (ary[c,i] + ary[i,c] < min) {
-						min = ary[i,0] + ary[c,i];
-						kmin = ary[c,i];
-						nc = i;
-					}
-				}
-			}
-			if (min != 999) {
-				cost += kmin;
-			}
-			
-			return nc;
-		}
-		
-		void mincost(int city) {
-			int i, ncity;
-			completed[city] = 1;
-			Console.Write((city + 1) + "--->");
-			ncity = least(city);
-			
-			if (ncity == 999) {
-				ncity = 0;
-				Console.Write((ncity+1));
-				cost += ary[city,ncity];
-				return;
-			}
-			mincost(ncity);
-		}
-		
-		public static int Main(string[] args) {
-			Program inside = new Program();
-			inside.takeInput();
-			Console.WriteLine();
-			Console.Write("The path is: ");
-			inside.mincost(0);
-			Console.WriteLine();
-			Console.WriteLine("Minimum cost is: " + inside.cost);
-			Console.ReadKey();
-			return 0;
-		}
+    function getDistance($origin, $destination) {
+        // RETURN DISTANCE
+        $lon1 = deg2rad($origin[1]);
+        $lat1 = deg2rad($origin[0]);
+        $lon2 = deg2rad($destination[1]);
+        $lat2 = deg2rad($destination[0]);
+    
+        $deltaLat = $lat2 - $lat1;
+        $deltaLon = $lon2 - $lon1;
+    
+        $a = pow(sin($deltaLat/2), 2) + cos($lat1) * cos($lat2) * pow(sin($deltaLon/2), 2);
+        $c = 2 * asin(sqrt($a));
+        $EARTH_RADIUS = 6371;
+        return $c * $EARTH_RADIUS * 1000;
     }
-    */
+
+    function least($c) {
+        $nc = 
+    }
+
 ?>
