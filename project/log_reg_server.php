@@ -61,7 +61,7 @@
 
                     }
 
-                    header('location: index_files/pages/resident-pages/resident-home.php');
+                    header('location: index_files/pages/Resident-pages/resident-home.php');
                 } else {
                     // WRONG PASSWORD
                     echo "<script>alert('wrong password');</script>";

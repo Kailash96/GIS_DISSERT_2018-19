@@ -137,7 +137,7 @@
     function travellingSalesmen($route, $amount){
         setDistanceGrid($route); // SET THE GRID OF ALL DISTANCES
 
-
+        
         // return ARRAY(ROUTE, AMOUNT);
     }
 
