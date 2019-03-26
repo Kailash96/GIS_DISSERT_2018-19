@@ -2,6 +2,7 @@
 <html>
     <head>
         <title>Home | Binswiper</title>
+        <?php include("../../../db_connect.php"); ?>
         <link type="text/css" rel="stylesheet" href="../../css_files/resident-css.css" />
         <script type="text/javascript" src="../../js_files/script.js" /></script>
 
@@ -96,6 +97,9 @@
                 <a href="?logout=logout" style="color:#002246;text-decoration:none;"><i class="fa fa-sign-out"></i> Logout</a>
                 <?php
                     if (isset($_GET['logout'])) {
+                        $userid = $_SESSION['userID'];
+                        $offline = "UPDATE tbl_generators_login SET Status = 0 WHERE GeneratorID = '$userid'";
+                        mysqli_query($conn, $offline);
                         session_destroy();
                         header("Refresh:0");
                     }

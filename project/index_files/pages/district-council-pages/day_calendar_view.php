@@ -84,13 +84,13 @@
                         $t = array("", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "");
                         $truckData = array("", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "");
                         
-                        $getSchedule = "SELECT * FROM tbl_schedule INNER JOIN tbl_trucks ON tbl_schedule.TruckID = tbl_trucks.PlateNumber WHERE Zone = $zone_id AND tbl_schedule.CollectionDate = '$selectedDate' AND tbl_trucks.Collector = 'District Council'";
+                        $getSchedule = "SELECT * FROM tbl_schedule INNER JOIN tbl_trucks ON tbl_schedule.TruckID = tbl_trucks.PlateNumber WHERE tbl_schedule.Zone = $zone_id AND tbl_schedule.CollectionDate = '$selectedDate' AND tbl_trucks.Collector = 'District Council'";
                         
                         if ($schedule_result = mysqli_query($conn, $getSchedule)) {
                             while ($schedule_row = mysqli_fetch_assoc($schedule_result)){
 
                                 $start_time = (int)$schedule_row['TimeStart'];
-                                $end_time = (int) $schedule_row['TimeEnd'];
+                                $end_time = (int)$schedule_row['TimeEnd'];
                                 $duration = $end_time - $start_time;
 
                                 $truckData[$start_time - 5] = $schedule_row['TruckID'];

@@ -9,7 +9,7 @@
             $table .= "
                 <tr>
                     <td>" . $row['GeneratorID'] . "</td>
-                    <td>" . substr($row['Name'], 0, 3) . substr($row['GeneratorID'], -3) . "</td>
+                    <td>" . strtolower(substr($row['Name'], 0, 3) . substr($row['GeneratorID'], -3)) . "</td>
                 </tr>
             ";
         }

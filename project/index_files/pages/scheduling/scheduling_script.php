@@ -184,13 +184,13 @@
             $total_waste_amount = $trips[$t][2];
             $routeID = $trips[$t][3];
             $numOfHouses = $trips[$t][4];
-            $duration = $trips[$t][5];
+            $duration = (int)$trips[$t][5];
             $distance = $trips[$t][6];
             $today = date("Y-m-d");
 
             $saveQuery =
                 "INSERT INTO
-                    tbl_trips (Trips, NumberOfHouses, Waste_amount, Duration_hrs, Distance_km, RouteID, TruckID, Date_Created)
+                    tbl_trips (Trips, NumberOfHouses, Waste_amount, Duration_MINS, Distance_KM, RouteID, TruckID, Date_Created)
                  VALUES ('$tripPath', $numOfHouses, $total_waste_amount, $duration, $distance, $routeID, '$truckID', '$today')
                 ";
 
@@ -200,6 +200,7 @@
             } else {
                 $flag = 1;
             }
+
         }
 
         echo json_encode($flag);
@@ -235,7 +236,7 @@
 
                         $waste_amount_per_trip = $trips['waste_amount'];
                         $current_zone = $trips['Zone'];
-                        $duration = $trips['Duration_hrs'];
+                        $duration = $trips['Duration_MINS'];
                         $flag = false; // set to true to break while loop
                         $category = $trips['Category'];
                         $waste_type = $trips['Waste_Type'];
@@ -244,7 +245,7 @@
                             if ($duration <= $timeLeft) {
                                 $timeLeft -= $duration;
                                 if ($zoneTracker == $current_zone) {
-                                    $timestamp = strtotime($endTime) + ($duration * 3600);
+                                    $timestamp = strtotime($endTime) + ($duration * 60);
                                     $endTime = date('H:i', $timestamp);
                                     $total_waste += $waste_amount_per_trip;
                                 } else {
@@ -256,7 +257,7 @@
                                     }
                                     $zoneTracker = $current_zone;
                                     $startTracker = $endTime;
-                                    $timestamp = strtotime($endTime) + ($duration * 3600);
+                                    $timestamp = strtotime($endTime) + ($duration * 60);
                                     $endTime = date('H:i', $timestamp);
                                     $total_waste += $waste_amount_per_trip;
                                 }
