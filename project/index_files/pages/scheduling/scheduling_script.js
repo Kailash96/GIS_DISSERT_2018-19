@@ -9,8 +9,7 @@ function getLocations(){
 
             // SAVE IN DB
             // save_tbl_route(getData);
-            console.log(getData); // already optimized in php
-            
+            travellingSalesman(getData);
             // only for testing
             // tripMaker();
             // update_schedule();
@@ -19,6 +18,20 @@ function getLocations(){
     getCoords.open("POST", "scheduling_script.php", true);
     getCoords.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
     getCoords.send("act=getRoute");
+
+}
+
+function travellingSalesman(data) {
+    var tsp = new XMLHttpRequest();
+    tsp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            var response = JSON.parse(this.responseText);
+            console.log(response);
+        }
+    }
+    tsp.open("POST", "tsp.php", true);
+    tsp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+    tsp.send("data=" + JSON.stringify(data));
 
 }
 
