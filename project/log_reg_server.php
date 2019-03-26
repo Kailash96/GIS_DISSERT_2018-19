@@ -58,8 +58,10 @@
                     if ($getData = mysqli_query($conn, $getDataQuery)) {
                         $value = mysqli_fetch_assoc($getData);
                         $_SESSION['username'] = $value['Name'];
-
                     }
+
+                    $online = "UPDATE tbl_generators_login SET Status = 1 WHERE GeneratorID = '$userid'";
+                    mysqli_query($conn, $online);
 
                     header('location: index_files/pages/resident-pages/resident-home.php');
                 } else {
