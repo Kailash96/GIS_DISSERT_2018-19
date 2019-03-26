@@ -15,10 +15,8 @@
                 padding:8px 12px;
                 border-radius:2px;
                 background-color:white;
-                width:224px;
-                height:75px;
-                box-shadow:0 0 2px #0796D5;
-                margin-right:18px;
+                box-shadow:0 0 3px #0796D5;
+                width:100px;
             }
 
             .topbox h5 {
@@ -28,7 +26,7 @@
             }
 
             .topbox h2, .topbox h4 {
-                color:#0082A8;
+                color:#0796D5;
                 padding:0;
                 margin:0;
             }
@@ -48,56 +46,25 @@
             $total_online = mysqli_num_rows(mysqli_query($conn, $getOnline));
             $percentage_online = ($total_online / $total) * 100;
         ?>
-        <div class="body_container" style="background-color:#F0F0F0">
-            <div style="display:inline-block;background-color:white;box-shadow:0 0 2px #0796D5;box-sizing:border-box;width:49%;padding:8px 0;">
+        <div class="body_container">
+            <div style="display:inline-block;box-sizing:border-box;width:49%;box-shadow:0 0 2px #0796D5;padding:8px 0;">
                 <h5 style="text-align:center;margin:0">Total Amount of Waste Generated Last Month in KG</h5>
                 <canvas id="myChart"></canvas>
             </div>
 
-            <div style="display:inline-block;float:right;box-shadow:0 0 2px #0796D5;background-color:white;width:49%;padding:8px 0;">
+            <div style="display:inline-block;float:right;width:49%;box-shadow:0 0 2px #0796D5;padding:8px 0;">
                 <h5 style="text-align:center;margin:0">Waste Amount Generated Comparisons</h5>
                 <canvas id="linechart"></canvas>
             </div>
             <br/><br/>
             
-            <div style="display:inline-block;width:49.5%;box-sizing:border-box;margin-right:4px;">
-                <div class="topbox" style="float:left">
-                    <h4>Users</h4>
-                    <h2><?php echo $total; ?></h2>
-                    <h5><?php echo round($percentage_online); ?> % Active</h5>
-                </div>
-                <div class="topbox" style="margin-right:0">
-                    <?php
-                        // GET NUMBER OF ZONES
-                        $query_zone = "SELECT * FROM tbl_zones";
-                        $total_zones = mysqli_num_rows(mysqli_query($conn, $query_zone));
-                    ?>
-                    <h4>Total Number of Zones</h4>
-                    <h2><?php echo $total_zones; ?></h2>
-                </div>
-            </div>
-            <div style="display:inline-block;box-sizing:border-box;width:49.6%;padding-left:6px;">
-                <div class="topbox" style="float:left;">
-                    <?php
-                        // GET NUMBER OF TRUCKS
-                        $query_zone = "SELECT * FROM tbl_trucks";
-                        $total_zones = mysqli_num_rows(mysqli_query($conn, $query_zone));
-                    ?>
-                    <h4>Total Number of Trucks</h4>
-                    <h2><?php echo $total_zones; ?></h2>
-                </div>
-                <div class="topbox" style="margin-right:0">
-                    <?php
-                        // GET NUMBER OF TRUCKS
-                        $query_zone = "SELECT * FROM tbl_trucks";
-                        $total_zones = mysqli_num_rows(mysqli_query($conn, $query_zone));
-                    ?>
-                    <h4>Total Number of Trucks</h4>
-                    <h2><?php echo $total_zones; ?></h2>
-                </div>
+            <div class="topbox">
+                <h4>Users</h4>
+                <h2><?php echo $total; ?></h2>
+                <h5><?php echo round($percentage_online); ?> % Active</h5>
             </div>
             <br/><br/>
-            <div style="width:100%;background-color:white;padding:8px 8px;box-sizing:border-box;box-shadow:0 0 2px #0796D5;">
+            <div style="width:100%;box-shadow:0 0 2px #0796D5;padding:8px 8px;box-sizing:border-box;">
                 <h5 style="text-align:center;margin:0">Total Amount of Waste Generated from each Region Last Month</h5>
                 <canvas id="barchart"></canvas>
             </div>

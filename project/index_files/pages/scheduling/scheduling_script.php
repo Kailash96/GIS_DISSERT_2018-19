@@ -32,7 +32,6 @@
                                 $region_name = $region_rw['regionName'];
                                 $zone_ID = $zone_rw['zoneID'];
                                 $getRoute = getRoute($region_name, $zone_ID, $category_array[$c], $waste_type_array[$w]);
-
                                 if ($getRoute > 0) {
                                     array_push(
                                         $tbl_route_array,
@@ -46,7 +45,6 @@
                                         )
                                     );
                                 }
-
                             }
 
                         }
