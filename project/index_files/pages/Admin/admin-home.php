@@ -34,7 +34,7 @@
         </style>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
     </head>
-    <body onload="getData(), amountPerRegion();">
+    <body onload="getData(), amountPerRegion(), setComparisons();">
         <?php include("admin-left_side_nav_bar.php"); ?>
         <?php include("admin-top-nav-bar.html"); ?>
         
@@ -56,7 +56,8 @@
                 <h5 style="text-align:center;margin:0">Waste Amount Generated Comparisons</h5>
                 <canvas id="linechart"></canvas>
             </div>
-
+            <br/><br/>
+            
             <div class="topbox">
                 <h4>Users</h4>
                 <h2><?php echo $total; ?></h2>
@@ -201,31 +202,83 @@
                     getData.send("name=amountperregion");
                 }
 
-                function comparisons() {
+                function comparisons(data) {
                     var ctx_line = document.getElementById('linechart').getContext('2d');
                     var myLineChart = new Chart(ctx_line, {
                         type: 'line',
                         data: {
                             labels: ["Jan","Feb","Mar","Apr","May","June","July","Aug","Sept","Oct", "Nov", "Dec"],
                             datasets: [{ 
-                                data: [86,114,106,106,107,111,133,221,783,2478],
+                                data: [
+                                    parseInt((data[1][0] / data[1][4]) * 100),
+                                    parseInt((data[2][0] / data[2][4]) * 100),
+                                    parseInt((data[3][0] / data[3][4]) * 100),
+                                    parseInt((data[4][0] / data[4][4]) * 100),
+                                    parseInt((data[5][0] / data[5][4]) * 100),
+                                    parseInt((data[6][0] / data[6][4]) * 100),
+                                    parseInt((data[7][0] / data[7][4]) * 100),
+                                    parseInt((data[8][0] / data[8][4]) * 100),
+                                    parseInt((data[9][0] / data[9][4]) * 100),
+                                    parseInt((data[10][0] / data[10][4]) * 100),
+                                    parseInt((data[11][0] / data[11][4]) * 100),
+                                    parseInt((data[12][0] / data[12][4]) * 100),
+                                ],
                                 label: "Organic",
-                                borderColor: "#3e95cd",
+                                borderColor: "grey",
                                 fill: false
                             }, { 
-                                data: [282,350,411,502,635,809,947,1402,3700,5267],
+                                data: [
+                                    parseInt((data[1][1] / data[1][4]) * 100),
+                                    parseInt((data[2][1] / data[2][4]) * 100),
+                                    parseInt((data[3][1] / data[3][4]) * 100),
+                                    parseInt((data[4][1] / data[4][4]) * 100),
+                                    parseInt((data[5][1] / data[5][4]) * 100),
+                                    parseInt((data[6][1] / data[6][4]) * 100),
+                                    parseInt((data[7][1] / data[7][4]) * 100),
+                                    parseInt((data[8][1] / data[8][4]) * 100),
+                                    parseInt((data[9][1] / data[9][4]) * 100),
+                                    parseInt((data[10][1] / data[10][4]) * 100),
+                                    parseInt((data[11][1] / data[11][4]) * 100),
+                                    parseInt((data[12][1] / data[12][4]) * 100),    
+                                ],
                                 label: "Plastic",
-                                borderColor: "#8e5ea2",
+                                borderColor: "orange",
                                 fill: false
                             }, { 
-                                data: [168,170,178,190,203,276,408,547,675,734],
+                                data: [
+                                    parseInt((data[1][2] / data[1][4]) * 100),
+                                    parseInt((data[2][2] / data[2][4]) * 100),
+                                    parseInt((data[3][2] / data[3][4]) * 100),
+                                    parseInt((data[4][2] / data[4][4]) * 100),
+                                    parseInt((data[5][2] / data[5][4]) * 100),
+                                    parseInt((data[6][2] / data[6][4]) * 100),
+                                    parseInt((data[7][2] / data[7][4]) * 100),
+                                    parseInt((data[8][2] / data[8][4]) * 100),
+                                    parseInt((data[9][2] / data[9][4]) * 100),
+                                    parseInt((data[10][2] / data[10][4]) * 100),
+                                    parseInt((data[11][2] / data[11][4]) * 100),
+                                    parseInt((data[12][2] / data[12][4]) * 100),    
+                                ],
                                 label: "Paper",
-                                borderColor: "#3cba9f",
+                                borderColor: "blue",
                                 fill: false
                             }, { 
-                                data: [40,20,10,16,24,38,74,167,508,784],
+                                data: [
+                                    parseInt((data[1][3] / data[1][4]) * 100),
+                                    parseInt((data[2][3] / data[2][4]) * 100),
+                                    parseInt((data[3][3] / data[3][4]) * 100),
+                                    parseInt((data[4][3] / data[4][4]) * 100),
+                                    parseInt((data[5][3] / data[5][4]) * 100),
+                                    parseInt((data[6][3] / data[6][4]) * 100),
+                                    parseInt((data[7][3] / data[7][4]) * 100),
+                                    parseInt((data[8][3] / data[8][4]) * 100),
+                                    parseInt((data[9][3] / data[9][4]) * 100),
+                                    parseInt((data[10][3] / data[10][4]) * 100),
+                                    parseInt((data[11][3] / data[11][4]) * 100),
+                                    parseInt((data[12][3] / data[12][4]) * 100),
+                                ],
                                 label: "Other",
-                                borderColor: "#e8c3b9",
+                                borderColor: "red",
                                 fill: false
                             }]
                         },
@@ -237,6 +290,8 @@
                                 yAxes: [{
                                     ticks: {
                                         beginAtZero: true,
+                                        scaleOverride:true,
+                                        stepSize: 20,
                                         max: 100
                                     }
                                 }]
@@ -245,7 +300,18 @@
                     });
                 }
 
-                comparisons();
+                function setComparisons() {
+                    var getdata = new XMLHttpRequest();
+                    getdata.onreadystatechange = function() {
+                        if (this.readyState == 4 && this.status == 200) {
+                            var data = JSON.parse(this.responseText);
+                            comparisons(data);
+                        }
+                    }
+                    getdata.open("POST", "chart.php", true);
+                    getdata.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+                    getdata.send("name=comparisons");
+                }
                 
             </script>
         </div>

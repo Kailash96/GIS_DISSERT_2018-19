@@ -64,6 +64,37 @@
         }
 
         echo json_encode($region_array);
+
+    } else if ($name == "comparisons") {
+        $monthly_amount = array("Months");
+        $total_organic = 0;
+        $total_plastic = 0;
+        $total_paper = 0;
+        $total_other = 0;
+        
+        $crr_year = date("Y");
+        for ($month = 1; $month <= 12; $month++) {
+            $query = "SELECT * FROM tbl_waste_gen WHERE MONTH(getDate) = $month AND YEAR(getDate) = $crr_year";
+            if ($count = mysqli_num_rows($result = mysqli_query($conn, $query))) {
+                while ($row = mysqli_fetch_assoc($result)) {
+                    $total_organic += ($row['Organic'] / 100) * 20;
+                    $total_plastic += ($row['Plastic'] / 100) * 20;
+                    $total_paper += ($row['Paper'] / 100) * 20;
+                    $total_other += ($row['Other'] / 100) * 20;
+                }
+            }
+
+            $total_full = (20 * $count) * 4; // 20KG * NUMBER OF USERS * 4 WEEKS (1MONTH)
+            array_push($monthly_amount, array($total_organic, $total_plastic, $total_paper, $total_other, $total_full));
+
+            $total_organic = 0;
+            $total_plastic = 0;
+            $total_paper = 0;
+            $total_other = 0;
+        }
+
+        echo json_encode($monthly_amount);
+
     }
 
 ?>
