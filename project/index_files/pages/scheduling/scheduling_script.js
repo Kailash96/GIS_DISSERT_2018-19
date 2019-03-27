@@ -26,7 +26,7 @@ function travellingSalesman(data) {
     tsp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
             var response = JSON.parse(this.responseText);
-            console.log(response);
+            save_tbl_route(response);
         }
     }
     tsp.open("POST", "tsp.php", true);

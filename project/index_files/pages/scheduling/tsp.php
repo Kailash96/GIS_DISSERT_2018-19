@@ -126,11 +126,29 @@
     }
 
     // TESTING
-    $response = array();
-    for ($m = 0; $m < 27; $m++) {
-        array_push($response, tsp($data[$m][0]));
+    $opt_arranged = array();
+    for ($m = 0; $m < sizeof($data); $m++) {
+        $opt_route = array();
+        $opt_amount = array();
+        $opt = tsp($data[$m][0]);
+        for ($o = 0; $o < sizeof($opt); $o++){
+            array_push($opt_route, $data[$m][0][$opt[$o]]);
+            array_push($opt_amount, $data[$m][3][$opt[$o]]);
+        }
+        array_push($opt_arranged, 
+            array(
+                $opt_route,
+                $data[$m][1],
+                $data[$m][2],
+                $opt_amount,
+                $data[$m][4],
+                $data[$m][5],
+                $data[$m][6],
+                $data[$m][7]
+            )
+        );
     }
 
-    echo json_encode($response);
+    echo json_encode($opt_arranged);
 
 ?>
