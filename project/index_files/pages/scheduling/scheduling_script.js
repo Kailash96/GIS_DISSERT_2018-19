@@ -22,6 +22,22 @@ function getLocations(){
 
 }
 
+<<<<<<< HEAD
+=======
+function travellingSalesman(data) {
+    var tsp = new XMLHttpRequest();
+    tsp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            var response = JSON.parse(this.responseText);
+            save_tbl_route(response);
+        }
+    }
+    tsp.open("POST", "tsp.php", true);
+    tsp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+    tsp.send("data=" + JSON.stringify(data));
+}
+
+>>>>>>> tsp2
 function save_tbl_route(datatosave){
 
     var savetodb = new XMLHttpRequest();
