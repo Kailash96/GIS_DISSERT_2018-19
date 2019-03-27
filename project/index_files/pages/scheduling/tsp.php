@@ -2,9 +2,6 @@
 
 
     $data = json_decode($_POST['data']);
-
-    // $completed = array();
-    // $grid = array();
     $n = 0; // NUMBER OF VILLAGES;
     $total = 0;
 
@@ -25,15 +22,12 @@
                 }
             }
         }
-
         return $nc;
-
     }
 
-    function mincost($city, $completed, $grid) {
+    function minDist($city, $completed, $grid) {
         global $n;
         $optimized_route = array();
-
         $ncity = $city;
         while ($ncity != $n) {
             $completed[$ncity] = 1;
@@ -43,16 +37,6 @@
                 return $optimized_route;
             }
         }
-        /*
-        $completed[$city] = 1;
-        array_push($optimized_route, $city);
-        $ncity = least($city);
-
-        if ($ncity == $n) {
-            return $optimized_route;
-        }
-        mincost($ncity);
-        */
     }
     
     function getDistance($origin, $destination) {
@@ -97,35 +81,18 @@
         return $return;
     }
 
-    /*
-    function optimization($optimized, $route, $amount) {
-        $optimization_amount = array();
-        $optimization_route = array();
-
-        $opt = array();
-        for ($i = 0; $i < sizeof($optimized); $i++) {
-            array_push($optimization_route, array($route[$optimized[$i]]));
-            array_push($optimization_amount, array($amount[$optimized[$i]]));
-        }
-        array_push($opt, array($optimization_route, $optimization_amount));
-        return $opt;
-    }
-    */
-
     function tsp($route) {
         global $n;
-        // global $grid;
         global $total;
 
         $n = sizeof($route);
         $completed = setDistanceGrid($route)[0];
         $grid = setDistanceGrid($route)[1];
-        return mincost(0, $completed, $grid);
+        return minDist(0, $completed, $grid);
         $total = 0;
         $n = 0;
     }
 
-    // TESTING
     $opt_arranged = array();
     for ($m = 0; $m < sizeof($data); $m++) {
         $opt_route = array();

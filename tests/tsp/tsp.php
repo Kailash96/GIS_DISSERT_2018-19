@@ -1,59 +1,95 @@
 <?php
 
-    $grid = array(
-        array(0, 25, 8, 20),
-        array(25, 0, 10, 2),
-        array(8, 10, 0, 5),
-        array(20, 2, 5, 0)
-    );
-    $n = 4; // NUMBER OF VILLAGES;
-    $completed = array(0, 0, 0, 0);
-    $optimized_route = array();
+    $n = 0; // NUMBER OF VILLAGES;
+    $total = 0;
 
-    function least($c) {
+    function least($c, $completed, $grid) {
         global $n;
-        global $grid;
-        global $completed;
-        $nc = 4;
-        $min = 1000000;
+        global $total;
+
+        $nc = $n;
+        $min = $total * 2;
         $kmin = 0;
 
         for ($i = 0; $i < $n; $i++) {
             if (($grid[$c][$i] != 0) && ($completed[$i] == 0)) {
-                if ($grid[$c][$i] + $grid[$i][$c] < $min) {
+                if (($grid[$c][$i] + $grid[$i][$c]) < $min) {
                     $min = $grid[$i][0] + $grid[$c][$i];
                     $kmin = $grid[$c][$i];
                     $nc = $i;
                 }
             }
         }
-
         return $nc;
-
     }
 
-    function mincost($city) {
-        global $completed;
-        global $optimized_route;
-        $completed[$city] = 1;
-        array_push($optimized_route, ($city+1));
-        $ncity = least($city);
-
-        if ($ncity == 4) {
-            $ncity = 0;
-            array_push($optimized_route, ($ncity+1));
-            return;
+    function minDist($city, $completed, $grid) {
+        global $n;
+        $optimized_route = array();
+        $ncity = $city;
+        while ($ncity != $n) {
+            $completed[$ncity] = 1;
+            array_push($optimized_route, $ncity);
+            $ncity = least($ncity, $completed, $grid);
+            if ($ncity == $n) {
+                return $optimized_route;
+            }
         }
-        mincost($ncity);
+    }
+    
+    function getDistance($origin, $destination) {
+        global $total;
+        $origin = explode(",", $origin);
+        $destination = explode(",", $destination);
+
+        // return distance in meters
+        $lon1 = deg2rad($origin[1]);
+        $lat1 = deg2rad($origin[0]);
+        $lon2 = deg2rad($destination[1]);
+        $lat2 = deg2rad($destination[0]);
+    
+        $deltaLat = $lat2 - $lat1;
+        $deltaLon = $lon2 - $lon1;
+    
+        $a = pow(sin($deltaLat/2), 2) + cos($lat1) * cos($lat2) * pow(sin($deltaLon/2), 2);
+        $c = 2 * asin(sqrt($a));
+        $EARTH_RADIUS = 6371;
+        $distance = round($c * $EARTH_RADIUS * 1000);
+        $total += $distance;
+        return $distance;
+
     }
 
-    function tsp() {
-        mincost(0);
+     // SETS THE GRID OF DISTANCES
+     function setDistanceGrid($route) {
+        $completed = array();
+        $grid = array();
+        $return = array();
+        $numberofhouses = sizeof($route); // GET THE NUMBER OF HOUSES
+        for ($i = 0; $i < $numberofhouses; $i++) {
+            $distance_row = array(); // THE DISTANCE LIST ROWS
+            for ($j = 0; $j < $numberofhouses; $j++) {
+                array_push($distance_row, getDistance($route[$i], $route[$j]));
+            }
+            array_push($grid, $distance_row);
+            array_push($completed, 0);
+            unset($distance_row);
+        }
+        array_push($return, $completed, $grid);
+        return $return;
     }
 
-    tsp();
-    print_r($optimized_route);
+    function tsp($route) {
+        global $n;
+        global $total;
 
-    echo "php Version: " . phpversion();
+        $n = sizeof($route);
+        $completed = setDistanceGrid($route)[0];
+        $grid = setDistanceGrid($route)[1];
+        return minDist(0, $completed, $grid);
+        $total = 0;
+        $n = 0;
+    }
 
+    
 ?>
