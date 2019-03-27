@@ -65,6 +65,10 @@ function tripMaker(){
 
 // GET TRIP ARRAY, CALCULATES DURATION OF EACH TRIPS AND STORES TO DB
 function configure_trip(trip_array){
+<<<<<<< HEAD
+=======
+
+>>>>>>> tsp
     var trip = [];
     // lOOP FOR EACH TRIP
     for (var t = 0; t < trip_array.length; t++) {
@@ -74,7 +78,7 @@ function configure_trip(trip_array){
         for (var TA = 1; TA < trip_array[t][0].length; TA++) {
             var pointA = trip_array[t][0][TA - 1].split(",");
             var pointB = trip_array[t][0][TA].split(",");
-            var collection_delay = 3; // 3MINS COLLECTION TIME BUFFER
+            var collection_delay = 60; // 3; // 3MINS COLLECTION TIME BUFFER
             total_duration = (getDuration(pointA, pointB) + collection_delay); // IN MINS
             total_distance += getDistance(pointA, pointB) / 1000; // IN KM
         }
