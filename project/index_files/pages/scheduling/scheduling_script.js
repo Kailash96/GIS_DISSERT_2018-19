@@ -4,15 +4,9 @@ function getLocations(){
         if (this.readyState == 4 && this.status == 200){
             var getData = JSON.parse(this.responseText);
 
-            // REARRANGE ROUTE IN OPTIMIZED ROUTE
-            // TO REARRANGE array amount along with location array;
-
-            // SAVE IN DB
-            // save_tbl_route(getData);
-            travellingSalesman(getData);
-            // only for testing
-            // tripMaker();
-            // update_schedule();
+            // travellingSalesman(getData);
+            console.log(getData);
+            
         }
     }
     getCoords.open("POST", "scheduling_script.php", true);
@@ -71,7 +65,6 @@ function tripMaker(){
 
 // GET TRIP ARRAY, CALCULATES DURATION OF EACH TRIPS AND STORES TO DB
 function configure_trip(trip_array){
-    // should be in a nested loop ----------------------------------------------------
 
     var trip = [];
     // lOOP FOR EACH TRIP
