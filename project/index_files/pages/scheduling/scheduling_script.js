@@ -32,7 +32,6 @@ function travellingSalesman(data) {
     tsp.open("POST", "tsp.php", true);
     tsp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
     tsp.send("data=" + JSON.stringify(data));
-
 }
 
 function save_tbl_route(datatosave){
