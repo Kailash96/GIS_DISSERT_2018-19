@@ -2,7 +2,7 @@
     $servername = "localhost";
     $username = "root";
     $password = "";
-    $dbname = "gisfwms";
+    $dbname = "wastemanagement";
 
     $conn = mysqli_connect($servername, $username, $password, $dbname);
 
