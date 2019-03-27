@@ -4,7 +4,6 @@
     $data = json_decode($_POST['data']);
 
     $completed = array();
-    $optimized_route = array();
     $grid = array();
     $n = 0; // NUMBER OF VILLAGES;
     $total = 0;
@@ -35,17 +34,28 @@
 
     function mincost($city) {
         global $completed;
-        global $optimized_route;
         global $n;
+        $optimized_route = array();
 
+        $ncity = $city;
+        while ($ncity != $n) {
+            $completed[$ncity] = 1;
+            array_push($optimized_route, $ncity);
+            $ncity = least($ncity);
+            if ($ncity == $n) {
+                return $optimized_route;
+            }
+        }
+        /*
         $completed[$city] = 1;
         array_push($optimized_route, $city);
         $ncity = least($city);
 
-        if ($ncity == $n) {            
-            return;
+        if ($ncity == $n) {
+            return $optimized_route;
         }
         mincost($ncity);
+        */
     }
     
     function getDistance($origin, $destination) {
@@ -89,19 +99,35 @@
 
     }
 
-    function tsp($route, $amount) {
-        global $optimized_route;
-        global $n;
-        global $grid;
-        global $completed;
-        $n = sizeof($route);
-        setDistanceGrid($route);
-        mincost(0);
+    function optimization($optimized, $route, $amount) {
+        $optimization_amount = array();
+        $optimization_route = array();
 
-        echo json_encode($optimized_route);
-
+        $opt = array();
+        for ($i = 0; $i < sizeof($optimized); $i++) {
+            array_push($optimization_route, array($route[$optimized[$i]]));
+            array_push($optimization_amount, array($amount[$optimized[$i]]));
+        }
+        array_push($opt, array($optimization_route, $optimization_amount));
+        return $opt;
     }
 
-    tsp($data[0][0], $data[0][3]);
+    function tsp($route) {
+        global $n;
+        global $grid;
+        global $data;
+
+        $n = sizeof($route);
+        setDistanceGrid($route);
+        return mincost(0);
+    }
+
+    // TESTING
+    $response = array();
+    for ($m = 0; $m < 27; $m++) {
+        array_push($response, tsp($data[$m][0]));
+    }
+
+    echo json_encode($completed);
 
 ?>
