@@ -4,16 +4,9 @@ function getLocations(){
         if (this.readyState == 4 && this.status == 200){
             var getData = JSON.parse(this.responseText);
 
-            // REARRANGE ROUTE IN OPTIMIZED ROUTE
-            // TO REARRANGE array amount along with location array;
-
-            // SAVE IN DB
-            // save_tbl_route(getData);
-            console.log(getData); // already optimized in php
+            // travellingSalesman(getData);
+            console.log(getData);
             
-            // only for testing
-            // tripMaker();
-            // update_schedule();
         }
     }
     getCoords.open("POST", "scheduling_script.php", true);
@@ -22,8 +15,6 @@ function getLocations(){
 
 }
 
-<<<<<<< HEAD
-=======
 function travellingSalesman(data) {
     var tsp = new XMLHttpRequest();
     tsp.onreadystatechange = function() {
@@ -37,7 +28,6 @@ function travellingSalesman(data) {
     tsp.send("data=" + JSON.stringify(data));
 }
 
->>>>>>> tsp2
 function save_tbl_route(datatosave){
 
     var savetodb = new XMLHttpRequest();
@@ -75,8 +65,6 @@ function tripMaker(){
 
 // GET TRIP ARRAY, CALCULATES DURATION OF EACH TRIPS AND STORES TO DB
 function configure_trip(trip_array){
-    // should be in a nested loop ----------------------------------------------------
-
     var trip = [];
     // lOOP FOR EACH TRIP
     for (var t = 0; t < trip_array.length; t++) {
