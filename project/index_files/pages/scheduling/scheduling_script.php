@@ -49,8 +49,6 @@
         }
     }
 
-    // fetchData();
-
     function buildTruck() {
         global $conn;
         $truckArray = array();
@@ -73,7 +71,6 @@
 
     function nextTruck($category, $region, $capacity) {
         global $trucks;
-        $truckRow = -1;
         for ($i = 0; $i < sizeof($trucks); $i++) {
             if (($trucks[$i][2] == $category) && ($trucks[$i][5] == 1) && ($trucks[$i][3] == $region) && ($trucks[$i][1] == $capacity)) {
                 $trucks[$i][5] = 0;
@@ -81,7 +78,7 @@
                 return $truckRow;
             }
         }
-        return $truckRow;
+        return -1;
     }
 
     function resetTruckStatus($category, $region, $capacity) {
@@ -150,8 +147,9 @@
                         if ($tripready = mysqli_query($conn, $getTripQuery)) {
                             while ($trip = mysqli_fetch_assoc($tripready)) {
                                 if (($truckCapacity <= 0) || ($timeLeft <= 0)) {
-                                    $truckRowFetched = nextTruck($trip['Category'], $trip['region'], 5000); // FETCH BIG TRUCK CAPACITY: 5000
+                                    $truckRowFetched = nextTruck($trip['Category'], $trip['region'], 50); // FETCH BIG TRUCK CAPACITY: 5000
                                     if ($truckRowFetched >= 0) { // TRUCK EXISTS
+                                        $truckID = $trucks[$truckRowFetched][0];
                                         $truckCapacity = $trucks[$truckRowFetched][1];
                                         $timeLeft = $trucks[$truckRowFetched][4];
                                         $noTruck = false;
@@ -176,30 +174,36 @@
                                         if ($trip['Amount'] <= $truckCapacity) {
                                             $truckCapacity -= $trip['Amount'];
                                             $genID = $trip['GeneratorID'];
-                                            $setStatusQuery = "UPDATE tbl_route_full_region SET Status = 1 WHERE GeneratorID = '$genID'";
+                                            $now = date("Y-m-d");
+                                            $setStatusQuery = "UPDATE tbl_route_full_region SET Status = 1 WHERE GeneratorID = '$genID' AND WasteType = 'Organic' AND DateRecorded = '$now'";
                                             mysqli_query($conn, $setStatusQuery); // SET STATUS OF COLLECTED TO 1
                                             $totalAmount = $totalAmount - $trip['Amount'];
                                             array_push($tripArray, array(
                                                 $trip['Locations'],
-                                                $duration * 3600, // CONVERTED TO SECONDS
+                                                $duration * 60, // CONVERTED TO MINS
                                                 $today,
                                                 $tripNumber,
-                                                $trip['zoneID']
+                                                $trip['zoneID'],
+                                                $truckID,
+                                                $trip['WasteType'],
+                                                $trip['Category'],
+                                                $trip['GeneratorID']
                                             ));
                                             $flag = false;
                                         } else {
                                             // TIME TAKEN TO DROP TO TRANSFER STATION
                                             $timeLeft -= 0.75; // 45 MINS (O.75 HOURS)
-                                            $truckCapacity = $trucks[$truckRowFetched][1]; // RESET TRUCK CAPACITY
+                                            $truckCapacity = $trucks[$truckRowFetched][1]; // RESET TRUCK CAPACITY                                            
                                             $tripNumber++;
                                             $flag = true;
                                             if ($totalAmount <= ((1 / 2) * $truckCapacity)) {
                                                 $flag = false;
                                                 $changeZone = true;
                                             }
+                                            $flag = false;
                                         }
                                     } else {
-                                        $truckRowFetched = nextTruck($trip['Category'], $trip['region'], 5000); // FETCH BIG TRUCK CAPACITY:5000
+                                        $truckRowFetched = nextTruck($trip['Category'], $trip['region'], 1000); // FETCH BIG TRUCK CAPACITY:5000
                                         if ($truckRowFetched < 0) { // NO TRUCK
                                             $today = date("Y-m-d", strtotime($today . ' +1 day'));
                                             $checkDay = strtotime($today);
@@ -207,12 +211,11 @@
                                             if ($day == "Sunday") {
                                                 $today = date("Y-m-d", strtotime($today . ' +1 day'));
                                             }
-                                            resetTruckStatus($trip['Category'], $trip['region'], 5000);
-                                            $timeLeft = 8;
+                                            resetTruckStatus($trip['Category'], $trip['region'], 50);
+                                            $timeLeft = 2; // 8;
                                             $flag = true;
                                         }
                                         $tripNumber = 1;
-                                        
                                     }
                                     if ($changeZone) {
                                         break;
@@ -227,10 +230,29 @@
                 }
             }
         }
-        return $tripArray;
+        savetotbl_trips($tripArray);
     }
 
-    echo "<pre>";
-    print_r(setTrips());
+    function savetotbl_trips($tripArray) {
+        global $conn;
+        for ($i = 0; $i < sizeof($tripArray); $i++) {
+            $location = $tripArray[$i][0];
+            $duration = $tripArray[$i][1];
+            $tripDate = $tripArray[$i][2];
+            $tripNumber = $tripArray[$i][3];
+            $tripZone = $tripArray[$i][4];
+            $truckID = $tripArray[$i][5];
+            $wasteType = $tripArray[$i][6];
+            $category = $tripArray[$i][7];
+            $userID = $tripArray[$i][8];
+            $saveQuery = "INSERT INTO tbl_trips (locations, durations, tripDate, tripNumber, zone, truckID, wasteType, generatorID, category)
+                VALUES ('$location', $duration, '$tripDate', $tripNumber, $tripZone, '$truckID', '$wasteType', '$userID', '$category')
+            ";
+            mysqli_query($conn, $saveQuery);
+        }
+    }
+
+    // fetchData();
+    setTrips();
 
 ?>
