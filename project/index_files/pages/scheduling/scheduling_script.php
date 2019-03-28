@@ -124,6 +124,7 @@
         global $conn;
         global $trucks;
         $changeZone = false;
+        $noTruck = false;
         $today = date("Y-m-d");
         $tripArray = array();
         $regionQuery = "SELECT * FROM tbl_region";
@@ -140,9 +141,9 @@
                     while ($zoner = mysqli_fetch_assoc($zoning)) {
                         if ($totalAmount <= 0) {
                             $crrzone = $zoner['zoneID'];
-                            $setTotalAmountQuery = "SELECT SUM(Amount) FROM tbl_route_full_region INNER JOIN tbl_generator ON tbl_generator.GeneratorID = tbl_route_full_region.GeneratorID WHERE zoneID = $crrzone";
+                            $setTotalAmountQuery = "SELECT SUM(Amount) AS totalamount FROM tbl_route_full_region INNER JOIN tbl_generator ON tbl_generator.GeneratorID = tbl_route_full_region.GeneratorID WHERE zoneID = $crrzone";
                             // GET TOTAL AMOUNT FOR EACH ZONE
-                            $totalAmount = mysqli_fetch_assoc(mysqli_query($conn, $setTotalAmountQuery));
+                            $totalAmount = mysqli_fetch_assoc(mysqli_query($conn, $setTotalAmountQuery))['totalamount'];                            
                         }
                         $zoneID = $zoner['zoneID'];
                         $getTripQuery = "SELECT * FROM tbl_route_full_region INNER JOIN tbl_generator ON tbl_route_full_region.GeneratorID = tbl_generator.GeneratorID WHERE tbl_generator.zoneID = $zoneID AND WasteType = 'Organic' AND Status = 0";
@@ -168,6 +169,7 @@
                                 }
                                 $collectionTime = 180; // 3MINS (180 SECS)
                                 $duration = getDuration(json_encode($currentLocation), json_encode($nextLocation)) + $collectionTime;
+                                $duration = $duration / 3600;
                                 $flag = true;
                                 while ($flag) {
                                     if ($duration <= $timeLeft) {
@@ -176,10 +178,11 @@
                                             $genID = $trip['GeneratorID'];
                                             $setStatusQuery = "UPDATE tbl_route_full_region SET Status = 1 WHERE GeneratorID = '$genID'";
                                             mysqli_query($conn, $setStatusQuery); // SET STATUS OF COLLECTED TO 1
-                                            $totalAmount -= $trip['Amount'];
+                                            $totalAmount = $totalAmount - $trip['Amount'];
                                             array_push($tripArray, array(
                                                 $trip['Locations'],
-                                                $duration,
+                                                $duration * 3600, // CONVERTED TO SECONDS
+                                                $today,
                                                 $tripNumber,
                                                 $trip['zoneID']
                                             ));
@@ -206,7 +209,7 @@
                                             }
                                             resetTruckStatus($trip['Category'], $trip['region'], 5000);
                                             $timeLeft = 8;
-                                            $flag = false; // true; // temp - should be true ---------------------------------------------------------
+                                            $flag = true;
                                         }
                                         $tripNumber = 1;
                                         
