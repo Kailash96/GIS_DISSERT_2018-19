@@ -49,5 +49,16 @@
         }
     }
 
-    fetchData();
+    // fetchData();
+
+    function setTrips() {
+        $truckCapacity = 0;
+        $timeLeft = 0;
+        $trip = 1;
+        // GET TOTAL AMOUNT
+        $totalAmount = 0;
+        $currentLocation = 0;
+        $getTripQuery = "SELECT * FROM tbl_route_full_region WHERE ";
+
+    }
 ?>
