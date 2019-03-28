@@ -1,5 +1,6 @@
 <?php
 
+    include("tsp.php");
     function getRoute($region, $zone, $category, $waste_type){
         $route_amount_full_region = array();
         $amount = 0;
@@ -80,11 +81,6 @@
         }
 
         // OPTIMIZE ROUTE
-        $optimized = tsp($route_amount_full_region);
-
-        return $optimized;
-    }
-
-    function tsp($route_amount_array) {
+        return tsp(json_encode($route_amount_full_region));
         
     }

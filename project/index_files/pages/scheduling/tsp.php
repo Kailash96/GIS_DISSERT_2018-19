@@ -1,7 +1,5 @@
 <?php
 
-
-    $data = json_decode($_POST['data']);
     $n = 0; // NUMBER OF VILLAGES;
     $total = 0;
 
@@ -40,9 +38,10 @@
     }
     
     function getDistance($origin, $destination) {
+
         global $total;
-        $origin = explode(",", $origin);
-        $destination = explode(",", $destination);
+        $origin = explode(",", $origin[0]);
+        $destination = explode(",", $destination[0]);
 
         // return distance in meters
         $lon1 = deg2rad($origin[1]);
@@ -64,6 +63,7 @@
 
      // SETS THE GRID OF DISTANCES
      function setDistanceGrid($route) {
+
         $completed = array();
         $grid = array();
         $return = array();
@@ -79,43 +79,26 @@
         }
         array_push($return, $completed, $grid);
         return $return;
+
     }
 
-    function tsp($route) {
+    function rearrange($order, $disorder) {
+        $inOrder = array();
+        for ($m = 0; $m < sizeof($order); $m++) {
+            array_push($inOrder, $disorder[$order[$m]]);
+        }
+        return $inOrder;
+    }
+
+    function tsp($data) {
         global $n;
         global $total;
-
+        $route = json_decode($data);
         $n = sizeof($route);
         $completed = setDistanceGrid($route)[0];
         $grid = setDistanceGrid($route)[1];
-        return minDist(0, $completed, $grid);
-        $total = 0;
-        $n = 0;
+        $order = minDist(0, $completed, $grid);
+        return rearrange($order, $route);
     }
-
-    $opt_arranged = array();
-    for ($m = 0; $m < sizeof($data); $m++) {
-        $opt_route = array();
-        $opt_amount = array();
-        $opt = tsp($data[$m][0]);
-        for ($o = 0; $o < sizeof($opt); $o++){
-            array_push($opt_route, $data[$m][0][$opt[$o]]);
-            array_push($opt_amount, $data[$m][3][$opt[$o]]);
-        }
-        array_push($opt_arranged, 
-            array(
-                $opt_route,
-                $data[$m][1],
-                $data[$m][2],
-                $opt_amount,
-                $data[$m][4],
-                $data[$m][5],
-                $data[$m][6],
-                $data[$m][7]
-            )
-        );
-    }
-
-    echo json_encode($opt_arranged);
 
 ?>
