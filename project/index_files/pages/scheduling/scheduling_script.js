@@ -4,7 +4,7 @@ function getLocations(){
         if (this.readyState == 4 && this.status == 200){
             var getData = JSON.parse(this.responseText);
 
-            // travellingSalesman(getData);
+            travellingSalesman(getData);
             console.log(getData);
             
         }
@@ -138,7 +138,7 @@ function save_to_tbl_trips(trips_array) {
 }
 
 function update_schedule() {
-    var workingHrs = 120; // IN MINS (2HOURS)
+    var workingHrs = 480; // IN MINS (8 HOURS)
     var startTime = "5:00"; // 5am
 
     var schedule = new XMLHttpRequest();
