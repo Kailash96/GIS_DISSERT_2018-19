@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
     <head>
         <title>Bin Control | Binswiper</title>
         <link rel="stylesheet" href="../../css_files/style.css" />
@@ -49,22 +50,73 @@
             }
 
             function viewAccount(genID){
-                console.log(genID);
+                var profile = new XMLHttpRequest();
+                profile.onreadystatechange = function() {
+                    if (this.readyState == 4 && this.status == 200) {
+                        var response = JSON.parse(this.responseText);
+                        document.getElementById('content_list').innerHTML = response;
+                    }
+                }
+                profile.open("POST", "profile.php", true);
+                profile.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+                profile.send("genID=" + genID);
             }
 
             function search(data){
-                
+                var cat = document.getElementById("category").value;
+                var search = new XMLHttpRequest();
+                search.onreadystatechange = function () {
+                    if (this.readyState == 4 && this.status == 200) {
+                        var response = JSON.parse(this.responseText);
+                        document.getElementById("content_list").innerHTML = response;
+                    }
+                }
+                search.open("POST", "search.php", true);
+                search.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+                search.send("cat=" + cat + "&data=" + data);
             }
+
+            function resetBin(type, userid) {
+                var reset = new XMLHttpRequest();
+                reset.onreadystatechange = function() {
+                    if (this.readyState == 4 && this.status == 200) {
+                        var response = JSON.parse(this.responseText);
+                        console.log(response);
+                        alert("Bin has been reset successfully!");
+                    }
+                }
+                reset.open("POST", "resetbin.php", true);
+                reset.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+                reset.send("userid=" + userid + "&type=" + type);
+            }
+
+            function deleteAccount(genID) {
+                if (confirm("Confirm Account Deletion?")) {
+                    var deleteAcc = new XMLHttpRequest();
+                    deleteAcc.onreadystatechange = function() {
+                        if (this.readyState == 4 && this.status == 200) {
+                            var response = JSON.parse(this.responseText);
+                            console.log(response);
+                            alert("Account Deleted!");
+                            document.location.reload();
+                        }
+                    }
+                    deleteAcc.open("POST", "deleteAccount.php", true);
+                    deleteAcc.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+                    deleteAcc.send("genID=" + genID);
+                }
+            }
+
         </script>
     </head>
-    <body onload="user_list('Resident')">
+    <body onload="viewAccount('C011196130765E')"> <!-- user_list('Resident') -->
         <?php include("admin-left_side_nav_bar.php"); ?>
         <?php include("admin-top-nav-bar.html"); ?>
         
         <div style="padding:20px;font-size:14px;">
 
             Filter:
-            <select onchange="user_list(this.value)" style="border:1px solid #BFBFBF;border-radius:2px;padding:4px;width:200px;outline:none;">
+            <select id="category" onchange="user_list(this.value)" style="border:1px solid #BFBFBF;border-radius:2px;padding:4px;width:200px;outline:none;">
                 <option value="Resident">Resident</option>
                 <option value="Commercial">Commercial</option>
                 <option value="Industrial">Industrial</option>

@@ -1,0 +1,32 @@
+#overview_selected{
+    background-color:#DCDCDC;
+    border-left:4px solid #009DC4;
+}
+
+#map{
+    height:615px;
+    margin-top:52px;
+    z-index:0;
+    box-shadow:0 0 4px black;
+}
+
+.user_panel {
+    position:fixed;
+    right:0px;
+    top:100px;
+    border:1px solid black;
+    padding:10px;
+    background-color:white;
+    border-radius:3px 0 0 3px;
+    display:none;
+    width:400px;
+}
+
+.user_panel h3{
+    padding:0;
+    margin:0;
+}
+
+#panel_support{
+    display:none;
+}

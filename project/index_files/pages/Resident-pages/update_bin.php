@@ -26,9 +26,10 @@
         // $other_level
         $other_level = $_POST['other_level'];
 
-        $current_date = date("y-m-d");
-        $timestamp = strtotime(date("h:i:s")) + (60 * 60 * 4);
-        $current_time = date("H:i:s", $timestamp);
+        $current_date = date("Y-m-d");
+        // $timestamp = strtotime(date("h:i:s")) + (60 * 60 * 4);
+        // $current_time = date("H:i:s", $timestamp);
+        $current_time = date("H:i:s");
 
         $update_query = "
             INSERT INTO tbl_waste_gen (Organic, Plastic, Paper, Other, getDate, getTime, generatorID)

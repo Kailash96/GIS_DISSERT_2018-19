@@ -252,6 +252,8 @@
                                     if ($zoneTracker != 0) {
                                         $unixtimestamp = strtotime($dateTracker);
                                         $day = date("l", $unixtimestamp);
+                                        $time = strtotime($startTracker);
+                                        $startTracker = date("H:i", strtotime('+15 minutes', $time));
                                         array_push($schedule, array($zoneTracker, $startTracker, $endTime, $truck_ID, $dateTracker, $day, $total_waste, $category, $waste_type));
                                         $total_waste = 0;
                                     }
@@ -271,6 +273,7 @@
                                     $dateTracker = date('Y-m-d', strtotime("+1 day", strtotime($dateTracker))); // set to monday
                                     $endDate = date('Y-m-d', strtotime("+7 day", strtotime($endDate))); // next sunday
                                 }
+                                // RESET ALL FOR NEXT DAY
                                 $timeLeft = WORKING_HOURS;
                                 $startTracker = START_TIME;
                                 $endTime = START_TIME;
