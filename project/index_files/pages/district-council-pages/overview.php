@@ -210,6 +210,22 @@
 
             map.fitBounds(region.getBounds());
 
+            /*
+            function getRoutes() {
+                var routing = new XMLHttpRequest();
+                routing.onreadystatechange = function() {
+                    if (this.readyState == 4 && this.status == 200) {
+
+                    }
+                }
+                routing.open("POST", "setRoute.php", true);
+                routing.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+                routing.send();
+            }
+            */
+            
+            
+
         </script>
 
         <!-- USER INFORMATION PANEL -->
