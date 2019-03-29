@@ -3,53 +3,24 @@
     <head>
         <title>Home | Binswiper</title>
         <link rel="stylesheet" href="../../css_files/style.css" />
+        <link rel="stylesheet" href="../../css_files/overview.css" />
         <script src="../../js_files/jquery_lib.js"></script>
 
-        <!-- MAP CSS AND JAVASCRIPT -->
-        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css"
-        integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="
-        crossorigin=""/>
-        <script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js"
-        integrity="sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg=="
-        crossorigin=""></script>
+        <!-- LEAFLET ROUTING CSS -->
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.2.0/dist/leaflet.css" />
+        <link rel="stylesheet" href="../../css_files/leaflet-routing-machine.css" />
 
+        <!-- LEAFLET ROUTING, MARKING ETC -->
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css" integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA==" crossorigin=""/>
+        <script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js" integrity="sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg==" crossorigin=""></script>
+
+        <!-- ROUTING MACHINE LOCAL-->
+        <script src="../../js_files/leaflet-routing-machine.js"></script>
+
+        <!-- LEAFLET DRAW -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.css"/>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.js"></script>
 
-        <style>
-            #overview_selected{
-                background-color:#DCDCDC;
-                border-left:4px solid #009DC4;
-            }
-
-            #map{
-                height:615px;
-                margin-top:52px;
-                z-index:0;
-                box-shadow:0 0 4px black;
-            }
-
-            .user_panel {
-                position:fixed;
-                right:0px;
-                top:100px;
-                border:1px solid black;
-                padding:10px;
-                background-color:white;
-                border-radius:3px 0 0 3px;
-                display:none;
-                width:400px;
-            }
-
-            .user_panel h3{
-                padding:0;
-                margin:0;
-            }
-
-            #panel_support{
-                display:none;
-            }
-        </style>
         <script>
             $(document).keydown(function(event) {
             if (event.ctrlKey==true && (event.which == '61' || event.which == '107' || event.which == '173' || event.which == '109'  || event.which == '187'  || event.which == '189'  ) ) {
@@ -63,7 +34,7 @@
 
             $(window).bind('mousewheel DOMMouseScroll', function (event) {
                 if (event.ctrlKey == true) {
-                event.preventDefault();
+                    event.preventDefault();
                 }
             });
         </script>
@@ -72,17 +43,11 @@
         <?php include("left_side_nav_bar.html"); ?>
         <?php include("top-nav-bar.html"); ?>
 
-        <?php
-            include("../../../db_connect.php");
-
-            // QUERY FOR RESIDENTS
-            $active_user_query = "SELECT LocationCoordinate FROM residents WHERE Active = 1";
-            // QUERY FOR INDUSTRIALS
-            // QUERY FOR COMMERCIALS
-
-        ?>
+        <?php include("../../../db_connect.php"); ?>
         
         <div id="map"></div>
+        <script src="https://unpkg.com/leaflet@1.2.0/dist/leaflet.js"></script>
+        <script src="../../js_files/leaflet-routing-machine.js"></script>
 
         <script>
             var map = L.map('map').setView([-20.220740, 57.776270], 12);
@@ -210,21 +175,44 @@
 
             map.fitBounds(region.getBounds());
 
-            /*
             function getRoutes() {
                 var routing = new XMLHttpRequest();
                 routing.onreadystatechange = function() {
                     if (this.readyState == 4 && this.status == 200) {
-
+                        var route = JSON.parse(this.responseText);
+                        formatting(route);
                     }
                 }
                 routing.open("POST", "setRoute.php", true);
                 routing.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
                 routing.send();
             }
-            */
-            
-            
+
+            routes = [];
+            function formatting(way) {
+                for (var i = 0; i < way.length; i++) {
+                    for (var j = 0; j < way[i].length; j++) {
+                        routes.push("[" + way[i][j] + "]");
+                    }
+                    var arr_routes = "[" + routes + "]";
+                    addRoute(arr_routes);
+                    routes.length = 0;
+                }
+            }
+
+            // var way = [[-20.143506686462313,57.69015312194824],[-20.144111040432193,57.68946647644043]];
+            function addRoute(route) {
+                L.Routing.control({
+                    waypoints: JSON.parse(route),
+                    routeWhileDragging: false,
+                    show:false,
+                    createMarker: function() { return null; },
+                    fitSelectedRoutes: false,
+                    addWaypoints: false
+                }).addTo(map);
+            }
+            // addRoute(way);
+            getRoutes();
 
         </script>
 
