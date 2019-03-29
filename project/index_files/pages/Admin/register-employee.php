@@ -35,6 +35,7 @@
             }
 
             function edit_data(empid, empFName, empLName){
+                
                 $("#edit-data-box").fadeIn();
                 $("#edit-data-box-blur").fadeIn();
                 
@@ -43,6 +44,7 @@
                 document.getElementById('empnumedit').value = empid;
                 document.getElementById('empfnameedit').value = empFName;
                 document.getElementById('emplnameedit').value = empLName;
+
             }
 
             function update_data(saveid, savefname, savelname, prevEmpNum){
@@ -104,7 +106,7 @@
         <?php include("admin-top-nav-bar.html"); ?>
         
         <!-- content container -->
-        <div style="padding:0 20px;">
+        <div style="padding:10px 20px;">
             <h3>Employee Registration</h3>
             <div>
                 <form method="POST" onsubmit="register(employeeNumber.value, employeeFName.value, employeeLName.value)">

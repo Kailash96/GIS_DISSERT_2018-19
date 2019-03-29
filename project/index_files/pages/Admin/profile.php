@@ -11,6 +11,7 @@
     }
 
     $profile .= "
+        <input type='button' value='Back' style='background-color:white;border:1px solid black;box-shadow: 0 0 1px black;padding:8px;border-radius:2px;width:100px;cursor:pointer' onclick='user_list(category.value)' /><br/><br/>
         <table border='0' width='100%'>
             <tr>
                 <th colspan='2'><h1 style='margin:0;text-align:left;box-shadow:0 2px 1px black;padding:10px;'>User Profile</h1></th>
