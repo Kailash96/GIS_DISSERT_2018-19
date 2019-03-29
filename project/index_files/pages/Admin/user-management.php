@@ -53,7 +53,17 @@
             }
 
             function search(data){
-                
+                var cat = document.getElementById("category").value;
+                var search = new XMLHttpRequest();
+                search.onreadystatechange = function () {
+                    if (this.readyState == 4 && this.status == 200) {
+                        var response = JSON.parse(this.responseText);
+                        document.getElementById("content_list").innerHTML = response;
+                    }
+                }
+                search.open("POST", "search.php", true);
+                search.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+                search.send("cat=" + cat + "&data=" + data);
             }
         </script>
     </head>
@@ -64,7 +74,7 @@
         <div style="padding:20px;font-size:14px;">
 
             Filter:
-            <select onchange="user_list(this.value)" style="border:1px solid #BFBFBF;border-radius:2px;padding:4px;width:200px;outline:none;">
+            <select id="category" onchange="user_list(this.value)" style="border:1px solid #BFBFBF;border-radius:2px;padding:4px;width:200px;outline:none;">
                 <option value="Resident">Resident</option>
                 <option value="Commercial">Commercial</option>
                 <option value="Industrial">Industrial</option>

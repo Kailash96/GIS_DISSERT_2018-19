@@ -254,8 +254,8 @@
                                     if ($zoneTracker != 0) {
                                         $unixtimestamp = strtotime($dateTracker);
                                         $day = date("l", $unixtimestamp);
-                                        // $time = strtotime($startTracker);
-                                        // $startTracker = date("H:i", strtotime('+15 minutes', $time));
+                                        $time = strtotime($startTracker);
+                                        $startTracker = date("H:i", strtotime('+15 minutes', $time));
                                         array_push($schedule, array($zoneTracker, $startTracker, $endTime, $truck_ID, $dateTracker, $day, $total_waste, $category, $waste_type));
                                         $total_waste = 0;
                                     }

@@ -1,17 +1,22 @@
 function getLocations(){
+    
     var getCoords = new XMLHttpRequest();
     getCoords.onreadystatechange = function(){
         if (this.readyState == 4 && this.status == 200){
             var getData = JSON.parse(this.responseText);
 
             travellingSalesman(getData);
-            console.log(getData);
+            // console.log(getData);
             
         }
     }
     getCoords.open("POST", "scheduling_script.php", true);
     getCoords.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
     getCoords.send("act=getRoute");
+    
+   
+    // TESTING
+    // var route = [];
 
 }
 
@@ -75,8 +80,8 @@ function configure_trip(trip_array){
         for (var TA = 1; TA < trip_array[t][0].length; TA++) {
             var pointA = trip_array[t][0][TA - 1].split(",");
             var pointB = trip_array[t][0][TA].split(",");
-            var collection_delay = 60; // 3; // 3MINS COLLECTION TIME BUFFER
-            total_duration = (getDuration(pointA, pointB) + collection_delay); // IN MINS
+            var collection_delay = 3; // 3MINS COLLECTION TIME BUFFER
+            total_duration = collection_delay + 15; // (getDuration(pointA, pointB) + collection_delay); // IN MINS
             total_distance += getDistance(pointA, pointB) / 1000; // IN KM
         }
 
