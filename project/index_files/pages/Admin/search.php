@@ -19,7 +19,7 @@
     if ($length == 0) {
         $getUserQuery = "SELECT * FROM tbl_generator WHERE Category = '$category' ORDER BY dateReg DESC";
     } else {
-        $getUserQuery = "SELECT * FROM tbl_generator WHERE Category = '$category' AND (SUBSTR(Name, 1, $length) = '$data' OR SUBSTR(Name, POSITION(' ' IN Name) + 1, $length) = '$data') ORDER BY dateReg DESC";
+        $getUserQuery = "SELECT * FROM tbl_generator WHERE Category = '$category' AND (SUBSTR(Name, 1, $length) = '$data' OR SUBSTR(Name, POSITION(' ' IN Name) + 1, $length) = '$data' OR SUBSTR(GeneratorID, 1, $length) = '$data') ORDER BY dateReg DESC";
     }
     
     if ($data_result = mysqli_query($conn, $getUserQuery)) {

@@ -1,4 +1,6 @@
 <?php
+    date_default_timezone_set('Indian/Mauritius');
+    
     $servername = "localhost";
     $username = "root";
     $password = "";
