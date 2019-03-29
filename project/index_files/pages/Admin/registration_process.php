@@ -23,11 +23,8 @@
                     <td style='text-transform:uppercase'>" . $row['EmployeeNumber'] . "</td>
                     <td style='text-transform:capitalize'>" . $row['EmployeeFirstName'] . " " . $row['EmployeeLastName'] . "</td>
                     <td>
-                        <input type='hidden' value=" . $row['EmployeeNumber'] . " id='emp_" . $row['EmployeeNumber'] . "' />
-                        <input type='hidden' value=" . $row['EmployeeFirstName'] . " id='emp_fname_" . $row['EmployeeNumber'] . "' />
-                        <input type='hidden' value=" . $row['EmployeeLastName'] . " id='emp_lname_" . $row['EmployeeNumber'] . "' />
-                        <input type='button' value='Edit' onclick='edit_data(emp_" . $row['EmployeeNumber'] . ".value, emp_fname_" . $row['EmployeeNumber'] . ".value, emp_lname_" . $row['EmployeeNumber'] . ".value)' class='button' />
-                        <input type='button' value='Remove' onclick='confirm_remove_emp(emp_" . $row['EmployeeNumber'] . ".value)' class='button' />
+                        <input type='button' value='Edit' onclick='edit_data(" . json_encode($row['EmployeeNumber']) . ", " . json_encode($row['EmployeeFirstName']) . ", " . json_encode($row['EmployeeLastName']) . ")' class='button' />
+                        <input type='button' value='Remove' onclick='confirm_remove_emp(" . json_encode($row['EmployeeNumber']) . ")' class='button' />
                     </td>
                 </tr>
                 <tr><td colspan='3'><hr></td></tr>";

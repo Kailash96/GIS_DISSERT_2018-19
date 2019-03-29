@@ -134,6 +134,19 @@
                 reject.send("nic=" + nic);
             }
 
+            function filter_request(category) {
+                var filter = new XMLHttpRequest();
+                filter.onreadystatechange = function() {
+                    if (this.readyState == 4 && this.status == 200) {
+                        var data = JSON.parse(this.responseText);
+                        document.getElementById("LORequests").innerHTML = data;
+                    }
+                }
+                filter.open("POST", "filter_request.php", true);
+                filter.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+                filter.send("category=" + category);
+            }
+
         </script>
     </head>
     <body>
@@ -141,13 +154,17 @@
         <?php include("admin-top-nav-bar.html"); ?>
         
         <div style="padding:10px 20px;" id="listofrequestscontainer">
-            <h3>List of Account Activation Requests</h3>
-            <input type="button" class="selection_button" value="Resident" />
-            <input type="button" class="selection_button" value="Commercial" />
-            <input type="button" class="selection_button" value="Industrial" />
+            <h3 style="color:#053A5C">List of Account Activation Requests</h3>
+            <select id="category" onchange="filter_request(this.value)" style="border-radius:2px;padding:8px;width:300px;outline:none;">
+                <option value="resident">Resident</option>
+                <option value="commercial">Commercial</option>
+                <option value="industrial">Industrial</option>
+            </select>
             <br/><br/>
             <!-- LIST OF REQUEST CONTAINER -->
-            <div id="LORequests"></div>
+            <div id="LORequests">
+                <h1 style='text-align:center;font-size:50px;color:#EDEDED;margin-top:100px'><i style='color:#EDEDED' class="fa fa-check-square-o"></i> No Request</h1>
+            </div>
         </div>
 
         <!-- VIEW DETAILS CONTAINER  -->

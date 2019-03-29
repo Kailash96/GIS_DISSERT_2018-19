@@ -65,7 +65,6 @@
     <ul>
         <li><a href="admin-home.php" id="home_selected"><i class="logo_space fa fa-bar-chart"></i> Dashboard</a></li>
         <li><a href="user-management.php" id="user_mngt_selected"><i class="logo_space fa fa-group"></i> User Management</a></li>
-        <li><a href="" id=""><i class="logo_space fa fa-trash-o"></i> User Bin Management </a></li>
         <li><a href="zone_management.php" id="zone_mngt_selected"><i class="logo_space fa fa-map-o"></i> Zones Management <i class="material-icons" id='notif_icon' style='font-size:13px;color:red'>&#xe7f7;</i></a></li>
         <li><a href="requests_management.php" id="requests_selected"><i class="logo_space fa fa-bell-o"></i> Requests <span style="background-color:red;padding:0px 6px 0px 5px;border-radius:3px;color:white;" id="counter"></span></a></li>
         <li><a href="register-employee.php" id="register-employee_selected"><i class="logo_space fa fa-address-card-o"></i> Manage Employee</a></li>

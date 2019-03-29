@@ -77,17 +77,20 @@
             }
 
             function resetBin(type, userid) {
-                var reset = new XMLHttpRequest();
-                reset.onreadystatechange = function() {
-                    if (this.readyState == 4 && this.status == 200) {
-                        var response = JSON.parse(this.responseText);
-                        console.log(response);
-                        alert("Bin has been reset successfully!");
+                if (confirm("Confirm Reset Bin for " + type)) {
+                    var reset = new XMLHttpRequest();
+                    reset.onreadystatechange = function() {
+                        if (this.readyState == 4 && this.status == 200) {
+                            var response = JSON.parse(this.responseText);
+                            console.log(response);
+                            alert("Bin has been reset successfully!");
+                            window.location.reload();
+                        }
                     }
+                    reset.open("POST", "resetbin.php", true);
+                    reset.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+                    reset.send("userid=" + userid + "&type=" + type);
                 }
-                reset.open("POST", "resetbin.php", true);
-                reset.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-                reset.send("userid=" + userid + "&type=" + type);
             }
 
             function deleteAccount(genID) {
@@ -109,7 +112,7 @@
 
         </script>
     </head>
-    <body onload="viewAccount('C011196130765E')"> <!-- user_list('Resident') -->
+    <body onload="user_list('Resident')">
         <?php include("admin-left_side_nav_bar.php"); ?>
         <?php include("admin-top-nav-bar.html"); ?>
         

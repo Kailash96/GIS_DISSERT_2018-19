@@ -190,6 +190,7 @@
                 editableLayers.addLayer(layer);
             });
 
+            
             function save_changes(collector_id, region_name){
 
             var save = new XMLHttpRequest();
@@ -206,6 +207,7 @@
 
             }
 
+            
             var polygon = [];
             function save_zone(act){
                 var data;
@@ -233,6 +235,7 @@
                 store_zones.send(data);
             }
 
+            
             function submit_changes(){
                 var region = document.getElementById("region").checked;
                 var zone = document.getElementById("zone").checked;
@@ -257,6 +260,7 @@
                 $("#board").fadeOut();
             }
 
+            
             var marker = [];
             function redraw_markers(region){
                 var getmarkers = new XMLHttpRequest();
@@ -274,6 +278,7 @@
                 getmarkers.send("region=" + region);
             }
 
+            
             function toggle_switch(opt, region){
                 if (opt == "off") {
                     $("#on").css('display','block');
@@ -290,6 +295,7 @@
                     marker.length = 0;
                 }
             }
+
         </script>
         
         <table style="background-color:white;font-size:14px;z-index:2;position:fixed;top:200px;right:10px;width:350px;box-shadow:0 0 2px black;border-radius:3px" cellspacing="0">
