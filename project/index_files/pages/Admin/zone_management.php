@@ -108,17 +108,25 @@
             L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
                 attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
             }).addTo(map);
+
+            function select(event) {
+                var selection = event.target.options.id;
+                console.log(selection);
+            }
             
             <?php
                 
                 // temp for dcof region to be changes to session[collectorsID] on login
                 // SETS THE REGION
-                $getPolygonCoords_query = "SELECT coordinates FROM tbl_region";
+                $getPolygonCoords_query = "SELECT * FROM tbl_region";
                 if ($results = mysqli_query($conn, $getPolygonCoords_query)) {
                     while ($row = mysqli_fetch_assoc($results)) {
                         $coords = $row['coordinates'];
+                        $label = $row['regionName'];
+                        $id = $row['regionID'];
                         echo "
-                            var polygon = L.polygon(" . $coords . ", {color: 'blue', weight: 1});
+                            var polygon = L.polygon(" . $coords . ", {color: 'blue', weight: 1, label: '" . $label . "', id: '" . $id . "'});
+                            polygon.on('click', select);
                             polygon.addTo(map);
                         ";
                     }
@@ -193,17 +201,20 @@
             
             function save_changes(collector_id, region_name){
 
-            var save = new XMLHttpRequest();
-            save.onreadystatechange = function(){
-                if (this.readyState == 4 && this.status == 200) {
-                    console.log("success");
+                var save = new XMLHttpRequest();
+                save.onreadystatechange = function(){
+                    if (this.readyState == 4 && this.status == 200) {
+                        console.log("success");
+                        cancel();
+                        alert("New Region/Zone created Successfully!");
+                        window.location.reload();
+                    }
                 }
-            }
-            save.open("POST", "admin_save_region.php", true);
-            save.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-            save.send("coords=" + JSON.stringify(regionArray) + "&collectors_id=" + collector_id + "&region_name=" + region_name);
+                save.open("POST", "admin_save_region.php", true);
+                save.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+                save.send("coords=" + JSON.stringify(regionArray) + "&collectors_id=" + collector_id + "&region_name=" + region_name);
 
-            regionArray.length = 0; // empty the array
+                regionArray.length = 0; // empty the array
 
             }
 
@@ -339,28 +350,28 @@
             <select id="collector">
                 <option selected disabled>-- District Council --</option>
                 <?php
-                    $get_from_dc_query = "SELECT DCID, Name FROM districtcouncil";
+                    $get_from_dc_query = "SELECT CollectorID, Name FROM tbl_collectors WHERE Category = 'District Council'";
                     if ($data = mysqli_query($conn, $get_from_dc_query)) {
                         while ($row = mysqli_fetch_assoc($data)) {
-                            echo "<option value=" . $row['DCID'] . ">" . $row['Name'] . "</option>";
+                            echo "<option value=" . $row['CollectorID'] . ">" . $row['Name'] . "</option>";
                         }
                     }
                 ?>
                 <option disabled>-- Municipality --</option>
                 <?php
-                    $get_from_mp_query = "SELECT MID, Name FROM municipality";
+                    $get_from_mp_query = "SELECT CollectorID, Name FROM tbl_collectors WHERE Category = 'Municipality'";
                     if ($data = mysqli_query($conn, $get_from_mp_query)) {
                         while ($row = mysqli_fetch_assoc($data)) {
-                            echo "<option value=" . $row['MID'] . ">" . $row['Name'] . "</option>";
+                            echo "<option value=" . $row['CollectorID'] . ">" . $row['Name'] . "</option>";
                         }
                     }
                 ?>
                 <option disabled>-- Recyclers --</option>
                 <?php
-                    $get_from_rc_query = "SELECT RegNo, Name FROM contractors";
+                    $get_from_rc_query = "SELECT RegNo, Name FROM tbl_contractors WHERE Category = 'Contractors'";
                     if ($data = mysqli_query($conn, $get_from_rc_query)) {
                         while ($row = mysqli_fetch_assoc($data)) {
-                            echo "<option value=" . $row['RegNo'] . ">" . $row['Name'] . "</option>";
+                            echo "<option value=" . $row['CollectorID'] . ">" . $row['Name'] . "</option>";
                         }
                     }
                 ?>
