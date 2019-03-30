@@ -67,8 +67,12 @@
 <<<<<<< HEAD
 =======
 
+<<<<<<< HEAD
 >>>>>>> zonemanagement
                     header('location: index_files/pages/Resident-pages/resident-home.php');
+=======
+                    header('location: index_files/pages/Generators/Resident-pages/resident-home.php');
+>>>>>>> allpages
                 } else {
                     // WRONG PASSWORD
                     echo "<script>alert('wrong password');</script>";

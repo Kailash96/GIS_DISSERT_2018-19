@@ -1,5 +1,5 @@
 <?php
-    include("../../../../config/db_connect.php");
+    include("../../../../../config/db_connect.php");
 
     $user_data = array();
     $bin_data = array();

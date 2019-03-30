@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <?php include("../../../../config/db_connect.php") ?>
-        <link rel="stylesheet" href="../../css_files/style.css" />
+        <?php include("../../../../../config/db_connect.php") ?>
+        <link rel="stylesheet" href="../../../css_files/style.css" />
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
         <style>
             #schedule_selected{
