@@ -2,20 +2,20 @@
 <html>
     <head>
         <title>Home | Binswiper</title>
-        <link rel="stylesheet" href="../../css_files/style.css" />
-        <link rel="stylesheet" href="../../css_files/overview.css" />
-        <script src="../../js_files/jquery_lib.js"></script>
+        <link rel="stylesheet" href="../../../css_files/style.css" />
+        <link rel="stylesheet" href="../../../css_files/overview.css" />
+        <script src="../../../js_files/jquery_lib.js"></script>
 
         <!-- LEAFLET ROUTING CSS -->
         <link rel="stylesheet" href="https://unpkg.com/leaflet@1.2.0/dist/leaflet.css" />
-        <link rel="stylesheet" href="../../css_files/leaflet-routing-machine.css" />
+        <link rel="stylesheet" href="../../../css_files/leaflet-routing-machine.css" />
 
         <!-- LEAFLET ROUTING, MARKING ETC -->
         <link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css" integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA==" crossorigin=""/>
         <script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js" integrity="sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg==" crossorigin=""></script>
 
         <!-- ROUTING MACHINE LOCAL-->
-        <script src="../../js_files/leaflet-routing-machine.js"></script>
+        <script src="../../../js_files/leaflet-routing-machine.js"></script>
 
         <!-- LEAFLET DRAW -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.css"/>
@@ -43,11 +43,11 @@
         <?php include("left_side_nav_bar.html"); ?>
         <?php include("top-nav-bar.html"); ?>
 
-        <?php include("../../../../config/db_connect.php"); ?>
+        <?php include("../../../../../config/db_connect.php"); ?>
         
         <div id="map"></div>
         <script src="https://unpkg.com/leaflet@1.2.0/dist/leaflet.js"></script>
-        <script src="../../js_files/leaflet-routing-machine.js"></script>
+        <script src="../../../js_files/leaflet-routing-machine.js"></script>
 
         <script>
             var map = L.map('map').setView([-20.220740, 57.776270], 12);
@@ -57,8 +57,8 @@
             }).addTo(map);
 
             var redIcon = new L.Icon({
-                iconUrl: '../../img/marker-red.png',
-                shadowUrl: '../../img/marker-shadow.png',
+                iconUrl: '../../../img/marker-red.png',
+                shadowUrl: '../../../img/marker-shadow.png',
                 iconSize: [25, 41],
                 iconAnchor: [12, 41],
                 popupAnchor: [1, -34],
@@ -66,8 +66,8 @@
             });
 
             var yellowIcon = new L.Icon({
-                iconUrl: '../../img/marker-yellow.png',
-                shadowUrl: '../../img/marker-shadow.png',
+                iconUrl: '../../../img/marker-yellow.png',
+                shadowUrl: '../../../img/marker-shadow.png',
                 iconSize: [25, 41],
                 iconAnchor: [12, 41],
                 popupAnchor: [1, -34],
@@ -75,8 +75,8 @@
             });
 
             var greenIcon = new L.Icon({
-                iconUrl: '../../img/marker-green.png',
-                shadowUrl: '../../img/marker-shadow.png',
+                iconUrl: '../../../img/marker-green.png',
+                shadowUrl: '../../../img/marker-shadow.png',
                 iconSize: [25, 41],
                 iconAnchor: [12, 41],
                 popupAnchor: [1, -34],
@@ -84,8 +84,8 @@
             });
 
             var blueIcon = new L.Icon({
-                iconUrl: '../../img/marker-blue.png',
-                shadowUrl: '../../img/marker-shadow.png',
+                iconUrl: '../../../img/marker-blue.png',
+                shadowUrl: '../../../img/marker-shadow.png',
                 iconSize: [25, 41],
                 iconAnchor: [12, 41],
                 popupAnchor: [1, -34],

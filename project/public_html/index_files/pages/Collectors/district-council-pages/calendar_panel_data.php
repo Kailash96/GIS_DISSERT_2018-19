@@ -1,6 +1,6 @@
 <?php
 
-    include("../../../../config/db_connect.php");
+    include("../../../../../config/db_connect.php");
 
     $slotID = $_POST['slotID'];
     $data = explode("_", $slotID);

@@ -2,7 +2,7 @@
 <html>
     <head>
         <title>Home | Binswiper</title>
-        <link rel="stylesheet" href="../../css_files/style.css" />
+        <link rel="stylesheet" href="../../../css_files/style.css" />
 
         <!-- MAP CSS AND JAVASCRIPT -->
         <link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css"
@@ -35,7 +35,7 @@
         <?php include("top-nav-bar.html"); ?>
 
         <?php
-            include("../../../../config/db_connect.php");
+            include("../../../../../config/db_connect.php");
 
             // QUERY FOR RESIDENTS
             $active_user_query = "SELECT LocationCoordinate FROM residents WHERE Active = 1";

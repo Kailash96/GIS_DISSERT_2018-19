@@ -1,6 +1,6 @@
 <?php
 
-    include("../../../../config/db_connect.php");
+    include("../../../../../config/db_connect.php");
 
     $day_date = $_POST['day_date'];
     $day_date = explode(" ", $day_date);
