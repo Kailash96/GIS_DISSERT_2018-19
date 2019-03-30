@@ -103,7 +103,7 @@
                 $(".blurry-background").css('visibility', 'hidden');
             }
 
-            function edit(nic, fullname){
+            function edit(nic, fullname, email){
                 event.preventDefault();
                 // ACTIVATE ACCOUNT
                 var activate = new XMLHttpRequest();
@@ -114,7 +114,7 @@
                 }
                 activate.open("POST", "activate-account.php", true);
                 activate.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-                activate.send("nic=" + nic + "&fname=" + fullname);
+                activate.send("nic=" + nic + "&fname=" + fullname + "&email=" + email);
                 
             }
 
@@ -173,7 +173,7 @@
             <h3 style="padding:0 20px;margin:0;color:#002246">Details Edit <input type='button' onclick='closeme()' value='X' class='top-right-close-button'></h3>
             <div class="reg-form-box">
                 <div style="padding:10px;">
-                    <form method="POST" onsubmit="edit(nic.value, fullname.value)" style="font-size:12px;font-weight:bold;color:#9F9F9F">
+                    <form method="POST" onsubmit="edit(nic.value, fullname.value, email.value)" style="font-size:12px;font-weight:bold;color:#9F9F9F">
                         NIC <input type="text" name="nic" placeholder="NIC" style="text-transform:uppercase" class="input-box" required /><br/><br/>
                         Full Name <input type="text" name="fullname" placeholder="Full Name" style="text-transform:capitalize" class="input-box" required /><br/><br/>
                         Tax Account Number <input type="text" name="tan" placeholder="Tax Account Number" class="input-box" /><br/><br/>

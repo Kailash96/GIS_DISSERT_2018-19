@@ -24,7 +24,7 @@
                         };
 
                     } else {
-                        // using flag to prevent repeated table update for more efficient processing power
+                        
                         $flag = false;
                     }
 
