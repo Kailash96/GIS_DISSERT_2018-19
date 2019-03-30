@@ -3,18 +3,28 @@
     <head>
         <title>Home | Binswiper</title>
         <?php include("../../../db_connect.php"); ?>
+        <?php
+            session_start();
+            if (!isset($_SESSION['userID'])) {
+                header('location: ../../../index.php');
+            } else {
+                $userid = $_SESSION['userID'];
+                $user_zone = $_SESSION['zone'];
+                $user_category = $_SESSION['category'];
+                if (isset($_GET['logout'])) {
+                    $offline = "UPDATE tbl_generators_login SET Status = 0 WHERE GeneratorID = '$userid'";
+                    mysqli_query($conn, $offline);
+                    session_destroy();
+                    header("Refresh:0");
+                }
+            }
+        ?>
         <link type="text/css" rel="stylesheet" href="../../css_files/resident-css.css" />
         <script type="text/javascript" src="../../js_files/script.js" /></script>
 
         <link type="text/css" rel="stylesheet" href="../../css_files/circle.css" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-        <?php
-            session_start();
-            if (!isset($_SESSION['userID'])) {
-                header('location: ../../../index.php');
-            }
-        ?>
         <style>
             .bins_box{
                 box-shadow:0 0 4px #002246;
@@ -80,11 +90,140 @@
             #changessaved{
                 display:none;
             }
+
+            /* Notifications */
+
+            .notification {
+                display: inline-block;
+                position: relative;
+                padding: 0.2em;
+                border-radius: 0.2em;
+                font-size: 1.1em;
+            }
+
+            .notification::before, 
+            .notification::after {
+                color: #004876;
+                text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+            }
+
+            .notification::before {
+                display: block;
+                content: "\f0f3";
+                font-family: "FontAwesome";
+                transform-origin: top center;
+            }
+
+            .notification::after {
+                font-family: Arial;
+                font-size: 0.7em;
+                position: absolute;
+                top: -16px;
+                left: 12px;
+                padding: 3px 5px 3px 4px;
+                line-height: 100%;
+                border: 2px #fff solid;
+                border-radius: 6px;
+                background: red;
+                color:white;
+                opacity: 0;
+                content: attr(data-count);
+                opacity: 0;
+                -webkit-transform: scale(0.5);
+                transform: scale(0.5);
+                transition: transform, opacity;
+                transition-duration: 0.3s;
+                transition-timing-function: ease-out;
+            }
+
+            .notification.notify::before {
+                -webkit-animation: ring 1.5s ease;
+                animation: ring 1.5s ease;
+            }
+
+            .notification.show-count::after {
+                -webkit-transform: scale(1);
+                transform: scale(1);
+                opacity: 1;
+            }
+
+            @-webkit-keyframes ring {
+                0% {
+                    -webkit-transform: rotate(35deg);
+                }
+                12.5% {
+                    -webkit-transform: rotate(-30deg);
+                }
+                25% {
+                    -webkit-transform: rotate(25deg);
+                }
+                37.5% {
+                    -webkit-transform: rotate(-20deg);
+                }
+                50% {
+                    -webkit-transform: rotate(15deg);
+                }
+                62.5% {
+                    -webkit-transform: rotate(-10deg);
+                }
+                75% {
+                    -webkit-transform: rotate(5deg);
+                }
+                100% {
+                    -webkit-transform: rotate(0deg);
+                }
+            }
+
+            @keyframes ring {
+                0% {
+                    -webkit-transform: rotate(35deg);
+                    transform: rotate(35deg);
+                }
+                12.5% {
+                    -webkit-transform: rotate(-30deg);
+                    transform: rotate(-30deg);
+                }
+                25% {
+                    -webkit-transform: rotate(25deg);
+                    transform: rotate(25deg);
+                }
+                37.5% {
+                    -webkit-transform: rotate(-20deg);
+                    transform: rotate(-20deg);
+                }
+                50% {
+                    -webkit-transform: rotate(15deg);
+                    transform: rotate(15deg);
+                }
+                62.5% {
+                    -webkit-transform: rotate(-10deg);
+                    transform: rotate(-10deg);
+                }
+                75% {
+                    -webkit-transform: rotate(5deg);
+                    transform: rotate(5deg);
+                }
+                100% {
+                    -webkit-transform: rotate(0deg);
+                    transform: rotate(0deg);
+                }
+            }
         </style>
+        <script>
+            function notify(count){
+                count = count || 0;
+                var el = document.querySelector('.notification');
+                el.setAttribute('data-count', count);
+                el.classList.remove('notify');
+                el.offsetWidth = el.offsetWidth;
+                el.classList.add('notify');
+                el.classList.add('show-count');
+            }
+        </script>
 
     </head>
     <input type="hidden" value="<?php echo $_SESSION['userID']; ?>" id='userid' />
-    <body style="padding:70px 45px;" onload="level_update(userid.value, 'citizen', 0)">
+    <body style="padding:70px 45px;" onload="level_update(userid.value, 'citizen', 0), notify(4);">
         <!-- TOP BAR -->
         <div class="top-bar">
             <h1 style="display:inline-block;margin:8px 0;"><i class='fa fa-trash'></i> Binswiper</h1>
@@ -93,21 +232,11 @@
                 <span id="savechanges" class="button" onclick="level_update(userid.value, 'citizen', 1)"><i class="fa fa-database" style="color:red;"></i> Save Changes?</span>
                 <span style="cursor:default;color:green;border:2px solid green;border-radius:4px" id="changessaved" class="button">Changes Saved <i class="fa fa-check-square-o"></i></span>
                 <span style="margin-right:50px;text-transform:capitalize"><i class="fa fa-user-circle-o"></i> <?php echo $_SESSION['username'] ?></span>
+                <div style="display:inline-block;margin-right:20px">
+                    <div class="notification"></div>
+                </div>
                 <a href="" style="color:#002246;text-decoration:none;margin-right:50px;"><i class="fa fa-wrench"></i> Settings</a>
                 <a href="?logout=logout" style="color:#002246;text-decoration:none;"><i class="fa fa-sign-out"></i> Logout</a>
-                <?php
-                    if (isset($_GET['logout'])) {
-                        $userid = $_SESSION['userID'];
-                        $offline = "UPDATE tbl_generators_login SET Status = 0 WHERE GeneratorID = '$userid'";
-                        mysqli_query($conn, $offline);
-                        session_destroy();
-                        header("Refresh:0");
-                    } else {
-                        $userid = $_SESSION['userID'];
-                        $user_zone = $_SESSION['zone'];
-                        $user_category = $_SESSION['category'];
-                    }
-                ?>
             </div>
         </div>
 

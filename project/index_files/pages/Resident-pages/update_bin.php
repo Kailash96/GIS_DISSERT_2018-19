@@ -25,10 +25,7 @@
         $paper_level = $_POST['paper_level'];
         // $other_level
         $other_level = $_POST['other_level'];
-
         $current_date = date("Y-m-d");
-        // $timestamp = strtotime(date("h:i:s")) + (60 * 60 * 4);
-        // $current_time = date("H:i:s", $timestamp);
         $current_time = date("H:i:s");
 
         $update_query = "

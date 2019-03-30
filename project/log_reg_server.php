@@ -64,6 +64,10 @@
 
                     $online = "UPDATE tbl_generators_login SET Status = 1 WHERE GeneratorID = '$userid'";
                     mysqli_query($conn, $online);
+<<<<<<< HEAD
+=======
+
+>>>>>>> zonemanagement
                     header('location: index_files/pages/Resident-pages/resident-home.php');
                 } else {
                     // WRONG PASSWORD
