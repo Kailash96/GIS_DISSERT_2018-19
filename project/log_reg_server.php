@@ -58,6 +58,8 @@
                     if ($getData = mysqli_query($conn, $getDataQuery)) {
                         $value = mysqli_fetch_assoc($getData);
                         $_SESSION['username'] = $value['Name'];
+                        $_SESSION['zone'] = $value['zoneID'];
+                        $_SESSION['category'] = $value['Category'];
                     }
 
                     $online = "UPDATE tbl_generators_login SET Status = 1 WHERE GeneratorID = '$userid'";

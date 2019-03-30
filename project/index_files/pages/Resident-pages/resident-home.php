@@ -102,10 +102,24 @@
                         mysqli_query($conn, $offline);
                         session_destroy();
                         header("Refresh:0");
+                    } else {
+                        $userid = $_SESSION['userID'];
+                        $user_zone = $_SESSION['zone'];
+                        $user_category = $_SESSION['category'];
                     }
                 ?>
             </div>
         </div>
+
+        <?php
+            // GET COLLECTION DATES
+            // ORGANIC
+            $nextCollectionOrganic = "SELECT * FROM tbl_schedule WHERE Zone = $user_zone AND Category = '$user_category' AND SchedulingDate = (SELECT MAX(SchedulingDate) FROM tbl_schedule WHERE Zone = $user_zone) LIMIT 1";
+            if ($organic_date = mysqli_query($conn, $nextCollectionOrganic)) {
+                $organic_d = mysqli_fetch_assoc($organic_date)['CollectionDate'];
+            }
+
+        ?>
 
         <!-- All Bins -->
         <div class="all_bins_container">
@@ -124,7 +138,7 @@
                     <td style="font-size:14px">
                         Next Collection:
                         <div style="font-size:18px;color:red">
-                            <i class="fa fa-calendar"></i> 16 Feb 2019
+                            <i class="fa fa-calendar"></i> <?php echo date("D, d M Y", strtotime($organic_d)); ?>
                         </div>
                     </td>
                 </tr>
