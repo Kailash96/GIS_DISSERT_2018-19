@@ -68,7 +68,7 @@
                 }
 
                 // SETS THE ZONES
-                $getZonesCoords_query = "SELECT coordinates FROM tbl_zones";
+                $getZonesCoords_query = "SELECT coordinates FROM tbl_zones WHERE regionID = 1";
                 if ($results = mysqli_query($GLOBALS['conn'], $getZonesCoords_query)) {
                     while ($row = mysqli_fetch_assoc($results)) {
                         $coords = $row['coordinates'];

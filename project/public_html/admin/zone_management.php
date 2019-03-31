@@ -92,18 +92,12 @@
 
         <?php
             include("../../config/db_connect.php");
-
-            // QUERY FOR RESIDENTS
-            $active_user_query = "SELECT LocationCoordinate FROM tbl_residents WHERE Active = 1";
-            // QUERY FOR INDUSTRIALS
-            // QUERY FOR COMMERCIALS
-
         ?>
 
         <div id="map"></div>
 
         <script>
-            var map = L.map('map').setView([-20.220740, 57.776270], 12);
+            var map = L.map('map').setView([-20.220740, 57.776270], 11);
 
             L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
                 attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
@@ -161,7 +155,7 @@
                 },
                 edit: {
                     featureGroup: editableLayers, //REQUIRED!!
-                    remove: false,
+                    remove: true,
                 }
             };
 
@@ -175,7 +169,7 @@
 
             var regionArray = [], zoneArray = [];
 
-            map.on('draw:created', function(e) {
+            map.on(L.Draw.Event.CREATED, function(e) {
                 var type = e.layerType,
                     layer = e.layer;
 
@@ -196,6 +190,7 @@
                     zoneArray.push(JSON.parse(cFormat));
                 }
                 editableLayers.addLayer(layer);
+                console.log(layer);
             });
 
             
@@ -256,6 +251,7 @@
                 } else if (zone) {
                     // save in table zone
                     save_zone(1);
+                    /*
                     var zoneAssignment = new XMLHttpRequest();
                     zoneAssignment.onreadystatechange = function(){
                         // to redraw markers function redraw_markers() -> need region parameter
@@ -263,6 +259,7 @@
                     zoneAssignment.open("POST", "checkZoneAssignment.php", true);
                     zoneAssignment.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
                     zoneAssignment.send();
+                    */
                 }
 
             }
