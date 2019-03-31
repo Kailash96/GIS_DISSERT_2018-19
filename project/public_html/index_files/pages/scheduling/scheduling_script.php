@@ -12,7 +12,7 @@
 
         $tbl_route_array = array();
         $category_array = array("Resident", "Commercial", "Industrial");
-        $waste_type_array = array("Organic", "Plastic", "Paper", "Other");
+        $waste_type = array("Organic", "Plastic", "Paper", "Other");
 
         // LOOPING INTO TABLE REGION
         $region_query = "SELECT * FROM tbl_region";
@@ -28,10 +28,10 @@
 
                         for ($c = 0; $c < sizeof($category_array); $c++) {
 
-                            for ($w = 0; $w < sizeof($waste_type_array); $w++) {
+                            for ($w = 0; $w < sizeof($waste_type); $w++) {
                                 $region_name = $region_rw['regionName'];
                                 $zone_ID = $zone_rw['zoneID'];
-                                $getRoute = getRoute($region_name, $zone_ID, $category_array[$c], $waste_type_array[$w]);
+                                $getRoute = getRoute($region_name, $zone_ID, $category_array[$c], $waste_type[$w]);
 
                                 if ($getRoute > 0) {
                                     array_push(
@@ -42,11 +42,10 @@
                                             $zone_ID,
                                             $region_name,
                                             $category_array[$c],
-                                            $waste_type_array[$w]
+                                            $waste_type[$w]
                                         )
                                     );
                                 }
-
                             }
 
                         }

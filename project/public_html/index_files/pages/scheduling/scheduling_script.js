@@ -13,11 +13,7 @@ function getLocations(){
     getCoords.open("POST", "scheduling_script.php", true);
     getCoords.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
     getCoords.send("act=getRoute");
-    
    
-    // TESTING
-    // var route = [];
-
 }
 
 function travellingSalesman(data) {
@@ -59,7 +55,8 @@ function tripMaker(){
     setup.onreadystatechange = function(){
         if (this.readyState == 4 && this.status == 200) {
             var tripArray = JSON.parse(this.responseText);
-            configure_trip(tripArray);
+            // configure_trip(tripArray);
+            console.log(tripArray);
         }
     }
     setup.open("POST", "scheduling_script.php", true);
