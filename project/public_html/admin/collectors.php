@@ -76,7 +76,6 @@
             <br/>
             Collectors List:
             <div id="content_list"></div>
-
         </div>
 
         <div id="collectorForm">
