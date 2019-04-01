@@ -55,8 +55,8 @@ function tripMaker(){
     setup.onreadystatechange = function(){
         if (this.readyState == 4 && this.status == 200) {
             var tripArray = JSON.parse(this.responseText);
-            // configure_trip(tripArray);
-            console.log(tripArray);
+            configure_trip(tripArray);
+            // console.log(tripArray);
         }
     }
     setup.open("POST", "scheduling_script.php", true);
