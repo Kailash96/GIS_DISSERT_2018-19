@@ -109,70 +109,65 @@
 
     } else if ($act == "setTrips") {
 
-        // GET ALL THE TRUCKS
-        $all_trucks_array = array();
-        $getAllTrucksQuery = "SELECT * FROM tbl_trucks INNER JOIN tbl_collectors ON tbl_collectors.CollectorID = tbl_trucks.OwnerID WHERE Status = 1";
-        if ($getAllTrucks = mysqli_query($conn, $getAllTrucksQuery)) {
-            while ($allTrucks = mysqli_fetch_assoc($getAllTrucks)) {
-                array_push($all_trucks_array, array($allTrucks['Category'], $allTrucks['WasteType'], $allTrucks['RegionName'], $allTrucks['Capacity'], $allTrucks['PlateNumber'], 1));
-            }
-        }
-
-        // SETUP OF AN ARRAY TO KEEP TRACK OF WHICH TRUCK HAS ALREADY BEEN ASSIGNED A ZONE
-        // KEEPING TRACK HELPS THE LOOP TO CHOOSE THE NEXT AVAILABLE TRUCK INSTEAD OF UNAVAILABLE ONE
-        $allTrucksArrayRearranged = array();
-        for ($r = 0; $r < sizeof($all_trucks_array); $r++) {
-            if (sizeof($allTrucksArrayRearranged) < 1) {
-                array_push($allTrucksArrayRearranged, array($all_trucks_array[$r][0], $all_trucks_array[$r][1], $all_trucks_array[$r][2], 1, 1));
-            } else {
-                for ($j = 0; $j < sizeof($allTrucksArrayRearranged); $j++) {
-                    if (($all_trucks_array[$r][0] == $allTrucksArrayRearranged[$j][0]) && ($all_trucks_array[$r][1] == $allTrucksArrayRearranged[$j][1]) && ($all_trucks_array[$r][2] == $allTrucksArrayRearranged[$j][2])) {
-                        $allTrucksArrayRearranged[$j][3] = $allTrucksArrayRearranged[$j][3] + 1;
-                        $allTrucksArrayRearranged[$j][4] = $allTrucksArrayRearranged[$j][4] + 1;
-                    } else {
-                        array_push($allTrucksArrayRearranged, array($all_trucks_array[$r][0], $all_trucks_array[$r][1], $all_trucks_array[$r][2], 1, 1));
-                    }
+        function getTrucks($category, $wastetype, $regionname) {
+            global $conn;
+             // GET ALL THE TRUCKS
+            $all_trucks_array = array();
+            $getAllTrucksQuery = "SELECT * FROM tbl_trucks INNER JOIN tbl_collectors ON tbl_collectors.CollectorID = tbl_trucks.OwnerID WHERE Status = 1 AND tbl_trucks.Category = '$category' AND tbl_trucks.WasteType = '$wastetype' AND tbl_collectors.RegionName = '$regionname'";
+            if ($getAllTrucks = mysqli_query($conn, $getAllTrucksQuery)) {
+                while ($allTrucks = mysqli_fetch_assoc($getAllTrucks)) {
+                    array_push($all_trucks_array, array($allTrucks['Category'], $allTrucks['WasteType'], $allTrucks['RegionName'], $allTrucks['Capacity'], $allTrucks['PlateNumber'], 1));
                 }
             }
+            return $all_trucks_array;
         }
 
+        $category_array = array("Resident", "Commercial", "Industrial");
+        $waste_type = array("Organic", "Plastic", "Paper", "Other");
         $tripArray = array();
-        $today = date("Y-m-d");
-        $loopTblRouteQuery = "SELECT * FROM tbl_route_per_zone WHERE Date_Created = '$today'";
-        if ($getPath = mysqli_query($conn, $loopTblRouteQuery)) {
-            while ($path = mysqli_fetch_assoc($getPath)) {
 
-                $tripBuilderArray = array();
-
-                $path_array = json_decode($path['Route_Path']);
-                $waste_amount = json_decode($path['AmountPerHouse']);
-                for ($i = 0; $i < sizeof($path_array); $i++) {
-                    array_push($tripBuilderArray, array($path_array[$i], $waste_amount[$i]));
-                }
-
-                $truckRankAssigned = createTrips($tripBuilderArray, $path['RegionName'], $path['Category'], $path['Waste_Type'], $all_trucks_array, $path['RPZ_ID']);
-
-                if ($truckRankAssigned > -1) {
-                    $all_trucks_array[$truckRankAssigned][5] = 0;
-                    for ($c = 0; $c < sizeof($allTrucksArrayRearranged); $c++) {
-                        if (($all_trucks_array[$truckRankAssigned][0] == $allTrucksArrayRearranged[$c][0]) && ($all_trucks_array[$truckRankAssigned][1] == $allTrucksArrayRearranged[$c][1]) && ($all_trucks_array[$truckRankAssigned][2] == $allTrucksArrayRearranged[$c][2])) {
-                            $allTrucksArrayRearranged[$c][4] = $allTrucksArrayRearranged[$c][4] - 1;
-                            if ($allTrucksArrayRearranged[$c][4] < 1) {
-                                $allTrucksArrayRearranged[$c][4] = $allTrucksArrayRearranged[$c][3];
-                                for ($reset = 0; $reset < sizeof($all_trucks_array); $reset++) {
-                                    if (($all_trucks_array[$reset][0] == $allTrucksArrayRearranged[$c][0]) && ($all_trucks_array[$reset][1] == $allTrucksArrayRearranged[$c][1]) && ($all_trucks_array[$reset][2] == $allTrucksArrayRearranged[$c][2])) {
-                                        $all_trucks_array[$reset][5] = 1;
+        for ($c = 0; $c < sizeof($category_array); $c++) {
+            $category = $category_array[$c];
+            for ($w = 0; $w < sizeof($waste_type); $w++) {
+                $wastetype = $waste_type[$w];
+                // GET REGIONS
+                $getRegionQuery = "SELECT * FROM tbl_region";
+                if ($getRegion = mysqli_query($conn, $getRegionQuery)) {
+                    while ($region = mysqli_fetch_assoc($getRegion)) {
+                        $regionid = $region['regionID'];
+                        $regionname = $region['regionName'];
+                        // GET ZONES FROM EACH REGION
+                        $getZoneQuery = "SELECT * FROM tbl_zones WHERE regionID = $regionid";
+                        if ($getZone = mysqli_query($conn, $getZoneQuery)) {
+                            while ($zone = mysqli_fetch_assoc($getZone)) {
+                                // TRUCK ARRAY WILL BE OF SELECTED CATEGORY, WASTETYPE, ETC
+                                $trucks_details = getTrucks($category, $wastetype, $regionname);
+                                $zoneid = $zone['zoneID'];
+                                $buildTripBuilderQuery = "SELECT * FROM tbl_route_per_zone WHERE Category = '$category' AND Waste_Type = '$wastetype' AND Zone = $zoneid AND RegionName = '$regionname'";
+                                if ($buildTripBuilder = mysqli_query($conn, $buildTripBuilderQuery)) {
+                                    while ($buildTrip = mysqli_fetch_assoc($buildTripBuilder)) {
+                                        $tripBuilder = array();
+                                        array_push($tripBuilder, $buildTrip['Route_Path']);
+                                        array_push($tripBuilder, $buildTrip['AmountPerHouse']);
+                                        setTrip(json_encode($tripBuilder), $category, $buildTrip['RPZ_ID']);
                                     }
+                                } else {
+                                    echo json_encode("failed to build trip builder!");
+                                    break;
                                 }
                             }
+                        } else {
+                            echo json_encode("Failed to get zone!");
                             break;
                         }
                     }
+                } else {
+                    echo json_encode("Failed to get Region!");
+                    break;
                 }
-
             }
         }
-        
+
         echo json_encode($tripArray);
 
     } else if ($act == "saveTrips") {
