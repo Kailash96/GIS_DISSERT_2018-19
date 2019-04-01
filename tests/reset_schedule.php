@@ -1,5 +1,5 @@
 <?php
-    include("../project/db_connect.php");
+    include("../project/config/db_connect.php");
 
     $reset_trip = "DELETE FROM tbl_trips";
     $reset_trip_1 = "ALTER TABLE tbl_trips AUTO_INCREMENT 0";
