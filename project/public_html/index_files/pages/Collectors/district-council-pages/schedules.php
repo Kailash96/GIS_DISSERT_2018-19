@@ -11,19 +11,26 @@
             }
         </style>
         <script>
-            var data = JSON.stringify([        
+
+            /*
+            var data = JSON.stringify([    
                 {
                 title: 'DC1020 zone:20',
                 start: '2019-03-04T05:00:00',
                 end: '2019-03-04T07:30:00',
                 color: 'yellow'
-                },
+                }
+                ,
                 {
                 title: 'DC1020 zone:23',
                 start: '2019-03-04T08:00:00',
                 end: '2019-03-04T09:30:00',
                 color: 'yellow'
-                },
+                }
+            ]);
+            console.log(data);
+            */
+                /*,
                 {
                 title: 'DC1020 zone:23',
                 start: '2019-03-04T10:00:00',
@@ -100,7 +107,7 @@
                 start: '2019-03-11T07:00:00',
                 color: 'yellow'
                 }
-                
+                */
                 /*
                 {
                 title: 'Meeting',
@@ -150,8 +157,9 @@
                 rendering: 'background',
                 color: '#ff9f89'
                 }
-                */
+                
             ]);
+            */
         </script>
     </head>
     <body>

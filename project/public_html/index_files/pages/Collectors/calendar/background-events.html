@@ -13,28 +13,43 @@
 <script src='../calendar/packages/list/main.js'></script>
 <script>
 
-  
-
-  document.addEventListener('DOMContentLoaded', function() {
-    var calendarEl = document.getElementById('calendar');
-
-    var calendar = new FullCalendar.Calendar(calendarEl, {
-      plugins: [ 'interaction', 'dayGrid', 'timeGrid', 'list' ],
-      header: {
-        left: 'prev,next today',
-        center: 'title',
-        right: 'dayGridMonth,timeGridWeek,timeGridDay,listMonth'
-      },
-      defaultDate: new Date(),
-      navLinks: true, // can click day/week names to navigate views
-      businessHours: true, // display business hours
-      editable: false,
-      events: JSON.parse(data)
+  function calendar(parsed_data) {
+    // console.log(data);
+    document.addEventListener('DOMContentLoaded', function() {
+      var calendarEl = document.getElementById('calendar');
+      var calendar = new FullCalendar.Calendar(calendarEl, {
+        plugins: [ 'interaction', 'dayGrid', 'timeGrid', 'list' ],
+        header: {
+          left: 'prev,next today',
+          center: 'title',
+          right: 'dayGridMonth,timeGridWeek,timeGridDay,listMonth'
+        },
+        defaultDate: new Date(),
+        navLinks: true, // can click day/week names to navigate views
+        businessHours: true, // display business hours
+        editable: false,
+        events: data
+      });
+      calendar.render();
     });
 
-    calendar.render();
-  });
+  }
 
+  function fetch_data() {
+    
+    var getData = new XMLHttpRequest();
+    getData.onreadystatechange = function(){
+        if (this.readyState == 4 && this.status == 200) {
+            var data_returned = JSON.parse(this.responseText);
+            console.log(JSON.stringify(data_returned[0]));
+            calendar(data_returned);
+        }
+    }
+    getData.open("POST", "../district-council-pages/schedule_details.php", true);
+    getData.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+    getData.send();
+    
+  }
 </script>
 <style>
 
@@ -52,7 +67,7 @@
 
 </style>
 </head>
-<body>
+<body onload="fetch_data()">
 
   <div id='calendar'></div>
 
