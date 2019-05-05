@@ -12,9 +12,8 @@
 <script src='../calendar/packages/timegrid/main.js'></script>
 <script src='../calendar/packages/list/main.js'></script>
 <script>
-
+  
   function calendar(parsed_data) {
-    // console.log(data);
     document.addEventListener('DOMContentLoaded', function() {
       var calendarEl = document.getElementById('calendar');
       var calendar = new FullCalendar.Calendar(calendarEl, {
@@ -27,12 +26,11 @@
         defaultDate: new Date(),
         navLinks: true, // can click day/week names to navigate views
         businessHours: true, // display business hours
-        editable: false,
-        events: data
+        editable: true,
+        events: parsed_data
       });
       calendar.render();
     });
-
   }
 
   function fetch_data() {
@@ -41,15 +39,18 @@
     getData.onreadystatechange = function(){
         if (this.readyState == 4 && this.status == 200) {
             var data_returned = JSON.parse(this.responseText);
-            console.log(JSON.stringify(data_returned[0]));
             calendar(data_returned);
         }
     }
-    getData.open("POST", "../district-council-pages/schedule_details.php", true);
+    getData.open("POST", "../district-council-pages/schedule_details.php", false);
     getData.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
     getData.send();
     
   }
+
+  fetch_data();
+
+
 </script>
 <style>
 
@@ -67,7 +68,7 @@
 
 </style>
 </head>
-<body onload="fetch_data()">
+<body>
 
   <div id='calendar'></div>
 
