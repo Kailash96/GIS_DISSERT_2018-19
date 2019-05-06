@@ -107,18 +107,19 @@
 
             function popupInfo(){
                 var USER_ID = this.options.markerID;
-                show();
 
                 var userData = new XMLHttpRequest();
                 userData.onreadystatechange = function(){
                     if (this.readyState == 4 && this.status == 200) {
-                        var content = JSON.parse(this.responseText);
-                        document.getElementById("usr_panel").innerHTML = content;
+                        var content_value = JSON.parse(this.responseText);
+                        document.getElementById("usr_panel").innerHTML = content_value;
+                        show();
                     }
                 }
                 userData.open("POST", "user_data.php", true);
                 userData.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
                 userData.send("userID=" + USER_ID);
+
             }
             
             <?php

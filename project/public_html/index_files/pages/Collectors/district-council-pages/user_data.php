@@ -1,10 +1,10 @@
 <?php
-    include("../../../../config/db_connect.php");
+    include("../../../../../config/db_connect.php");
 
     $userID = $_POST['userID'];
 
     $data = array();
-
+    
     // GET USER BIN LEVELS
     $userBinLevelQuery = "SELECT * FROM tbl_waste_gen WHERE generatorID = '$userID' ORDER BY wgID DESC LIMIT 1";
     if (mysqli_num_rows($result = mysqli_query($conn, $userBinLevelQuery)) > 0) {
@@ -19,7 +19,7 @@
         array_push($data, 0);
         array_push($data, 0);
     }
-
+    
     // GET USER DETAILS
     $userDataQuery = "SELECT GeneratorID, Name, Address, PhoneNumber, Email, Country, tbl_generator.ZoneID AS usr_zone, tbl_region.regionName AS usr_region FROM ((tbl_generator LEFT JOIN tbl_zones ON tbl_generator.zoneID = tbl_zones.zoneID) LEFT JOIN tbl_region ON tbl_zones.regionID = tbl_region.regionID) WHERE tbl_generator.GeneratorID = '$userID' LIMIT 1";
     if ($result = mysqli_query($conn, $userDataQuery)) {
