@@ -32,11 +32,14 @@
             </div>
         </div>
 
+        <!-- 
         <h1>temporary links:</h1><br/>
         <a href="index_files/pages/Resident-pages/resident-home.php" target="_blank">resident home page</a><br/>
         <a href="index_files/pages/Collectors/district-council-pages/overview.php" target="_blank">district council page</a><br/>
         <a href="">municipality page</a><br/>
         <a href="">local authorities</a><br/>
         <a href="index_files/pages/employees/employee-signin.php" target="_blank">Employee page</a>
+        -->
+        
     </body>
 </html>

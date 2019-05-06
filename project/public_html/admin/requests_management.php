@@ -191,7 +191,7 @@
                     </form>
                 </div>
                 <div align="right" style="padding:10px">
-                    <?php include('../getlocationmap.php'); ?>
+                    <?php include('../index_files/pages/getlocationmap.php'); ?>
                     <script>
                         function viewDetails(genID){
 
