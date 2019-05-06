@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html>
     <head>
-        <?php include_once('../../log_reg_server.php'); ?>
+        <?php include_once('../../../config/log_reg_server.php'); ?>
         <title>Registration Form | Binswiper</title>
         <link type="text/css" rel="stylesheet" href="../css_files/style.css" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -349,15 +349,15 @@
                                     if ($_GET['reg'] == "resident") {
                                         echo '
                                         <div style="width:50%;padding:50px 30px 0 30px">
-                                            <img src="Resident-pages/img/sorting.png" style="width:100%"/>';
+                                            <img src="Generators/Resident-pages/img/sorting.png" style="width:100%"/>';
                                     } else if ($_GET['reg'] == "commercial") {
                                         echo '
                                         <div style="width:50%;padding:4px 0 0 30px">
-                                            <img src="commercial_pages/img/sorting.png" style="width:100%"/>';
+                                            <img src="Generators/commercial_pages/img/sorting.png" style="width:100%"/>';
                                     } else {
                                         echo '
                                         <div style="width:50%;padding:50px 30px 0 30px">
-                                            <img src="industry_pages/img/sorting.png" style="width:100%"/>';
+                                            <img src="Generators/industry_pages/img/sorting.png" style="width:100%"/>';
                                     }
                                 ?>
                             </div>
