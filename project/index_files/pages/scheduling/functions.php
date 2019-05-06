@@ -79,10 +79,6 @@
             }
 
             if (sizeof($route_array) > 0) {
-                // $tsp = travellingSalesman($route_array, $wasteAmountPerUser);
-                // $optimized_route = $tsp[0];
-                // $optimized_route_waste_amount = $tsp[1];
-                // array_push($data_array, array($optimized_route, $numOfHouses, $total_waste, $optimized_route_waste_amount));
                 array_push($data_array, array($route_array, $numOfHouses, $total_waste, $wasteAmountPerUser));
                 return $data_array;
             } else {
@@ -131,6 +127,7 @@
 
     }
 
+<<<<<<< HEAD
     $grid = array();
     $completed = array();
     // RETURNS AN ARRAY OF OPTIMIZED ROUTING AND REARRANGED WASTE AMOUNT ARRAY
@@ -176,4 +173,6 @@
         
     }
 
+=======
+>>>>>>> tsp
 ?>
