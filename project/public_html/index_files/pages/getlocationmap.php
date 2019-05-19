@@ -29,6 +29,7 @@
   <div class="map-holder" style="position:relative">
     <div style="display:flex;flex-direction:column;position:absolute;top:10px;right:10px;z-index:2">
       <input type="hidden" name="country" value="Mauritius" />
+      <!-- SELECT REGIONS -->
       <select class="input-box" name="region" onchange="validate_step_2()" required>
         <option selected="true" disabled="true">Select Region</option>
         <option value="Flacq">Flacq</option>
@@ -66,12 +67,15 @@
             function searchLoc(country_val, address_val, region_val){
               if (validate_step_2()){
                 // GEOCODE
+                // CONVERT ADDRESS TO COORDINATES
                 L.esri.Geocoding.geocode().text(address_val + ' ' + region_val + ' ' + country_val).run(function(err, result, response){
                   // result_layer.addLayer(
+                    // IF MARKER EXISTS, REMOVES MARKER
                     if (prevMarker != ""){
                       map.removeLayer(prevMarker);
                     }
                     
+                    // CREATE MARKER
                     prevMarker = L.marker(result.results[0].latlng, {draggable:'true'}).addTo(map);
                     var position = prevMarker.getLatLng();
                     var reformat = position.lat + "," + position.lng;
@@ -82,6 +86,7 @@
                       position = prevMarker.getLatLng();
                       // function to set value in input type hidden
                       reformat = position.lat + "," + position.lng;
+                      // SET MAP CENTER
                       map.setView([position.lat, position.lng], 16);
                       setValue(reformat);
                     });

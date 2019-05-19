@@ -14,6 +14,7 @@ function level_update(user_id, generator_type, act){
         var domestic_level = document.getElementById("domestic_level").value;
         crr_level_domestic = domestic_level;
 
+        // CONVERT TO PERCENTAGE
         domestic_level = parseInt((domestic_level / bin_capacity) * 100);
 
         var plastic_level = document.getElementById("plastic_level").value;

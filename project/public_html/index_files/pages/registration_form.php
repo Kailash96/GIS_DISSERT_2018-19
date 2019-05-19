@@ -237,6 +237,7 @@
                 var phone = $("input[name='phone']").val();
                 var email = $("input[name='email']").val();
 
+                // CHECK IF TEXTBOXES ARE EMPTY
                 if (nic == "" || surname == "" || firstname == "" || phone == "" || email == "") {
                     error = true;
                 }
@@ -346,6 +347,7 @@
                                 <button class="submit_button" id="next_button" onclick="next()">Next <i class="fa fa-toggle-right"></i></button>
                             </div>
                                 <?php
+                                    // DIFFERENT PICTURES FOR EACH TYPE
                                     if ($_GET['reg'] == "resident") {
                                         echo '
                                         <div style="width:50%;padding:50px 30px 0 30px">

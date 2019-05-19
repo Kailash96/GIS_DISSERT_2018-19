@@ -21,11 +21,12 @@
         xmlhttp.onreadystatechange = function(){
             if (this.readyState == 4 && this.status == 200){
                 var dataValue = JSON.parse(this.responseText);
-                if ((dataValue[0] >= 0) && (dataValue[0] != current_value)){
+                if ((dataValue[0] > 0) && (dataValue[0] != current_value)){
                     document.getElementById("counter").style.visibility = "visible";
                     document.getElementById("counter").innerHTML = dataValue[0];
                     current_value = dataValue[0];
                     if (document.getElementById("LORequests")) {
+                        // DISPLAY LIST OF DATA
                         document.getElementById("LORequests").innerHTML = dataValue[1];
                     }
                 } else if (dataValue[0] == 0) {
@@ -33,10 +34,13 @@
                 }                  
             }
         }
+        // RETRIEVE FROM CHECKREQUEST.PHP PAGE
         xmlhttp.open("POST", "checkRequest.php", true);
         xmlhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
         xmlhttp.send("checker=" + current_value);
     }
+
+    // EXECUTE UPDATE FUNCTION EVERY 2 SECONDS
     setInterval(update, 2000);
 
     function getNoZone(){

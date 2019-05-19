@@ -208,6 +208,24 @@
                     transform: rotate(0deg);
                 }
             }
+
+            .more_option_box{
+                background-color:white;
+                border:1px solid black;
+                position:fixed;
+                right:50px;
+                top:60px;
+                padding:1px;
+                display:none;
+            }
+            .more_option_box a{
+                display:block;
+                margin:0;
+                padding:4px 50px 4px 8px;
+            }
+            .more_option_box a:hover{
+                background-color:#DFDFDF;
+            }
         </style>
         <script>
             function notify(count){
@@ -218,6 +236,10 @@
                 el.offsetWidth = el.offsetWidth;
                 el.classList.add('notify');
                 el.classList.add('show-count');
+            }
+
+            function open_more_options(){
+                $("#more_option").toggle();
             }
         </script>
 
@@ -235,9 +257,14 @@
                 <div style="display:inline-block;margin-right:20px">
                     <div class="notification"></div>
                 </div>
-                <a href="" style="color:#002246;text-decoration:none;margin-right:50px;"><i class="fa fa-wrench"></i> Settings</a>
-                <a href="?logout=logout" style="color:#002246;text-decoration:none;"><i class="fa fa-sign-out"></i> Logout</a>
+                <i class="fa fa-bars" style="cursor:pointer;" onclick="open_more_options()"></i>
             </div>
+        </div>
+
+        <div class="more_option_box" id="more_option">
+            <a href="" style="color:#002246;text-decoration:none;">Collection Request</a>
+            <a href="" style="color:#002246;text-decoration:none;"><i class="fa fa-wrench"></i> Settings</a>
+            <a href="?logout=logout" style="color:#002246;text-decoration:none;"><i class="fa fa-sign-out"></i> Logout</a>
         </div>
 
         <?php

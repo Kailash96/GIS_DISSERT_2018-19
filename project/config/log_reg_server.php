@@ -28,6 +28,7 @@
             if ($my_result = mysqli_query($GLOBALS['conn'], $zone_query)) {
                 while ($row = mysqli_fetch_assoc($my_result)) {
                     if (inside($usr_location_arr, json_decode($row['coordinates']))){
+                        // IF LOCATION IN ZONE, RETURN ZONE ID
                         return $row['zoneID'];
                     }
                 }
@@ -43,11 +44,14 @@
             $password = SHA1($_POST['userpassword']);
 
             $checkID_query = "SELECT * FROM tbl_generators_login WHERE GeneratorID = '$userid'";
-            $checkPass_query = "SELECT * FROM tbl_generators_login WHERE Password = '$password'";
+            $checkPass_query = "SELECT * FROM tbl_generators_login WHERE GeneratorID = '$userid' AND Password = '$password'";
 
+            // VERIFIES ID
             if (mysqli_num_rows($checkCat = mysqli_query($conn, $checkID_query)) > 0){
+                // VERIFIES PASSWORD
                 if (mysqli_num_rows($result = mysqli_query($conn, $checkPass_query)) > 0){
 
+                    // SUCCESSFUL LOGIN - SET SESSION
                     session_start();
                     $_SESSION['userID'] = $userid;
                     
@@ -62,6 +66,7 @@
                         $_SESSION['category'] = $value['Category'];
                     }
 
+                    // UPDATE DATABASE
                     $online = "UPDATE tbl_generators_login SET Status = 1 WHERE GeneratorID = '$userid'";
                     mysqli_query($conn, $online);
 
