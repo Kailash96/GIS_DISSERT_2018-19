@@ -130,6 +130,9 @@ function save_to_tbl_trips(trips_array) {
 
             if (response == 1) {
                 update_schedule();
+                console.log(response);
+            } else {
+                console.log(response);
             }
 
         }
