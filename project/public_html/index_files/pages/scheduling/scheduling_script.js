@@ -77,7 +77,7 @@ function configure_trip(trip_array){
         for (var TA = 1; TA < trip_array[t][0].length; TA++) {
             var pointA = trip_array[t][0][TA - 1].split(",");
             var pointB = trip_array[t][0][TA].split(",");
-            var collection_delay = 3; // 3MINS COLLECTION TIME BUFFER
+            var collection_delay = 120; // 3MINS COLLECTION TIME BUFFER
             total_duration = collection_delay + 15; // (getDuration(pointA, pointB) + collection_delay); // IN MINS
             total_distance += getDistance(pointA, pointB) / 1000; // IN KM
         }
@@ -140,18 +140,32 @@ function save_to_tbl_trips(trips_array) {
 }
 
 function update_schedule() {
-    var workingHrs = 480; // IN MINS (8 HOURS)
+    var workingHrs = 300; // IN MINS (8 HOURS)
     var startTime = "5:00"; // 5am
 
     var schedule = new XMLHttpRequest();
     schedule.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
             var response = JSON.parse(this.responseText);
-            console.log(response);
+            console.log("Schedule: " + response);
+            carry_forward_check();
         }
     }
     schedule.open("POST", "scheduling_script.php", true);
     schedule.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
     schedule.send("act=scheduling" + "&workingHours=" + workingHrs + "&starttime=" + startTime);
 
+}
+
+function carry_forward_check(){
+    var check = new XMLHttpRequest();
+    check.onreadystatechange = function(){
+        if (this.readyState == 4 && this.status == 200) {
+            var response = JSON.parse(this.responseText);
+            console.log("Carry forward: " + response);
+        }
+    }
+    check.open("POST", "scheduling_script.php", true);
+    check.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+    check.send("act=carryForward");
 }

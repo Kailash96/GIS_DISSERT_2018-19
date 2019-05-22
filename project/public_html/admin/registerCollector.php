@@ -8,8 +8,8 @@
     $category = $_POST['category'];
     $location = "null";
 
-    $register = "INSERT
-        INTO
+    $register = "
+        INSERT INTO
             tbl_collectors (Name, Address, Telephone, LocationCoordinate, RegionName, Category)
         VALUES ('$username', '$address',$telephone, '$location', '$region', '$category')
     ";

@@ -241,11 +241,29 @@
             function open_more_options(){
                 $("#more_option").toggle();
             }
+
+            function notification_alert() {
+                var getNotif = new XMLHttpRequest();
+                getNotif.onreadystatechange = function(){
+                    if (this.readyState == 4 && this.status == 200) {
+                        // var data = JSON.parse(this.responseText);
+                        // document.getElementById("notif_box").innerHTML = data;
+                    }
+                }
+                getNotif.open("POST", "notification.php", true);
+                getNotif.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+                getNotif.send();
+            }
+
         </script>
 
     </head>
     <input type="hidden" value="<?php echo $_SESSION['userID']; ?>" id='userid' />
-    <body style="padding:70px 45px;" onload="level_update(userid.value, 'citizen', 0), notify(4);">
+    <body style="padding:70px 45px;" onload="level_update(userid.value, 'citizen', 0), notification_alert()">
+
+        <!-- NOTIFICATION BOX -->
+        <div id="notif_box"></div>
+
         <!-- TOP BAR -->
         <div class="top-bar">
             <h1 style="display:inline-block;margin:8px 0;"><i class='fa fa-trash'></i> Binswiper</h1>
@@ -255,7 +273,7 @@
                 <span style="cursor:default;color:green;border:2px solid green;border-radius:4px" id="changessaved" class="button">Changes Saved <i class="fa fa-check-square-o"></i></span>
                 <span style="margin-right:50px;text-transform:capitalize"><i class="fa fa-user-circle-o"></i> <?php echo $_SESSION['username'] ?></span>
                 <div style="display:inline-block;margin-right:20px">
-                    <div class="notification"></div>
+                    <div class="notification" style="cursor:pointer;"></div>
                 </div>
                 <i class="fa fa-bars" style="cursor:pointer;" onclick="open_more_options()"></i>
             </div>

@@ -212,7 +212,7 @@
         $endDate = $next_sunday; // should be sunday's date
         define("WORKING_HOURS", $_POST['workingHours']); // setting $working_hours to constant variable
 
-        $timeLeft = WORKING_HOURS;
+        $timeLeft = WORKING_HOURS; // IN MINUTES
         define("START_TIME", $_POST['starttime']); // setting START_TIME to constant variable
         $startTracker = START_TIME;
         $endTime = START_TIME;
@@ -314,5 +314,34 @@
         echo json_encode($success);
 
     }
+    
+    /*
+    else if ($act == "carryForward") {
+        $today = date("Y-m-d");
+        // GET THE FIRST SCHEDULE FOR COMPARISON
+        $check_query = "SELECT ScheduleID, CollectionDate FROM tbl_schedule WHERE SchedulingDate = '$today' ORDER BY ScheduleID ASC LIMIT 1";
+        $check_fetch = mysqli_query($conn, $check_query);
+        $check = mysqli_fetch_assoc($check_fetch);
+        // CHECKS THE FIRST SCHEDULE TO KNOW THE WEEK NUMBER FOR COMPARISON
+        $compare_date = $check['CollectionDate'];
+        // GET WEEK NUMBER
+        $week_number_flag = date('W', strtotime($compare_date));
+        // SEARCH ALL SCHEDULES WITH COLLECTION DATE > FLAG, THIS WILL BE NOTIFICATION
+        $details_query = "SELECT * FROM tbl_schedule WHERE SchedulingDate = '$today' AND WasteType != 'Organic'";
+        $getDetails = mysqli_query($conn, $details_query);
+        $array_test = array();
+        while ($collection_date = mysqli_fetch_assoc($getDetails)) {
+            $collect = $collection_date['CollectionDate'];
+            $schedule_id = $collection_date['ScheduleID'];
+            $weekNo = date('W', strtotime($collect));
+            if ($weekNo > $week_number_flag) {
+                $save_notif = "INSERT INTO tbl_carry_forward (schedule_ID) VALUES ($schedule_id)";
+                mysqli_query($conn, $save_notif);
+            }
+        }
+        echo json_encode(1);
+    }
+
+    */
 
 ?>

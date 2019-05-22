@@ -14,6 +14,29 @@
                 padding:10px 30px;
                 display:none;
             }
+
+            .textBox{
+                box-sizing:border-box;
+                border:1px solid #A3A3A3;
+                padding:8px 8px;
+                width:300px;
+                border-radius:3px;
+                outline:none;
+            }
+
+            .btn{
+                border:1px solid #A3A3A3;
+                background-color:white;
+                color:black;
+                border-radius:3px;
+                padding:8px 12px;
+                cursor:pointer;
+                width:100px;
+            }
+
+            .btn:hover{
+                box-shadow:0 0 2px black;
+            }
         </style>
         <script>
             function list(cType) {
@@ -66,10 +89,10 @@
             <h2 style="box-shadow:0 2px 1px black;padding:20px">Waste Collectors</h2>
             <div>
                 <input type="text" placeholder="Search" style="outline:none;padding:8px;width:400px;margin-right:40px" />
-                <select id="collector_type" style="outline:none;padding:8px;width:200px;" onchange="list(this.value)">
+                <select id="collector_type" style="outline:none;padding:8px;width:200px;cursor:pointer" onchange="list(this.value)">
                     <option value="District Council">District Council</option>
                     <option value="Municipality">Municipality</option>
-                    <option value="Recyclers">Recyclers</option>
+                    <option value="Recycler">Recyclers</option>
                 </select>
                 <input type="button" value="+ Add Collector" onclick="show()" style="float:right;background-color:white;border:1px solid black;border-radius:2px;padding:10px 20px;cursor:pointer;box-shadow:0 0 1px black;" />
             </div>
@@ -81,17 +104,17 @@
         <div id="collectorForm">
             <h2 style="box-shadow:0 2px 1px black;padding:20px">Waste Collectors</h2>
             <form method="post" onsubmit="register(username.value, address.value, telephone.value, region.value, category.value)">
-                <input type="text" placeholder="Name" name="username" /><br/><br/>
-                <input type="text" placeholder="Address" name="address" /><br/><br/>
-                <input type="text" placeholder="Telephone" name="telephone" /><br/><br/>
-                <select name="category">
+                <input type="text" placeholder="Name" name="username" class="textBox" /><br/><br/>
+                <input type="text" placeholder="Address" name="address" class="textBox" /><br/><br/>
+                <input type="text" placeholder="Telephone" name="telephone" class="textBox" /><br/><br/>
+                <select name="category" class="textBox" style="cursor:pointer">
                     <option value="District Council">District Council</option>
                     <option value="Municipality">Municipality</option>
                     <option value="Recycler">Recycler</option>
                 </select><br/><br/>
-                <input type="text" placeholder="Region Covered" name="region" /><br/><br/>
-                <input type="submit" value="Register" />
-                <input type="button" value="Cancel" onclick="hide()" />
+                <input type="text" placeholder="Region Covered" name="region" class="textBox" /><br/><br/>
+                <input type="submit" value="Register" class="btn" />
+                <input type="button" value="Cancel" class="btn" onclick="hide()" />
             </form>
         </div>
     </body>
