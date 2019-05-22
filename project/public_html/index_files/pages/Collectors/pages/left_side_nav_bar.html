@@ -1,13 +1,52 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-<script type="text/javascript" src="../../../js_files/dc_script.js"></script>
+
+
+<style>
+    .counter{
+        border:1px solid red;
+        display:inline-block;
+        margin:0 4px;
+        width:30px;
+        padding:0 4px;
+        text-align:center;
+        border-radius:3px;
+        background-color:red;
+        color:white;
+    }
+</style>
+
+<script>
+    var counter = 0;
+    function collectRequest(){
+        var check = new XMLHttpRequest();
+        check.onreadystatechange = function(){
+            if (this.readyState == 4 && this.status == 200){
+                var response = JSON.parse(this.responseText);
+                counter = response[0];
+                document.getElementById("counter").innerHTML = counter;
+                var notifbox = document.getElementById("notifbox");
+                if (notifbox){
+                    notifbox.innerHTML = response[1];
+                }
+                console.log(counter);
+            }
+        }
+        check.open("POST", "../check_collect_request.php", true);
+        check.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+        check.send();
+    }
+    
+    collectRequest();
+</script>
 
 <div class="left-nav-bar">
     <img src="../../../img/logo.jpg" style="width:200px;" />
-    <h3>District Council of Flacq</h3>
+    <h3><?php session_start(); echo $_SESSION['collector_username']; ?></h3>
     <ul>
-        <li><a href="" id="dashboard_selected"><i class="logo_space fa fa-cubes"></i> Dashboard</a></li>
+        <!-- <li><a href="" id="dashboard_selected"><i class="logo_space fa fa-cubes"></i> Dashboard</a></li> -->
         <li><a href="overview.php" id="overview_selected"><i class="logo_space fa fa-globe"></i> Overview</a></li>
         <li><a href="schedules.php" id="schedule_selected"><i class="logo_space fa fa-calendar-check-o"></i> Schedules</a></li>
+        <li><a href="collect_request.php" id="collect_selected"><i class="logo_space fa fa-bullhorn"></i> Collect Request <div class="counter" id="counter"></div></a></li>
         <li><a href="view_zones.php" id="zones_selected"><i class="logo_space fa fa-map-o"></i> View Zones</a></li>
         <li><a href=""><span class=""><i class="logo_space fa fa-truck"></i></span> Manage Trucks</a></li>
         <li><a href=""><i class="logo_space fa fa-group"></i> Scavengers</a></li>

@@ -132,7 +132,7 @@
 
                     // SUCCESSFUL LOGIN - SET SESSION
                     session_start();
-                    $_SESSION['userID'] = $userid;
+                    $_SESSION['collector_userID'] = $userid;
                     
                     $row = mysqli_fetch_assoc($checkCat);
                     $category = $row['Category'];
@@ -140,8 +140,8 @@
 
                     if ($getData = mysqli_query($conn, $getDataQuery)) {
                         $value = mysqli_fetch_assoc($getData);
-                        $_SESSION['username'] = $value['Name'];
-                        $_SESSION['category'] = $value['Category'];
+                        $_SESSION['collector_username'] = $value['Name'];
+                        $_SESSION['collector_category'] = $value['Category'];
                     }
 
                    header('location: pages/overview.php');
