@@ -118,6 +118,41 @@
                 echo date('Y-m-d');
             }
 
+        } else if (($_SERVER['REQUEST_METHOD'] == 'POST') && (isset($_POST['collector']))) {
+            $userid = $_POST['userid'];
+            $password = $_POST['userpassword']; // SHA1($_POST['userpassword']);
+
+            $checkID_query = "SELECT * FROM tbl_collectors_login WHERE CollectorsID = '$userid'";
+            $checkPass_query = "SELECT * FROM tbl_collectors_login WHERE CollectorsID = '$userid' AND Password = '$password'";
+
+            // VERIFIES ID
+            if (mysqli_num_rows($checkCat = mysqli_query($conn, $checkID_query)) > 0){
+                // VERIFIES PASSWORD
+                if (mysqli_num_rows($result = mysqli_query($conn, $checkPass_query)) > 0){
+
+                    // SUCCESSFUL LOGIN - SET SESSION
+                    session_start();
+                    $_SESSION['userID'] = $userid;
+                    
+                    $row = mysqli_fetch_assoc($checkCat);
+                    $category = $row['Category'];
+                    $getDataQuery = "SELECT * FROM tbl_collectors WHERE CollectorID = '$userid'";
+
+                    if ($getData = mysqli_query($conn, $getDataQuery)) {
+                        $value = mysqli_fetch_assoc($getData);
+                        $_SESSION['username'] = $value['Name'];
+                        $_SESSION['category'] = $value['Category'];
+                    }
+
+                   header('location: pages/overview.php');
+                } else {
+                    // WRONG PASSWORD
+                    echo "<script>alert('wrong password');</script>";
+                }
+            } else {
+                // WRONG ID
+                echo "<script>alert('wrong ID');</script>";
+            }
         }
 
 ?>

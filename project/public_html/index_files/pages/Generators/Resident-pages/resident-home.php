@@ -226,6 +226,42 @@
             .more_option_box a:hover{
                 background-color:#DFDFDF;
             }
+
+            .special_waste_box{
+                border:1px solid #A2A2A2;
+                width:400px;
+                height:350px;
+                background-color:white;
+                position:fixed;
+                z-index:3;
+                top:100px;
+                left:480px;
+                padding:20px;
+                border-radius:3px;
+                display:none;
+            }
+
+            .bx_input{
+                border:1px solid #A2A2A2;
+                border-radius:3px;
+                padding:4px 8px;
+                box-sizing:border-box;
+                width:300px;
+                height:30px;
+                outline:none;
+            }
+
+            .cover_box{
+                position:fixed;
+                width:100%;
+                background-color:white;
+                z-index:2;
+                top:0px;
+                left:0px;
+                height:3000px;
+                opacity:0.8;
+                display:none;
+            }
         </style>
         <script>
             function notify(count){
@@ -255,6 +291,31 @@
                 getNotif.send();
             }
 
+            function submit_request(userID, waste_amount, cdate){
+                event.preventDefault();
+                var request = new XMLHttpRequest();
+                request.onreadystatechange = function(){
+                    if(this.readyState == 4 && this.status == 200) {
+                        var response = JSON.parse(this.responseText);
+                        console.log(response);
+                    }
+                }
+                request.open("post", "specialRequest.php", true);
+                request.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+                request.send("userid=" + userID + "&wasteamount=" + waste_amount + "&collect=" + cdate);
+            }
+
+            function appear(){
+                event.preventDefault();
+                $("#special_waste_box").show();
+                $("#cover_box").show();
+            }
+
+            function disappear(){
+                event.preventDefault();
+                $("#special_waste_box").hide();
+                $("#cover_box").hide();
+            }
         </script>
 
     </head>
@@ -280,7 +341,7 @@
         </div>
 
         <div class="more_option_box" id="more_option">
-            <a href="" style="color:#002246;text-decoration:none;">Collection Request</a>
+            <a href="" onclick="appear()" style="color:#002246;text-decoration:none;"><i class="fa fa-comment-o"></i> Collection Request</a>
             <a href="" style="color:#002246;text-decoration:none;"><i class="fa fa-wrench"></i> Settings</a>
             <a href="?logout=logout" style="color:#002246;text-decoration:none;"><i class="fa fa-sign-out"></i> Logout</a>
         </div>
@@ -294,6 +355,23 @@
             }
 
         ?>
+
+        <!-- SPECIAL WASTE BOX COVER -->
+        <div class="cover_box" id="cover_box">
+        </div>
+        <!-- SPECIAL WASTE REQUEST -->
+        <div id="special_waste_box" class="special_waste_box" >
+            Special Waste Collection Request<br/><br/>
+            <form method="post" onsubmit="submit_request(userID.value, waste_amount.value, c_date.value)">
+                <input type="hidden" value="<?php echo $userid; ?>" id="userID" />
+                <h5>Waste Amount (kg):</h5>
+                <input type="text" placeholder="Waste Amount" class="bx_input" id="waste_amount" /><br/>
+                <h5>Date to collect:</h5>
+                <input type="date" class="bx_input" id="c_date" /><br/><br/>
+                <input type="submit" value="Send Request" />
+                <input type="button" value="Cancel" onclick="disappear()"
+            </form>
+        </div>
 
         <!-- All Bins -->
         <div class="all_bins_container">
