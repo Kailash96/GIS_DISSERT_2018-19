@@ -29,8 +29,9 @@
         defaultDate: new Date(),
         navLinks: true, // can click day/week names to navigate views
         businessHours: false, // display business hours
-        editable: false,
-        events: parsed_data
+        editable: true,
+        events: parsed_data,
+        selectable: true
       });
       calendar.render();
     });
