@@ -172,8 +172,8 @@
 
     } else if ($act == "saveTrips") {
         $trips = json_decode($_POST['trips']);
-
         $flag = 0;
+        
         for ($t = 0; $t < sizeof($trips); $t++) {
             $tripPath = json_encode($trips[$t][0]);
             $truckID = $trips[$t][1];
@@ -186,7 +186,7 @@
 
             $saveQuery =
                 "INSERT INTO
-                    tbl_trips (Trips, NumberOfHouses, Waste_amount, Duration_MINS, Distance_KM, RouteID, TruckID, Date_Created)
+                    tbl_trips(Trips, NumberOfHouses, Waste_amount, Duration_MINS, Distance_KM, RouteID, TruckID, Date_Created)
                  VALUES ('$tripPath', $numOfHouses, $total_waste_amount, $duration, $distance, $routeID, '$truckID', '$today')
                 ";
 
@@ -196,9 +196,9 @@
             } else {
                 $flag = 1;
             }
-
+            
         }
-
+        
         echo json_encode($flag);
 
     } else if ($act == "scheduling") {
